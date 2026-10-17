@@ -17,8 +17,9 @@ window.CV = {
     photo: "assets/img/victor.jpg",
     location: { en: "Chișinău, Moldova", ro: "Chișinău, Moldova" },
     email: "victor.barbuta@outlook.com",
-    phone: "+373 62 149 223",
-    showPhone: true, // set to false to hide the phone number
+    // The repo is public: anything written here is visible to everyone, even when hidden on the page.
+    phone: "", // e.g. "+373 ..."; it only shows when showPhone is true
+    showPhone: false,
     telegram: "vicuvi27", // without @; adds a "Message me on Telegram" button
     role: { en: "Information Security Student", ro: "Student la Securitate Informațională" },
     focus: "SOC / Blue Team",
