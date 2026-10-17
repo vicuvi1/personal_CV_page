@@ -17,9 +17,9 @@ window.CV = {
     photo: "assets/img/victor.jpg",
     location: { en: "Chișinău, Moldova", ro: "Chișinău, Moldova" },
     email: "victor.barbuta@outlook.com",
-    // The repo is public: anything written here is visible to everyone, even when hidden on the page.
-    phone: "", // e.g. "+373 ..."; it only shows when showPhone is true
-    showPhone: false,
+    phone: "+373 62 149 223",
+    showPhone: true, // set to false to hide the phone number
+    telegram: "vicuvi27", // without @; adds a "Message me on Telegram" button
     role: { en: "Information Security Student", ro: "Student la Securitate Informațională" },
     focus: "SOC / Blue Team",
     badgeId: "VB-2026-SI266",
@@ -51,6 +51,8 @@ window.CV = {
   links: [
     { label: "GitHub", url: "https://github.com/vicuvi1", icon: "github" },
     { label: "TryHackMe", url: "https://tryhackme.com/p/vicuvi1", icon: "flag" },
+    { label: "Telegram", url: "https://t.me/vicuvi27", icon: "telegram" },
+    { label: "X", url: "https://x.com/vicuvi_1", icon: "x" },
     // { label: "LinkedIn", url: "https://www.linkedin.com/in/your-handle", icon: "linkedin" },
   ],
 
@@ -133,9 +135,68 @@ window.CV = {
   ],
 
   /* ---------- Projects ----------
+     featured: true  → big card at the top. Without it → small card under "More things I've built".
      status: "live" | "building" | "done" | "team"  (shows a small colored label)  */
   projects: [
     {
+      featured: true,
+      title: "Finance Helper",
+      period: "2026",
+      status: "live",
+      kind: { en: "Personal project · PWA + desktop app", ro: "Proiect personal · PWA + aplicație desktop" },
+      summary: {
+        en: "A private personal-finance app that replaced my budgeting spreadsheet: 5-second expense logging, smart category rules and a single \"safe to spend today\" number.",
+        ro: "O aplicație privată de finanțe personale care mi-a înlocuit tabelul de buget: înregistrare în 5 secunde, reguli inteligente de categorii și un singur număr „cât pot cheltui azi”.",
+      },
+      bullets: [
+        { en: "Installs on the phone and works offline; Electron desktop app for Windows, Mac and Linux.", ro: "Se instalează pe telefon și merge offline; aplicație desktop Electron pentru Windows, Mac și Linux." },
+        { en: "Own Telegram bot for logging and a weekly money report.", ro: "Bot Telegram propriu pentru înregistrare și un raport financiar săptămânal." },
+        { en: "No account, no server, no tracking: data stays on the device. Unit + Playwright tests.", ro: "Fără cont, fără server, fără tracking: datele rămân pe dispozitiv. Teste unitare + Playwright." },
+      ],
+      tags: ["JavaScript", "PWA", "Electron", "Telegram Bot", "Playwright"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Finance-Helper-App" }],
+    },
+    {
+      featured: true,
+      title: "Interview Manager",
+      period: "2026",
+      status: "live",
+      kind: { en: "Full-stack web app", ro: "Aplicație web full-stack" },
+      summary: {
+        en: "A full platform for requesting, scheduling, running and getting paid for interviews, with a candidate portal and an admin workspace.",
+        ro: "O platformă completă pentru solicitarea, programarea, desfășurarea și plata interviurilor, cu portal pentru candidați și spațiu de administrare.",
+      },
+      bullets: [
+        { en: "Real-time updates, file uploads to private storage, calendar (.ics) invites.", ro: "Actualizări în timp real, fișiere în stocare privată, invitații de calendar (.ics)." },
+        { en: "Telegram, Google Calendar and email integrations.", ro: "Integrări cu Telegram, Google Calendar și email." },
+        { en: "Role-based access with Supabase Auth and row-level security.", ro: "Acces pe roluri cu Supabase Auth și row-level security." },
+      ],
+      tags: ["Next.js", "TypeScript", "Supabase", "Realtime", "Zod"],
+      links: [
+        { label: "Live", url: "https://interview-manager-umber.vercel.app" },
+        { label: "GitHub", url: "https://github.com/vicuvi1/interview_manager" },
+      ],
+    },
+    {
+      featured: true,
+      title: "FounderHQ",
+      period: "2026",
+      status: "building",
+      kind: { en: "AI SaaS · Startup validation", ro: "SaaS cu AI · Validare de startup-uri" },
+      summary: {
+        en: "Validates startup demand before you build, using real evidence from Reddit, Hacker News, GitHub, Stack Overflow and Product Hunt.",
+        ro: "Validează cererea pentru un startup înainte să-l construiești, pe baza dovezilor reale din Reddit, Hacker News, GitHub, Stack Overflow și Product Hunt.",
+      },
+      bullets: [
+        { en: "Three modes: discover ideas, validate demand, generate an execution blueprint.", ro: "Trei moduri: descoperire idei, validare cerere, plan de execuție." },
+        { en: "Ideas are scored against 5 survival tests; weak ideas are filtered out.", ro: "Ideile sunt evaluate prin 5 teste de supraviețuire; cele slabe sunt eliminate." },
+        { en: "Founder profiles and saved sessions in Supabase.", ro: "Profiluri de fondator și sesiuni salvate în Supabase." },
+      ],
+      tags: ["Next.js", "TypeScript", "Claude API", "Supabase", "Vercel AI SDK"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/SaaS-Opportunity-Radar-In-App-AI" }],
+    },
+    {
+      featured: true,
       title: "Workout Crew",
       period: "2026",
       status: "live",
@@ -153,6 +214,7 @@ window.CV = {
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Sport-Bot-Telegram-" }],
     },
     {
+      featured: true,
       title: "Registru Digital",
       period: "2026",
       status: "live",
@@ -170,22 +232,7 @@ window.CV = {
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/mother_app_registru" }],
     },
     {
-      title: "Hermes Helper",
-      period: "2026",
-      status: "building",
-      kind: { en: "Original concept · Tooling", ro: "Concept original · Tooling" },
-      summary: {
-        en: "A portable tool that moves a complete Hermes AI-agent environment (files, skills, memory and settings) from one computer to another.",
-        ro: "Un instrument portabil care mută un mediu Hermes complet (fișiere, skills, memorie și setări) de pe un calculator pe altul.",
-      },
-      bullets: [
-        { en: "USB-based flow: export → transfer → fast restore on a new machine.", ro: "Flux bazat pe USB: export → transfer → restaurare rapidă pe un calculator nou." },
-        { en: "Architecture planned with AI agents; every change reviewed by hand.", ro: "Arhitectură planificată cu agenți AI; fiecare schimbare verificată manual." },
-      ],
-      tags: ["TypeScript", "AI agents", "Portability"],
-      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Hermes-Sync-Hub" }],
-    },
-    {
+      featured: true,
       title: "Deeptech GigaHack",
       period: "2026",
       status: "team",
@@ -200,6 +247,74 @@ window.CV = {
       ],
       tags: ["Teamwork", "Pitching", "Git", "Prototyping"],
       links: [],
+    },
+
+    /* ----- Smaller projects (no "featured") ----- */
+    {
+      title: "Hermes Sync Hub",
+      period: "2026",
+      status: "building",
+      summary: {
+        en: "Moves a complete Hermes AI-agent environment (files, skills, memory, settings) between computers: export → transfer → restore.",
+        ro: "Mută un mediu Hermes complet (fișiere, skills, memorie, setări) între calculatoare: export → transfer → restaurare.",
+      },
+      tags: ["TypeScript", "Monorepo", "AI agents"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Hermes-Sync-Hub" }],
+    },
+    {
+      title: "n8n AI Command Center",
+      period: "2026",
+      status: "done",
+      summary: {
+        en: "Describe an automation in plain English and Gemini builds the n8n workflow. Includes a SOC-style execution monitor that highlights failed runs.",
+        ro: "Descrii o automatizare în cuvinte și Gemini construiește workflow-ul n8n. Include un monitor de execuții în stil SOC care evidențiază erorile.",
+      },
+      tags: ["Python", "Streamlit", "Gemini API", "n8n"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/n8n_app" }],
+    },
+    {
+      title: "Jarvis",
+      period: "2026",
+      status: "done",
+      summary: {
+        en: "A fully offline voice assistant for Windows 11: wake word, local speech recognition and text-to-speech, with no cloud calls.",
+        ro: "Un asistent vocal complet offline pentru Windows 11: cuvânt de activare, recunoaștere vocală și sinteză locală, fără apeluri în cloud.",
+      },
+      tags: ["Python", "faster-whisper", "openWakeWord", "Piper TTS"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/jarvis-assistant" }],
+    },
+    {
+      title: "Hide & Survive",
+      period: "2026",
+      status: "done",
+      summary: {
+        en: "A co-op horror game on Roblox: an 8-zone facility and two AI enemies, one that hunts by sight and sound and one that only moves when nobody is looking.",
+        ro: "Un joc horror co-op pe Roblox: o clădire cu 8 zone și doi inamici AI, unul care vânează după văz și sunet și altul care se mișcă doar când nimeni nu se uită.",
+      },
+      tags: ["Lua / Luau", "Roblox", "Game AI"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/roblox_game-horror" }],
+    },
+    {
+      title: "Life OS",
+      period: "2026",
+      status: "building",
+      summary: {
+        en: "A dark-mode morning dashboard for goals, projects, tasks and habits that shows the 3 things that matter today.",
+        ro: "Un dashboard de dimineață pentru obiective, proiecte, sarcini și obiceiuri, care arată cele 3 lucruri importante de azi.",
+      },
+      tags: ["Next.js", "TypeScript", "Firebase"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/life_os" }],
+    },
+    {
+      title: { en: "Memory Constellation", ro: "Constelația amintirilor" },
+      period: "2026",
+      status: "live",
+      summary: {
+        en: "A gift website: a night sky where every star is a shared memory, with letters that unlock on future dates and a shared guestbook.",
+        ro: "Un site-cadou: un cer înstelat în care fiecare stea e o amintire comună, cu scrisori care se deblochează în viitor și o carte de oaspeți.",
+      },
+      tags: ["Next.js", "Framer Motion", "Supabase"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/friend_webpage" }],
     },
   ],
 
@@ -338,6 +453,7 @@ window.UI = {
     workflow: { en: "How I work with AI", ro: "Cum lucrez cu AI" },
     skills: { en: "Technical skills", ro: "Competențe tehnice" },
     projects: { en: "Projects & experience", ro: "Proiecte și experiență" },
+    more: { en: "More things I've built", ro: "Alte proiecte construite" },
     labs: { en: "Labs & practice", ro: "Laboratoare și practică" },
     certs: { en: "Certifications & training", ro: "Certificări și formare" },
     achievements: { en: "Beyond the keyboard", ro: "Dincolo de tastatură" },
@@ -364,6 +480,7 @@ window.UI = {
     copy: { en: "Copy email", ro: "Copiază emailul" },
     copied: { en: "Copied!", ro: "Copiat!" },
     email: { en: "Write me an email", ro: "Scrie-mi un email" },
+    telegram: { en: "Message on Telegram", ro: "Scrie-mi pe Telegram" },
     aiTools: { en: "Tools I use daily", ro: "Unelte folosite zilnic" },
     interests: { en: "What I'm aiming at", ro: "Ce țintesc" },
     terminalHint: { en: "Press ` to open the terminal", ro: "Apasă ` pentru terminal" },

@@ -33,6 +33,9 @@
     cert: svg('<circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21l4.5-2.5 4.5 2.5-1.5-7.5"/>'),
     github: svg('<path d="M9 19c-4 1.3-4-2-6-2.5m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 00-1.3-3.2 4.2 4.2 0 00-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 00-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 00-.1 3.2A4.6 4.6 0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>'),
     flag: svg('<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>'),
+    telegram: svg('<path d="M21 4L3 11l6 2.5M21 4l-3 16-9-6.5M21 4L9 13.5V19l3-3.5"/>'),
+    x: svg('<path fill="currentColor" stroke="none" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77zm-1.08 16.2h1.7L7.4 4.73H5.58z"/>'),
+    phone: svg('<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/>'),
     linkedin: svg('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 014 0v4M12 10v7"/>'),
     mail: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>'),
     arrow: svg('<path d="M5 12h14M13 6l6 6-6 6"/>'),
@@ -108,7 +111,17 @@
       </article>`).join("");
 
     // projects
-    $("#projects-grid").innerHTML = shown(CV.projects).map((p) => `
+    const projects = shown(CV.projects);
+    const more = projects.filter((p) => !p.featured);
+    $("#more-grid").innerHTML = more.map((p) => `
+      <article class="panel mini reveal">
+        <div class="project-top"><h3>${T(p.title)}</h3>${p.status ? `<span class="pill ${esc(p.status)}">${T(UI.status[p.status] || p.status)}</span>` : ""}</div>
+        <p>${T(p.summary)}</p>
+        <ul class="tags">${(p.tags || []).map((x) => `<li class="tag">${T(x)}</li>`).join("")}</ul>
+        ${p.links?.length ? `<div class="project-links">${p.links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${T(l.label)} ↗</a>`).join("")}</div>` : ""}
+      </article>`).join("");
+    $("#more-grid").previousElementSibling.hidden = !more.length;
+    $("#projects-grid").innerHTML = projects.filter((p) => p.featured).map((p) => `
       <article class="panel project reveal">
         <div class="project-top"><span class="project-kind">${T(p.kind)}</span>${p.status ? `<span class="pill ${esc(p.status)}">${T(UI.status[p.status] || p.status)}</span>` : ""}</div>
         <h3>${T(p.title)}<span class="yr">${T(p.period)}</span></h3>
@@ -161,11 +174,12 @@
     $("#contact-box").innerHTML = `
       <div>
         <a class="contact-mail" href="mailto:${esc(P.email)}">${esc(P.email)}</a>
-        <div class="contact-meta">${T(P.location)}${P.showPhone && P.phone ? ` · <a href="tel:${esc(P.phone.replace(/\s/g, ""))}">${esc(P.phone)}</a>` : ""}</div>
+        <div class="contact-meta">${P.showPhone && P.phone ? `<a href="tel:${esc(P.phone.replace(/\s/g, ""))}">${esc(P.phone)}</a> · ` : ""}${T(P.location)}</div>
         <div class="social">${links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${icon(l.icon)}${esc(l.label)}</a>`).join("")}</div>
       </div>
       <div class="contact-actions">
         <a class="btn primary" href="mailto:${esc(P.email)}">${icon("mail")}${T(UI.cta.email)}</a>
+        ${P.telegram ? `<a class="btn" href="https://t.me/${esc(P.telegram)}" target="_blank" rel="noopener">${icon("telegram")}${T(UI.cta.telegram)}</a>` : ""}
         <button class="btn" type="button" data-copy>${icon("copy")}<span>${T(UI.cta.copy)}</span></button>
       </div>`;
     $("#contact-box").classList.add("panel", "reveal");
@@ -350,7 +364,9 @@
     certs: () => shown(CV.certifications).forEach((c) => line(`<span class="y">✓</span> <span class="c">${plain(c.name)}</span> <span class="m">${plain(c.date)}</span>\n  ${plain(c.detail)}`)),
     wins: () => shown(CV.achievements).forEach((a) => line(`<span class="y">★</span> <span class="c">${plain(a.title)}</span> <span class="m">${plain(a.date)}</span>\n  ${plain(a.detail)}`)),
     edu: () => shown(CV.education).forEach((e) => line(`<span class="c">${plain(e.school)}</span> <span class="m">${plain(e.period)}</span>\n  ${plain(e.degree)}`)),
-    contact: () => { line(`<span class="c">email</span>   <a href="mailto:${esc(P.email)}">${esc(P.email)}</a>`); shown(CV.links).forEach((l) => line(`<span class="c">${esc(l.label.toLowerCase().padEnd(7))}</span> <a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.url)}</a>`)); },
+    contact: () => {
+      line(`<span class="c">email</span>   <a href="mailto:${esc(P.email)}">${esc(P.email)}</a>`);
+      if (P.showPhone && P.phone) line(`<span class="c">phone</span>   <a href="tel:${esc(P.phone.replace(/\s/g, ""))}">${esc(P.phone)}</a>`); shown(CV.links).forEach((l) => line(`<span class="c">${esc(l.label.toLowerCase().padEnd(7))}</span> <a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.url)}</a>`)); },
     email: async () => { const ok = await copyEmail(); line(ok ? `<span class="g">copied</span> ${esc(P.email)} to clipboard` : esc(P.email)); },
     cv: () => { closeTerm(); CV.cvPdf ? (location.href = CV.cvPdf) : setTimeout(() => print(), 200); },
     lang: (a) => { if (a === "en" || a === "ro") { setLang(a); line(`<span class="g">language set to ${a}</span>`); } else line("usage: lang en|ro"); },
