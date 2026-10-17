@@ -24,6 +24,7 @@ Rules of thumb:
 | Show your phone number | `showPhone: true` |
 | Offer a real PDF | put it in `assets/` and set `cvPdf: "assets/your-file.pdf"` |
 | Rename a section | edit `window.UI.sections` at the bottom of `content.js` |
+| Make a project big or small | add or remove `featured: true` |
 
 Project status labels: `"live"`, `"building"`, `"done"`, `"team"`.
 
@@ -38,7 +39,11 @@ Then open http://localhost:5173.
 ## Features
 
 - English / Romanian switch (remembers the visitor's choice, defaults to the browser language)
-- Animated ID badge, network background, counters (all respect *reduce motion*)
+- Short "access granted" intro on the first visit of a session (click or any key skips it; add `?noboot` to the URL to skip it entirely)
+- Animated ID badge, letter-by-letter name, aurora background, cursor light, glowing cards, magnetic buttons, scroll progress bar
+- Scrolling "SOC log" strip: edit `feed` in `content.js`
+- The "How I work" steps and the education timeline light up as you scroll
+- All effects live in `assets/js/fx.js` + `assets/css/fx.css` and switch off for visitors who choose *reduce motion*
 - Hidden terminal: press <kbd>`</kbd> or click `>_`, then try `help`, `nmap victor`, `sudo hire victor`
 - "Download CV" prints a clean, light, one-column CV (or serves your PDF if `cvPdf` is set)
 - Strict security headers in `vercel.json` (CSP, HSTS, X-Frame-Options, etc.) and `/.well-known/security.txt`

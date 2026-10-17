@@ -66,6 +66,21 @@ window.CV = {
     { value: 3, suffix: "×", label: { en: "National checkers champion", ro: "campion național la dame" } },
   ],
 
+  /* ---------- Scrolling "SOC log" strip under the numbers ----------
+     level: "ok" | "info" | "warn" | "block" | "alert"  (sets the color)  */
+  feed: [
+    { level: "ok", text: "hacktrone.ctf → placed 4/12 teams" },
+    { level: "info", text: "tryhackme.rank → top 3% worldwide" },
+    { level: "block", text: "ssh brute-force from 203.0.113.7 → denied" },
+    { level: "ok", text: "soc-level-1 → path completed" },
+    { level: "info", text: "registru-digital → nightly backup verified" },
+    { level: "ok", text: "taekwondo → black belt acquired" },
+    { level: "warn", text: "coffee.level → 12%, refill recommended" },
+    { level: "ok", text: "workout-crew → 346/346 tests passing" },
+    { level: "block", text: "phishing email → quarantined" },
+    { level: "alert", text: "new opportunity? → victor.barbuta@outlook.com" },
+  ],
+
   /* ---------- About ---------- */
   about: {
     paragraphs: [

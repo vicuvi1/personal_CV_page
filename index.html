@@ -21,6 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/fx.css">
 
   <script type="application/ld+json">
   {
@@ -38,7 +39,11 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
   <canvas id="net" aria-hidden="true"></canvas>
+  <div class="spot" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
 
   <header class="nav" id="top">
     <a class="brand" href="#top" aria-label="Back to top"><span class="brand-mark" data-bind="initials"></span><span class="brand-name" data-bind="name"></span></a>
@@ -67,6 +72,7 @@
     </section>
 
     <section class="stats" id="stats" aria-label="Highlights"></section>
+    <div class="feed" id="feed" aria-hidden="true"></div>
 
     <section class="section" id="about">
       <header class="section-head"><span class="section-no">01</span><h2 data-ui="sections.about"></h2></header>
@@ -76,7 +82,7 @@
     <section class="section" id="workflow">
       <header class="section-head"><span class="section-no">02</span><h2 data-ui="sections.workflow"></h2></header>
       <p class="section-intro" data-ui="workflowIntro"></p>
-      <ol class="pipeline" id="pipeline"></ol>
+      <ol class="pipeline" id="pipeline" data-progress></ol>
       <div class="tools" id="ai-tools"></div>
     </section>
 
@@ -108,7 +114,7 @@
     <section class="section split" id="education">
       <div>
         <header class="section-head"><span class="section-no">07</span><h2 data-ui="sections.education"></h2></header>
-        <ol class="timeline" id="edu"></ol>
+        <ol class="timeline" id="edu" data-progress></ol>
       </div>
       <div>
         <header class="section-head"><span class="section-no">08</span><h2 data-ui="sections.languages"></h2></header>
@@ -125,6 +131,7 @@
   </main>
 
   <footer class="footer">
+    <div class="footer-name" aria-hidden="true" data-bind="name"></div>
     <p id="footer-text"></p>
     <p class="mono muted" data-ui="cta.terminalHint"></p>
   </footer>
@@ -143,6 +150,7 @@
   <noscript><p class="noscript">This page needs JavaScript to show its content. Contact: victor.barbuta@outlook.com · github.com/vicuvi1</p></noscript>
 
   <script src="content.js"></script>
+  <script src="assets/js/fx.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>

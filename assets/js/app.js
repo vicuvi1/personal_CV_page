@@ -57,10 +57,17 @@
     $$('[data-bind="name"]').forEach((el) => (el.textContent = P.name));
 
     $("#nav-links").innerHTML = Object.entries(UI.nav)
-      .map(([id, label]) => `<a href="#${id}" data-nav="${id}">${T(label)}</a>`).join("");
+      .map(([id, label]) => `<a href="#${id}" data-nav="${id}">${T(label)}</a>`).join("") + `<span class="nav-ind" aria-hidden="true"></span>`;
 
-    // hero
-    $("#hero-name").textContent = P.name;
+    // hero: the name is split into letters so they can rise in one by one
+    const nameEl = $("#hero-name");
+    if (nameEl.dataset.name !== P.name) {
+      let i = 0;
+      const words = P.name.split(" ").map((w) => `<span class="w">${[...w].map((c) => `<span class="c" data-i="${i++}">${esc(c)}</span>`).join("")}</span>`);
+      nameEl.innerHTML = `<span class="sr-only">${esc(P.name)}</span><span aria-hidden="true">${words.join(" ")}</span>`;
+      $$(".c", nameEl).forEach((c) => c.style.setProperty("--i", c.dataset.i));
+      nameEl.dataset.name = P.name;
+    }
     $("#hero-role").textContent = t(P.role);
     $("#hero-pitch").textContent = t(P.pitch);
     const cvBtn = CV.cvPdf
@@ -77,6 +84,10 @@
     $("#stats").innerHTML = shown(CV.stats).map((s) => `
       <div class="stat reveal"><div class="stat-v">${esc(s.prefix || "")}<span class="num" data-to="${s.value}">${firstRender && !reduced ? 0 : s.value}</span><span class="acc">${esc(s.suffix || "")}</span></div>
       <div class="stat-l">${T(s.label)}</div></div>`).join("");
+
+    // log strip: the list is printed twice so the scroll loops seamlessly
+    const feed = shown(CV.feed).map((f) => `<span class="fl ${esc(f.level)}"><b>[${esc(f.level.toUpperCase())}]</b>${T(f.text)}</span>`).join("");
+    $("#feed").innerHTML = feed ? `<div class="feed-track"><div class="feed-group">${feed}</div><div class="feed-group">${feed}</div></div>` : "";
 
     // about
     const links = shown(CV.links);
@@ -190,6 +201,7 @@
     else $$(".reveal").forEach((el) => el.classList.add("in"));
     firstRender = false;
     setActiveNav();
+    if (window.fxRefresh) window.fxRefresh();
   }
 
   function renderBadge() {
@@ -286,6 +298,9 @@
     const ids = Object.keys(UI.nav); let cur = "";
     ids.forEach((id) => { const s = document.getElementById(id); if (s && s.getBoundingClientRect().top < innerHeight * 0.4) cur = id; });
     $$("[data-nav]").forEach((a) => a.classList.toggle("active", a.dataset.nav === cur));
+    const act = $(`[data-nav="${cur}"]`), ind = $(".nav-ind");
+    if (ind && act) { ind.style.left = act.offsetLeft + "px"; ind.style.width = act.offsetWidth + "px"; ind.style.opacity = "1"; }
+    else if (ind) ind.style.opacity = "0";
     $(".nav").classList.toggle("scrolled", scrollY > 8);
   }
 
@@ -429,10 +444,10 @@
   addEventListener("scroll", () => requestAnimationFrame(setActiveNav), { passive: true });
 
   render();
-  typeWhoami();
-  rotator();
   tilt();
   network();
+  // the hero typing starts once the intro animation (fx.js) has finished
+  (window.bootReady || Promise.resolve()).then(() => { typeWhoami(); rotator(); });
 
   console.log("%c" + P.name + "%c\nLooking under the hood? Good instinct. Press ` on the page for a terminal, or write me: " + P.email,
     "font:700 20px sans-serif;color:#5ce1e6", "color:#8d9bb0");
