@@ -151,23 +151,32 @@
       </li>`).join("");
 
     // write-ups (each expands to the full article via <details>)
-    $("#writeups-list").innerHTML = shown(CV.writeups).map((w) => `
-      <article class="panel writeup reveal">
+    $("#writeups-list").innerHTML = shown(CV.writeups).map((w) => {
+      const photos = w.photos || [];
+      const gallery = photos.length ? `<div class="wu-gallery">${photos.map((ph) =>
+        `<button class="wu-thumb" type="button" data-full="${esc(ph.src)}" data-cap="${T(ph.caption)}" aria-label="${T(ph.caption)}"><img src="${esc(ph.src)}" alt="${T(ph.caption)}" loading="lazy"></button>`).join("")}</div>` : "";
+      return `
+      <article class="panel writeup reveal${w.cover ? " has-cover" : ""}">
         <details>
           <summary>
-            <div class="wu-top">
-              <div><h3>${T(w.title)}</h3><div class="wu-meta">${T(w.meta)}${w.role ? ` · <span class="wu-role">${T(w.role)}</span>` : ""} · ${T(w.date)}</div></div>
-              ${w.status ? `<span class="pill ${esc(w.status)}">${T(UI.status[w.status] || w.status)}</span>` : ""}
+            ${w.cover ? `<div class="wu-cover"><img src="${esc(w.cover)}" alt="${T(w.title)}" loading="lazy"></div>` : ""}
+            <div class="wu-pad">
+              <div class="wu-top">
+                <div><h3>${T(w.title)}</h3><div class="wu-meta">${T(w.meta)}${w.role ? ` · <span class="wu-role">${T(w.role)}</span>` : ""} · ${T(w.date)}</div></div>
+                ${w.status ? `<span class="pill ${esc(w.status)}">${T(UI.status[w.status] || w.status)}</span>` : ""}
+              </div>
+              <p class="wu-summary">${T(w.summary)}</p>
+              <ul class="tags">${(w.tags || []).map((x) => `<li class="tag">${T(x)}</li>`).join("")}</ul>
+              <span class="wu-toggle"><span class="wu-open">${T(UI.cta.readMore)}</span><span class="wu-close">${T(UI.cta.readLess)}</span> <span class="wu-chev" aria-hidden="true">▾</span></span>
             </div>
-            <p class="wu-summary">${T(w.summary)}</p>
-            <ul class="tags">${(w.tags || []).map((x) => `<li class="tag">${T(x)}</li>`).join("")}</ul>
-            <span class="wu-toggle"><span class="wu-open">${T(UI.cta.readMore)}</span><span class="wu-close">${T(UI.cta.readLess)}</span> <span class="wu-chev" aria-hidden="true">▾</span></span>
           </summary>
           <div class="wu-body">
+            ${gallery}
             ${(w.sections || []).map((s) => `<h4>${T(s.h)}</h4><p>${T(s.p)}</p>`).join("")}
           </div>
         </details>
-      </article>`).join("");
+      </article>`;
+    }).join("");
 
     // certifications
     $("#certs-grid").innerHTML = shown(CV.certifications).map((c) => `
@@ -479,6 +488,26 @@
     addEventListener("scroll", () => requestAnimationFrame(toggleTop), { passive: true });
     toTop.addEventListener("click", () => scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }));
     toggleTop();
+  }
+
+  /* ---------- photo lightbox (write-up gallery + covers) ---------- */
+  const lb = { el: $("#lightbox"), img: $("#lb-img"), cap: $("#lb-cap") };
+  if (lb.el) {
+    const openLb = (src, cap) => {
+      lb.img.src = src; lb.img.alt = cap || ""; lb.cap.textContent = cap || "";
+      lb.cap.style.display = cap ? "" : "none";
+      lb.el.hidden = false; $("#lb-close").focus();
+    };
+    const closeLb = () => { lb.el.hidden = true; lb.img.src = ""; };
+    document.addEventListener("click", (e) => {
+      const thumb = e.target.closest(".wu-thumb");
+      if (thumb) { openLb(thumb.dataset.full, thumb.dataset.cap); return; }
+      const cover = e.target.closest(".wu-cover");
+      if (cover) { e.preventDefault(); const im = cover.querySelector("img"); openLb(im.src, im.alt); }
+    });
+    $("#lb-close").addEventListener("click", closeLb);
+    lb.el.addEventListener("click", (e) => { if (e.target === lb.el) closeLb(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !lb.el.hidden) closeLb(); });
   }
 
   console.log("%c" + P.name + "%c\nLooking under the hood? Good instinct. Press ` on the page for a terminal, or write me: " + P.email,

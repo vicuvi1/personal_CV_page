@@ -349,6 +349,12 @@ window.CV = {
       role: { en: "Operator / support", ro: "Operator / suport" },
       status: "team",
       tags: ["Red Team", "Active Directory", "MITRE ATT&CK", "CTF"],
+      cover: "assets/img/gigahack-team.jpg",
+      photos: [
+        { src: "assets/img/gigahack-team.jpg", caption: { en: "Team NAVI at the GigaHack arena", ro: "Echipa NAVI în arena GigaHack" } },
+        { src: "assets/img/gigahack-arena.jpg", caption: { en: "The main stage — DeepTech GigaHack 2026", ro: "Scena principală — DeepTech GigaHack 2026" } },
+        { src: "assets/img/gigahack-banner.jpg", caption: { en: "“The largest hackathon in Moldova”", ro: "„Cel mai mare hackathon din Moldova”" } },
+      ],
       summary: {
         en: "An authorized red-team competition on a shared practice lab. I was an operator/support member of the four-person team NAVI, which chained a single web foothold into control of five Windows/Linux domains and mapped a 41-host internal network. My takeaway is a defender's one: watching these attacks from the inside is the fastest way to learn how to spot them.",
         ro: "O competiție autorizată de tip red-team pe un laborator comun de practică. Am fost operator/suport în echipa de patru persoane NAVI, care a pornit de la un singur punct de intrare web și a ajuns să controleze cinci domenii Windows/Linux, cartografiind o rețea internă de 41 de hosturi. Concluzia mea e una de apărare: să vezi aceste atacuri din interior e cel mai rapid mod de a învăța cum să le detectezi.",
