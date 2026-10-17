@@ -133,7 +133,8 @@
       </article>`).join("");
     $("#more-grid").previousElementSibling.hidden = !more.length;
     $("#projects-grid").innerHTML = projects.filter((p) => p.featured).map((p) => `
-      <article class="panel project reveal">
+      <article class="panel project reveal${p.shot ? " has-shot" : ""}">
+        ${p.shot ? `<div class="proj-shot"><img src="${esc(p.shot)}" alt="${T(p.title)} screenshot" loading="lazy"></div>` : ""}
         <div class="project-top"><span class="project-kind">${T(p.kind)}</span>${p.status ? `<span class="pill ${esc(p.status)}">${T(UI.status[p.status] || p.status)}</span>` : ""}</div>
         <h3>${T(p.title)}<span class="yr">${T(p.period)}</span></h3>
         <p>${T(p.summary)}</p>
@@ -502,7 +503,7 @@
     document.addEventListener("click", (e) => {
       const thumb = e.target.closest(".wu-thumb");
       if (thumb) { openLb(thumb.dataset.full, thumb.dataset.cap); return; }
-      const cover = e.target.closest(".wu-cover");
+      const cover = e.target.closest(".wu-cover, .proj-shot");
       if (cover) { e.preventDefault(); const im = cover.querySelector("img"); openLb(im.src, im.alt); }
     });
     $("#lb-close").addEventListener("click", closeLb);

@@ -230,6 +230,7 @@ window.CV = {
         { en: "Self-hosted, so user data never leaves the server.", ro: "Self-hosted: datele utilizatorilor nu părăsesc serverul." },
       ],
       tags: ["Python", "python-telegram-bot", "SQLite", "aiohttp", "pytest"],
+      shot: "assets/img/shot-workout.jpg", // screenshot banner on the card (click to enlarge)
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Sport-Bot-Telegram-" }],
     },
     {
