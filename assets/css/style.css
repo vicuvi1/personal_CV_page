@@ -22,6 +22,33 @@
   --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
   --max: 1160px;
   --gutter: clamp(16px, 4vw, 40px);
+  --sheen: linear-gradient(180deg, #fff 30%, #9fb3cc); /* hero name letters */
+  --on-accent: #00121a; /* text on an accent-colored fill */
+  --nav-bg: rgba(7, 11, 18, 0.72);
+  color-scheme: dark;
+}
+
+/* ---------- Light theme (dark stays the default) ---------- */
+:root[data-theme="light"] {
+  --bg: #eef2f8;
+  --bg-2: #e3e9f2;
+  --panel: rgba(255, 255, 255, 0.78);
+  --panel-solid: #ffffff;
+  --line: rgba(15, 23, 42, 0.1);
+  --line-strong: rgba(15, 23, 42, 0.18);
+  --text: #0e1a2b;
+  --muted: #475468;
+  --faint: #7a8699;
+  --accent: #0a8fa6;
+  --accent-2: #2563eb;
+  --ok: #0f9d6a;
+  --warn: #b7791f;
+  --danger: #dc4b4b;
+  --glow: 0 0 0 1px rgba(10, 143, 166, 0.2), 0 10px 40px -14px rgba(10, 143, 166, 0.28);
+  --sheen: linear-gradient(180deg, #0e1a2b 30%, #475468);
+  --on-accent: #ffffff;
+  --nav-bg: rgba(238, 242, 248, 0.82);
+  color-scheme: light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -42,7 +69,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 ::selection { background: rgba(92, 225, 230, 0.3); }
 .mono { font-family: var(--mono); }
 .muted { color: var(--muted); }
-.skip { position: absolute; left: -999px; top: 8px; background: var(--accent); color: #001014; padding: 8px 14px; border-radius: 8px; z-index: 100; }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--accent); color: var(--on-accent); padding: 8px 14px; border-radius: 8px; z-index: 100; }
 .skip:focus { left: 8px; }
 #net { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.45; pointer-events: none; }
 
@@ -51,7 +78,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; gap: 24px;
   padding: 14px var(--gutter);
-  background: rgba(7, 11, 18, 0.72);
+  background: var(--nav-bg);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   border-bottom: 1px solid transparent;
@@ -62,7 +89,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .brand:hover { text-decoration: none; }
 .brand-mark {
   display: grid; place-items: center; width: 34px; height: 34px;
-  border-radius: 9px; font: 700 13px var(--mono); color: #001014;
+  border-radius: 9px; font: 700 13px var(--mono); color: var(--on-accent);
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
 }
 .brand-name { font-family: var(--display); letter-spacing: 0.01em; }
@@ -80,7 +107,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .lang:hover, .icon-btn:hover { border-color: var(--accent); color: var(--text); }
 .lang span { padding: 2px 4px; border-radius: 5px; }
-.lang span.on { color: #001014; background: var(--accent); }
+.lang span.on { color: var(--on-accent); background: var(--accent); }
 
 /* ============ Layout ============ */
 main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
@@ -113,7 +140,7 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .hero-name .w { display: inline-block; white-space: nowrap; }
 .hero-name .c {
   display: inline-block;
-  background: linear-gradient(180deg, #fff 30%, #9fb3cc);
+  background: var(--sheen);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -130,7 +157,7 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
   transition: transform 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 .btn:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-1px); }
-.btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #00121a; border: 0; box-shadow: var(--glow); }
+.btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: var(--on-accent); border: 0; box-shadow: var(--glow); }
 .btn.primary:hover { box-shadow: 0 0 0 1px rgba(92, 225, 230, 0.5), 0 14px 50px -10px rgba(92, 225, 230, 0.5); }
 .btn svg { width: 18px; height: 18px; flex: none; }
 .status { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; margin: 26px 0 0; }
@@ -222,7 +249,7 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 @keyframes flow { to { background-position: -200% 0; } }
 .step { padding: 0; text-align: left; }
 .step-dot { width: 62px; height: 62px; border-radius: 16px; display: grid; place-items: center; font: 700 15px var(--mono); color: var(--accent); background: var(--panel-solid); border: 1px solid var(--line-strong); margin-bottom: 16px; }
-.step.key .step-dot { color: #00121a; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: 0; box-shadow: var(--glow); }
+.step.key .step-dot { color: var(--on-accent); background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: 0; box-shadow: var(--glow); }
 .step h3 { margin: 0 0 6px; font: 600 18px var(--display); }
 .step p { margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.55; }
 .step .human { display: inline-block; margin-top: 10px; font: 600 10.5px var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--warn); border: 1px solid rgba(251,191,36,0.4); border-radius: 6px; padding: 2px 7px; }

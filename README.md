@@ -40,6 +40,10 @@ Then open http://localhost:5173.
 ## Features
 
 - English / Romanian switch (remembers the visitor's choice, defaults to the browser language)
+- Light / dark theme toggle in the header (dark by default, follows the visitor's system, remembers their choice)
+- A social share card (`assets/img/og.png`) so links look good on Telegram, X, LinkedIn, etc.
+- A back-to-top button that appears after you scroll
+- Footer shows a "last updated" line (edit `updated` in `content.js`)
 - Short "access granted" intro on the first visit of a session (click or any key skips it; add `?noboot` to the URL to skip it entirely)
 - Animated ID badge, letter-by-letter name, aurora background, cursor light, glowing cards, magnetic buttons, scroll progress bar
 - Scrolling "SOC log" strip: edit `feed` in `content.js`

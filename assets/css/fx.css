@@ -55,7 +55,7 @@
 
 /* a light sweeps across the name every few seconds (each letter carries its own slice of the sweep) */
 .fx.ready .hero-name .c {
-  background-image: linear-gradient(105deg, transparent 42%, rgba(160,245,255,0.95) 50%, transparent 58%), linear-gradient(180deg, #fff 30%, #9fb3cc);
+  background-image: linear-gradient(105deg, transparent 42%, rgba(160,245,255,0.95) 50%, transparent 58%), var(--sheen);
   background-size: 400% 100%, 100% 100%; background-position: 120% 0, 0 0; background-repeat: no-repeat;
   animation: rise .9s cubic-bezier(.2,.8,.2,1) both, shine 8s ease-in-out infinite;
   animation-delay: calc(var(--i, 0) * 38ms + .12s), calc(var(--i, 0) * 55ms + 2.6s);
@@ -172,3 +172,31 @@
 .btn { transition: transform .2s, border-color .2s, background .2s, box-shadow .2s, translate .35s cubic-bezier(.2,.8,.2,1); }
 .icon-btn, .lang { transition: border-color .2s, color .2s, translate .35s cubic-bezier(.2,.8,.2,1); }
 .brand-mark { transition: translate .35s cubic-bezier(.2,.8,.2,1); }
+
+/* ---------- Light theme: soften the dark-tuned decorations ---------- */
+:root[data-theme="light"] .aurora { opacity: 0.55; }
+:root[data-theme="light"] .grain { display: none; }
+:root[data-theme="light"] #net { opacity: 0.6; }
+:root[data-theme="light"] .spot { background: radial-gradient(640px circle at var(--cx, -999px) var(--cy, -999px), rgba(10,143,166,0.06), transparent 42%); }
+:root[data-theme="light"] .footer-name { -webkit-text-stroke-color: rgba(15,23,42,0.18); }
+:root[data-theme="light"] .fl b { filter: none; }
+
+/* ---------- Theme toggle + back-to-top button ---------- */
+.theme-btn { display: grid; place-items: center; padding: 0; width: 34px; }
+.theme-btn svg { width: 17px; height: 17px; }
+.theme-btn:hover { color: var(--accent); }
+.dot-sep { color: var(--faint); margin: 0 4px; }
+
+.to-top {
+  position: fixed; right: clamp(14px, 3vw, 28px); bottom: clamp(14px, 3vw, 28px); z-index: 60;
+  width: 46px; height: 46px; display: grid; place-items: center; border-radius: 13px;
+  color: var(--on-accent); background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border: 0; box-shadow: var(--glow);
+  opacity: 0; transform: translateY(14px) scale(.9); pointer-events: none;
+  transition: opacity .3s, transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.to-top.show { opacity: 1; transform: none; pointer-events: auto; }
+.to-top:hover { transform: translateY(-2px); }
+.to-top svg { width: 20px; height: 20px; }
+@media print { .to-top, .theme-btn { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { .to-top { transition: opacity .3s; transform: none; } .to-top.show:hover { transform: none; } }

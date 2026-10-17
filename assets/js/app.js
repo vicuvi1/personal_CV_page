@@ -196,6 +196,7 @@
     $("#contact-box").classList.add("panel", "reveal");
 
     $("#footer-text").textContent = `© ${new Date().getFullYear()} ${P.name}. ${t(UI.footer)}`;
+    $("#footer-updated").textContent = t(CV.updated);
 
     if (firstRender) observeReveals();
     else $$(".reveal").forEach((el) => el.classList.add("in"));
@@ -448,6 +449,15 @@
   network();
   // the hero typing starts once the intro animation (fx.js) has finished
   (window.bootReady || Promise.resolve()).then(() => { typeWhoami(); rotator(); });
+
+  // back-to-top button: appears once you've scrolled past the hero
+  const toTop = $("#to-top");
+  if (toTop) {
+    const toggleTop = () => toTop.classList.toggle("show", scrollY > innerHeight * 0.9);
+    addEventListener("scroll", () => requestAnimationFrame(toggleTop), { passive: true });
+    toTop.addEventListener("click", () => scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }));
+    toggleTop();
+  }
 
   console.log("%c" + P.name + "%c\nLooking under the hood? Good instinct. Press ` on the page for a terminal, or write me: " + P.email,
     "font:700 20px sans-serif;color:#5ce1e6", "color:#8d9bb0");

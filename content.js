@@ -48,6 +48,9 @@ window.CV = {
      Leave empty ("") and the button uses the browser's "Save as PDF" instead. */
   cvPdf: "",
 
+  /* Shown in the footer as "Updated <this>". Bump it when you make changes. */
+  updated: { en: "Updated October 2026", ro: "Actualizat octombrie 2026" },
+
   /* ---------- Links (header, contact, terminal) ---------- */
   links: [
     { label: "GitHub", url: "https://github.com/vicuvi1", icon: "github" },

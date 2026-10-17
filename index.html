@@ -14,9 +14,13 @@
   <meta property="og:type" content="profile">
   <meta property="og:title" content="Victor Bărbuță | Information Security · SOC / Blue Team">
   <meta property="og:description" content="Infosec student training for SOC / Blue Team. Top 3% on TryHackMe. Builds real software with AI-assisted workflows.">
-  <meta property="og:image" content="https://victor-barbuta.vercel.app/assets/img/victor.jpg">
+  <meta property="og:image" content="https://victor-barbuta.vercel.app/assets/img/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Victor Bărbuță — Information Security, SOC / Blue Team">
   <meta property="og:url" content="https://victor-barbuta.vercel.app/">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://victor-barbuta.vercel.app/assets/img/og.png">
 
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +28,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/fx.css">
+  <script src="assets/js/theme.js"></script>
 
   <script type="application/ld+json">
   {
@@ -52,6 +57,7 @@
     <nav class="nav-links" aria-label="Sections" id="nav-links"></nav>
     <div class="nav-actions">
       <button class="lang" id="lang" type="button" aria-label="Switch language"><span data-l="en">EN</span><span data-l="ro">RO</span></button>
+      <button class="icon-btn theme-btn" id="theme-toggle" type="button" aria-label="Switch theme"></button>
       <button class="icon-btn" id="term-open" type="button" aria-label="Open terminal" title="Terminal">&gt;_</button>
     </div>
   </header>
@@ -135,8 +141,12 @@
   <footer class="footer">
     <div class="footer-name" aria-hidden="true" data-bind="name"></div>
     <p id="footer-text"></p>
-    <p class="mono muted" data-ui="cta.terminalHint"></p>
+    <p class="mono muted"><span id="footer-updated"></span> <span class="dot-sep">·</span> <span data-ui="cta.terminalHint"></span></p>
   </footer>
+
+  <button class="to-top" id="to-top" type="button" aria-label="Back to top" title="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V6M6 12l6-6 6 6"/></svg>
+  </button>
 
   <!-- Terminal easter egg -->
   <div class="term" id="term" role="dialog" aria-modal="true" aria-label="Terminal" hidden>
