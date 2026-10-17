@@ -1,6 +1,7 @@
 # Victor Bărbuță — personal CV page
 
 Live: https://victor-barbuta.vercel.app
+Backup: https://vicuvi1.github.io/personal_CV_page/ (GitHub Pages, updated on every push by `.github/workflows/pages.yml`)
 
 A fast, single-page CV for an Information Security student (SOC / Blue Team). Plain HTML, CSS and JavaScript: no framework, no build step, no trackers.
 
