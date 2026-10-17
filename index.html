@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Victor Bărbuță | Information Security · SOC / Blue Team</title>
+  <meta name="description" content="Victor Bărbuță: Information Security student at UTM (Moldova), training for SOC / Blue Team roles. Top 3% on TryHackMe, builder of real-world apps with AI-assisted workflows.">
+  <meta name="author" content="Victor Bărbuță">
+  <meta name="theme-color" content="#070b12">
+  <link rel="canonical" href="https://victor-barbuta.vercel.app/">
+
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Victor Bărbuță | Information Security · SOC / Blue Team">
+  <meta property="og:description" content="Infosec student training for SOC / Blue Team. Top 3% on TryHackMe. Builds real software with AI-assisted workflows.">
+  <meta property="og:image" content="https://victor-barbuta.vercel.app/assets/img/victor.jpg">
+  <meta property="og:url" content="https://victor-barbuta.vercel.app/">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Victor Bărbuță",
+    "jobTitle": "Information Security Student",
+    "address": { "@type": "PostalAddress", "addressLocality": "Chișinău", "addressCountry": "MD" },
+    "alumniOf": "Technical University of Moldova",
+    "email": "mailto:victor.barbuta@outlook.com",
+    "image": "https://victor-barbuta.vercel.app/assets/img/victor.jpg",
+    "sameAs": ["https://github.com/vicuvi1", "https://tryhackme.com/p/vicuvi1"]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <canvas id="net" aria-hidden="true"></canvas>
+
+  <header class="nav" id="top">
+    <a class="brand" href="#top" aria-label="Back to top"><span class="brand-mark" data-bind="initials"></span><span class="brand-name" data-bind="name"></span></a>
+    <nav class="nav-links" aria-label="Sections" id="nav-links"></nav>
+    <div class="nav-actions">
+      <button class="lang" id="lang" type="button" aria-label="Switch language"><span data-l="en">EN</span><span data-l="ro">RO</span></button>
+      <button class="icon-btn" id="term-open" type="button" aria-label="Open terminal" title="Terminal">&gt;_</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-name">
+      <div class="hero-copy">
+        <p class="prompt"><span class="prompt-user">guest@vb</span>:<span class="prompt-path">~</span>$ <span id="whoami-typed"></span><span class="caret" aria-hidden="true"></span></p>
+        <h1 id="hero-name" class="hero-name"></h1>
+        <p class="hero-role"><span id="hero-role"></span> <span class="sep">·</span> <span class="rotator" id="rotator" aria-live="polite"></span></p>
+        <p class="hero-pitch" id="hero-pitch"></p>
+        <div class="hero-cta" id="hero-cta"></div>
+        <p class="status" id="status"></p>
+      </div>
+      <div class="hero-badge">
+        <div class="lanyard" aria-hidden="true"></div>
+        <article class="badge" id="badge" aria-label="ID badge"></article>
+      </div>
+    </section>
+
+    <section class="stats" id="stats" aria-label="Highlights"></section>
+
+    <section class="section" id="about">
+      <header class="section-head"><span class="section-no">01</span><h2 data-ui="sections.about"></h2></header>
+      <div class="about-grid" id="about-body"></div>
+    </section>
+
+    <section class="section" id="workflow">
+      <header class="section-head"><span class="section-no">02</span><h2 data-ui="sections.workflow"></h2></header>
+      <p class="section-intro" data-ui="workflowIntro"></p>
+      <ol class="pipeline" id="pipeline"></ol>
+      <div class="tools" id="ai-tools"></div>
+    </section>
+
+    <section class="section" id="skills">
+      <header class="section-head"><span class="section-no">03</span><h2 data-ui="sections.skills"></h2></header>
+      <div class="skills-grid" id="skills-grid"></div>
+    </section>
+
+    <section class="section" id="projects">
+      <header class="section-head"><span class="section-no">04</span><h2 data-ui="sections.projects"></h2></header>
+      <div class="projects-grid" id="projects-grid"></div>
+      <h3 class="sub-head" data-ui="sections.labs"></h3>
+      <ol class="timeline" id="labs"></ol>
+    </section>
+
+    <section class="section" id="certs">
+      <header class="section-head"><span class="section-no">05</span><h2 data-ui="sections.certs"></h2></header>
+      <div class="certs-grid" id="certs-grid"></div>
+    </section>
+
+    <section class="section" id="achievements">
+      <header class="section-head"><span class="section-no">06</span><h2 data-ui="sections.achievements"></h2></header>
+      <p class="section-intro" data-ui="achievementsIntro"></p>
+      <div class="ach-grid" id="ach-grid"></div>
+    </section>
+
+    <section class="section split" id="education">
+      <div>
+        <header class="section-head"><span class="section-no">07</span><h2 data-ui="sections.education"></h2></header>
+        <ol class="timeline" id="edu"></ol>
+      </div>
+      <div>
+        <header class="section-head"><span class="section-no">08</span><h2 data-ui="sections.languages"></h2></header>
+        <ul class="langs" id="langs"></ul>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <header class="section-head"><span class="section-no">09</span><h2 data-ui="sections.contact"></h2></header>
+      <p class="section-intro" data-ui="contactIntro"></p>
+      <div class="offers" id="offers"></div>
+      <div class="contact-box" id="contact-box"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p id="footer-text"></p>
+    <p class="mono muted" data-ui="cta.terminalHint"></p>
+  </footer>
+
+  <!-- Terminal easter egg -->
+  <div class="term" id="term" role="dialog" aria-modal="true" aria-label="Terminal" hidden>
+    <div class="term-win">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">guest@vb: ~</span><button class="term-x" id="term-close" type="button" aria-label="Close terminal">×</button></div>
+      <div class="term-body" id="term-body"><div class="term-out" id="term-out"></div>
+      <form class="term-in" id="term-form" autocomplete="off"><label for="term-input" class="prompt-user">guest@vb:~$</label><input id="term-input" spellcheck="false" autocapitalize="off"></form></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <noscript><p class="noscript">This page needs JavaScript to show its content. Contact: victor.barbuta@outlook.com · github.com/vicuvi1</p></noscript>
+
+  <script src="content.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
