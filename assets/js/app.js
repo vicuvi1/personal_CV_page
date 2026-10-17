@@ -150,6 +150,25 @@
         ${l.link ? `<p><a href="${esc(l.link.url)}" target="_blank" rel="noopener">${T(l.link.label)} ↗</a></p>` : ""}
       </li>`).join("");
 
+    // write-ups (each expands to the full article via <details>)
+    $("#writeups-list").innerHTML = shown(CV.writeups).map((w) => `
+      <article class="panel writeup reveal">
+        <details>
+          <summary>
+            <div class="wu-top">
+              <div><h3>${T(w.title)}</h3><div class="wu-meta">${T(w.meta)}${w.role ? ` · <span class="wu-role">${T(w.role)}</span>` : ""} · ${T(w.date)}</div></div>
+              ${w.status ? `<span class="pill ${esc(w.status)}">${T(UI.status[w.status] || w.status)}</span>` : ""}
+            </div>
+            <p class="wu-summary">${T(w.summary)}</p>
+            <ul class="tags">${(w.tags || []).map((x) => `<li class="tag">${T(x)}</li>`).join("")}</ul>
+            <span class="wu-toggle"><span class="wu-open">${T(UI.cta.readMore)}</span><span class="wu-close">${T(UI.cta.readLess)}</span> <span class="wu-chev" aria-hidden="true">▾</span></span>
+          </summary>
+          <div class="wu-body">
+            ${(w.sections || []).map((s) => `<h4>${T(s.h)}</h4><p>${T(s.p)}</p>`).join("")}
+          </div>
+        </details>
+      </article>`).join("");
+
     // certifications
     $("#certs-grid").innerHTML = shown(CV.certifications).map((c) => `
       <article class="panel cert reveal">
@@ -201,6 +220,9 @@
     if (firstRender) observeReveals();
     else $$(".reveal").forEach((el) => el.classList.add("in"));
     firstRender = false;
+    // number the section headers in document order, so inserting a section can't desync them
+    $$(".section-no").forEach((el, i) => (el.textContent = String(i + 1).padStart(2, "0")));
+
     setActiveNav();
     if (window.fxRefresh) window.fxRefresh();
   }

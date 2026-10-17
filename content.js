@@ -337,6 +337,62 @@ window.CV = {
     },
   ],
 
+  /* ---------- Write-ups ----------
+     Each is a card that expands to the full text.
+     To add one, copy a block. `sections` are the parts of the article;
+     each has a heading (h) and a paragraph (p). status is optional. */
+  writeups: [
+    {
+      title: "GigaHack 2026 — Red Team CTF",
+      date: "Sep 2026",
+      meta: { en: "Chișinău Cyber Arena · Team NAVI (4 people)", ro: "Chișinău Cyber Arena · Echipa NAVI (4 persoane)" },
+      role: { en: "Operator / support", ro: "Operator / suport" },
+      status: "team",
+      tags: ["Red Team", "Active Directory", "MITRE ATT&CK", "CTF"],
+      summary: {
+        en: "An authorized red-team competition on a shared practice lab. I was an operator/support member of the four-person team NAVI, which chained a single web foothold into control of five Windows/Linux domains and mapped a 41-host internal network. My takeaway is a defender's one: watching these attacks from the inside is the fastest way to learn how to spot them.",
+        ro: "O competiție autorizată de tip red-team pe un laborator comun de practică. Am fost operator/suport în echipa de patru persoane NAVI, care a pornit de la un singur punct de intrare web și a ajuns să controleze cinci domenii Windows/Linux, cartografiind o rețea internă de 41 de hosturi. Concluzia mea e una de apărare: să vezi aceste atacuri din interior e cel mai rapid mod de a învăța cum să le detectezi.",
+      },
+      sections: [
+        {
+          h: { en: "What it was", ro: "Ce a fost" },
+          p: {
+            en: "GigaHack 2026's Cyber Arena was an authorized, scoped red-team CTF: seven teams sharing the same practice lab over a weekend, with clear rules of engagement and a defined list of targets. Nothing here touched real systems — everything happened inside the organizers' lab.",
+            ro: "Cyber Arena de la GigaHack 2026 a fost un CTF red-team autorizat și delimitat: șapte echipe pe același laborator de practică, pe parcursul unui weekend, cu reguli clare și o listă definită de ținte. Nimic nu a atins sisteme reale — totul s-a petrecut în laboratorul organizatorilor.",
+          },
+        },
+        {
+          h: { en: "My role — honestly", ro: "Rolul meu — sincer" },
+          p: {
+            en: "I joined as an operator/support member of team NAVI (four people). The lead operator drove the main work; I helped with the early reconnaissance, kept the notes and timeline that became the team's report, and followed the kill chain step by step so I understood each stage. I was learning next to stronger teammates, not leading the compromise — and that's exactly why it was worth it.",
+            ro: "Am participat ca operator/suport în echipa NAVI (patru persoane). Operatorul principal a condus partea grea; eu am ajutat la recunoașterea inițială, am ținut notițele și cronologia care au devenit raportul echipei și am urmărit pas cu pas lanțul de atac ca să înțeleg fiecare etapă. Învățam alături de colegi mai experimentați, nu conduceam compromiterea — și tocmai de asta a meritat.",
+          },
+        },
+        {
+          h: { en: "What the team achieved", ro: "Ce a reușit echipa" },
+          p: {
+            en: "Starting from one internet-facing web host, the team worked its way to control of five linked Windows/Linux domains and produced a full map of the 41-host internal network. It used known, published vulnerabilities in an identity server and in Active Directory Certificate Services, and abused trust between domains. The headline finding was a defensive one: industrial-control (OT/ICS) systems sat on the same reachable network as ordinary office machines — the kind of flat-network risk a blue team exists to catch.",
+            ro: "Pornind de la un singur host web expus în internet, echipa a ajuns să controleze cinci domenii Windows/Linux legate între ele și a produs o hartă completă a rețelei interne de 41 de hosturi. A folosit vulnerabilități cunoscute și publicate dintr-un server de identitate și din Active Directory Certificate Services și a exploatat relațiile de încredere dintre domenii. Descoperirea principală a fost una de apărare: sisteme de control industrial (OT/ICS) se aflau în aceeași rețea accesibilă ca stațiile de birou obișnuite — exact genul de risc de rețea „plată” pe care un blue team există ca să-l prindă.",
+          },
+        },
+        {
+          h: { en: "What I took away (the blue-team angle)", ro: "Ce am învățat (din perspectiva blue team)" },
+          p: {
+            en: "Every step the team used leaves traces a defender can hunt for: default or reused passwords, certificate requests that shouldn't happen, directory replication coming from a machine that isn't a domain controller, and unusual cross-domain logins. Mapping each attack technique to what it looks like in logs — with the MITRE ATT&CK framework — is the work I want to do. This competition turned textbook techniques into things I've now watched happen in front of me.",
+            ro: "Fiecare pas al echipei lasă urme pe care un apărător le poate căuta: parole implicite sau reutilizate, cereri de certificate care n-ar trebui să existe, replicare de director venită de la o mașină care nu e controler de domeniu și autentificări neobișnuite între domenii. Să mapez fiecare tehnică de atac la felul în care arată în loguri — cu framework-ul MITRE ATT&CK — este munca pe care vreau s-o fac. Competiția a transformat tehnici din manual în lucruri pe care le-am văzut acum întâmplându-se în fața mea.",
+          },
+        },
+        {
+          h: { en: "A note on detail", ro: "O notă despre detalii" },
+          p: {
+            en: "A full technical report exists for the competition judges. This page stays high-level on purpose — it isn't a how-to. I'm happy to walk through the specifics and the detection ideas in an interview.",
+            ro: "Există un raport tehnic complet pentru juriul competiției. Această pagină rămâne la nivel general intenționat — nu e un ghid pas cu pas. Pot explica detaliile și ideile de detecție într-un interviu.",
+          },
+        },
+      ],
+    },
+  ],
+
   /* ---------- Labs & practice (timeline) ---------- */
   labs: [
     {
@@ -464,6 +520,7 @@ window.UI = {
     about: { en: "About", ro: "Despre" },
     skills: { en: "Skills", ro: "Competențe" },
     projects: { en: "Projects", ro: "Proiecte" },
+    writeups: { en: "Write-ups", ro: "Articole" },
     certs: { en: "Certifications", ro: "Certificări" },
     contact: { en: "Contact", ro: "Contact" },
   },
@@ -473,6 +530,7 @@ window.UI = {
     skills: { en: "Technical skills", ro: "Competențe tehnice" },
     projects: { en: "Projects & experience", ro: "Proiecte și experiență" },
     more: { en: "More things I've built", ro: "Alte proiecte construite" },
+    writeups: { en: "Write-ups", ro: "Articole & analize" },
     labs: { en: "Labs & practice", ro: "Laboratoare și practică" },
     certs: { en: "Certifications & training", ro: "Certificări și formare" },
     achievements: { en: "Beyond the keyboard", ro: "Dincolo de tastatură" },
@@ -492,6 +550,10 @@ window.UI = {
     en: "Have an internship, a role, or an idea that needs building? I reply within a day.",
     ro: "Ai un stagiu, un post sau o idee care trebuie construită? Răspund în maximum o zi.",
   },
+  writeupsIntro: {
+    en: "Short notes on things I've taken apart and what I learned from them. More coming as I finish them.",
+    ro: "Note scurte despre lucruri pe care le-am analizat și ce am învățat. Urmează mai multe pe măsură ce le finalizez.",
+  },
   cta: {
     contact: { en: "Get in touch", ro: "Contactează-mă" },
     projects: { en: "See my work", ro: "Vezi proiectele" },
@@ -502,6 +564,8 @@ window.UI = {
     telegram: { en: "Message on Telegram", ro: "Scrie-mi pe Telegram" },
     aiTools: { en: "Tools I use daily", ro: "Unelte folosite zilnic" },
     interests: { en: "What I'm aiming at", ro: "Ce țintesc" },
+    readMore: { en: "Read write-up", ro: "Citește articolul" },
+    readLess: { en: "Close", ro: "Închide" },
     terminalHint: { en: "Press ` to open the terminal", ro: "Apasă ` pentru terminal" },
   },
   status: {

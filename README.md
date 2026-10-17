@@ -21,6 +21,7 @@ Rules of thumb:
 | Same text in both languages | a plain string: `"Python"` |
 | Hide something without deleting it | add `hidden: true` to that block |
 | Add a project | copy a block in `projects: [ … ]`, paste it below, edit it |
+| Add a write-up | copy a block in `writeups: [ … ]`; each has `sections` (heading + paragraph) |
 | Change your photo | replace `assets/img/victor.jpg` (portrait, ~3:4) |
 | Show your phone number | `showPhone: true` |
 | Offer a real PDF | put it in `assets/` and set `cvPdf: "assets/your-file.pdf"` |
