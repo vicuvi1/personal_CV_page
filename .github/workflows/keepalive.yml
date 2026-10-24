@@ -1,0 +1,43 @@
+# Backup keep-alive for the free Supabase databases (the primary one is the Vercel cron
+# in vercel.json). Pings both daily. On the 1st of each month it also commits a heartbeat
+# file, because GitHub disables scheduled workflows in repos with 60 days of no commits.
+name: Keep databases awake
+
+on:
+  schedule:
+    - cron: "23 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Registru database
+        env:
+          URL: ${{ secrets.SUPABASE_REGISTRU_URL }}
+          KEY: ${{ secrets.SUPABASE_REGISTRU_KEY }}
+        run: curl -fsS -o /dev/null -w "registru %{http_code}\n" "$URL/rest/v1/app_settings?select=*&limit=0" -H "apikey: $KEY"
+
+      - name: Ping CV database
+        env:
+          URL: ${{ secrets.SUPABASE_CV_URL }}
+          KEY: ${{ secrets.SUPABASE_CV_KEY }}
+        run: curl -fsS -o /dev/null -w "cv %{http_code}\n" -X POST "$URL/rest/v1/rpc/ping" -H "apikey: $KEY" -H "Content-Type: application/json" -d '{"source":"github-actions"}'
+
+      - name: Monthly heartbeat commit
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule != ''
+        run: |
+          if [ "$(date -u +%d)" != "01" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Not the 1st of the month, skipping heartbeat."; exit 0
+          fi
+          git clone --depth 1 "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" repo
+          cd repo
+          date -u +%Y-%m-%dT%H:%M:%SZ > .github/keepalive-heartbeat
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/keepalive-heartbeat
+          git commit -m "chore: keep-alive heartbeat [skip ci]" || exit 0
+          git push
