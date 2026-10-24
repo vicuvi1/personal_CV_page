@@ -19,21 +19,33 @@ jobs:
         env:
           URL: ${{ secrets.SUPABASE_REGISTRU_URL }}
           KEY: ${{ secrets.SUPABASE_REGISTRU_KEY }}
-        run: curl -fsS -o /dev/null -w "registru %{http_code}\n" "$URL/rest/v1/app_settings?select=*&limit=0" -H "apikey: $KEY"
+        run: |
+          curl -fsS -o /dev/null -w "registru %{http_code}\n" \
+            "$URL/rest/v1/app_settings?select=*&limit=0" \
+            -H "apikey: $KEY"
 
       - name: Ping CV database
         env:
           URL: ${{ secrets.SUPABASE_CV_URL }}
           KEY: ${{ secrets.SUPABASE_CV_KEY }}
-        run: curl -fsS -o /dev/null -w "cv %{http_code}\n" -X POST "$URL/rest/v1/rpc/ping" -H "apikey: $KEY" -H "Content-Type: application/json" -d '{"source":"github-actions"}'
+        run: |
+          curl -fsS -o /dev/null -w "cv %{http_code}\n" \
+            -X POST "$URL/rest/v1/rpc/ping" \
+            -H "apikey: $KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"source":"github-actions"}'
 
       - name: Monthly heartbeat commit
-        if: github.event_name == 'workflow_dispatch' || github.event.schedule != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
         run: |
-          if [ "$(date -u +%d)" != "01" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-            echo "Not the 1st of the month, skipping heartbeat."; exit 0
+          if [ "$(date -u +%d)" != "01" ] && [ "$EVENT" != "workflow_dispatch" ]; then
+            echo "Not the 1st of the month, skipping heartbeat."
+            exit 0
           fi
-          git clone --depth 1 "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" repo
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" repo
           cd repo
           date -u +%Y-%m-%dT%H:%M:%SZ > .github/keepalive-heartbeat
           git config user.name "github-actions[bot]"
