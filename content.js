@@ -6,6 +6,8 @@
    • To ADD something, copy an existing block inside a list [ ... ],
      paste it below, change the text. Keep the commas between blocks.
    • To HIDE something without deleting it, add:  hidden: true
+   • After changing facts, run `node tools/build-cv.js` to update /cv and resume.txt,
+     then export the PDF again (see README).
    • Save → commit to GitHub → Vercel redeploys in about 30 seconds.
    ===================================================================== */
 
@@ -26,139 +28,330 @@ window.CV = {
     badgeId: "VB-2026-SI266",
     // Green status dot in the header and on the badge. Set available: false to hide it.
     available: true,
-    availability: {
-      en: "Open to SOC / Blue Team internships & freelance projects",
-      ro: "Disponibil pentru stagii SOC / Blue Team și proiecte freelance",
+    // The fixed line under your name. Never rotates: this is what you want.
+    goal: {
+      en: "First-year Information Security student · Looking for a SOC / Blue Team internship",
+      ro: "Student în anul I la Securitate Informațională · Caut un stagiu SOC / Blue Team",
     },
-    // Lines that rotate under your name in the hero.
+    availability: {
+      en: "Open to SOC / Blue Team internships. I reply within a day.",
+      ro: "Disponibil pentru stagii SOC / Blue Team. Răspund în maximum o zi.",
+    },
+    // When and how you can work. Empty fields ("") are not shown on the page.
+    work: {
+      start: "", // e.g. { en: "From February 2027", ro: "Din februarie 2027" }
+      hours: "", // e.g. { en: "20 hours a week during term", ro: "20 de ore pe săptămână în timpul semestrului" }
+      mode: { en: "On-site in Chișinău, hybrid or remote", ro: "La birou în Chișinău, hibrid sau de la distanță" },
+      shifts: { en: "Day shifts and weekends", ro: "Ture de zi și în weekend" },
+    },
+    // Lines that rotate under your name in the hero (desktop and phone).
     rotating: [
       { en: "training for SOC / Blue Team", ro: "mă pregătesc pentru SOC / Blue Team" },
-      { en: "Top 3% on TryHackMe", ro: "Top 3% pe TryHackMe" },
-      { en: "building real software with AI agents", ro: "construiesc software real cu agenți AI" },
       { en: "4th of 12 teams at HackTrone", ro: "locul 4 din 12 echipe la HackTrone" },
+      { en: "national checkers champion", ro: "campion național la dame" },
       { en: "black belt in Taekwondo", ro: "centură neagră la Taekwondo" },
     ],
+    // Three short facts right under the goal.
+    chips: [
+      { en: "Top 3% TryHackMe", ro: "Top 3% TryHackMe" },
+      { en: "SOC Level 1 done", ro: "SOC Level 1 finalizat" },
+      { en: "4th of 12 CTF", ro: "Locul 4 din 12 la CTF" },
+    ],
     pitch: {
-      en: "First-year Information Security student at the Technical University of Moldova. I spend my time in Linux labs, packet captures and CTF rooms, and I build working software with AI-assisted workflows. I check and test every line myself before it ships.",
-      ro: "Student în anul I la Securitate Informațională (UTM). Îmi petrec timpul în laboratoare Linux, capturi de trafic și camere CTF și construiesc software funcțional folosind fluxuri AI-assisted. Verific și testez fiecare linie înainte de integrare.",
+      en: "I spend my time in Linux labs, packet captures and CTF rooms, and I build working software. I review and test what I ship, and I can explain how it works.",
+      ro: "Îmi petrec timpul în laboratoare Linux, capturi de trafic și camere CTF și construiesc software funcțional. Verific și testez ce livrez și pot explica cum funcționează.",
     },
   },
 
-  /* Link to a PDF version of your CV, e.g. "assets/Victor_Barbuta_CV.pdf".
-     Leave empty ("") and the button uses the browser's "Save as PDF" instead. */
-  cvPdf: "",
+  /* Link to the PDF version of your CV. Leave empty ("") and the button uses the browser's "Save as PDF" instead. */
+  cvPdf: "assets/Victor_Barbuta_CV_SOC_Intern.pdf",
 
   /* Shown in the footer as "Updated <this>". Bump it when you make changes. */
-  updated: { en: "Updated October 2026", ro: "Actualizat octombrie 2026" },
+  updated: { en: "Updated November 2026", ro: "Actualizat noiembrie 2026" },
 
   /* ---------- Links (header, contact, terminal) ---------- */
   links: [
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/victor-barbuta-a0b69b2b9", icon: "linkedin" },
     { label: "GitHub", url: "https://github.com/vicuvi1", icon: "github" },
     { label: "TryHackMe", url: "https://tryhackme.com/p/vicuvi1", icon: "flag" },
     { label: "Telegram", url: "https://t.me/vicuvi27", icon: "telegram" },
     { label: "X", url: "https://x.com/vicuvi_1", icon: "x" },
-    // { label: "LinkedIn", url: "https://www.linkedin.com/in/your-handle", icon: "linkedin" },
   ],
 
-  /* ---------- Big numbers under the hero ---------- */
-  stats: [
-    { prefix: "Top ", value: 3, suffix: "%", label: { en: "TryHackMe global rank", ro: "clasament global TryHackMe" } },
-    { value: 140, suffix: "+", label: { en: "TryHackMe rooms completed", ro: "camere TryHackMe finalizate" } },
-    { value: 25, label: { en: "TryHackMe badges earned", ro: "insigne TryHackMe" } },
-    { value: 4, suffix: "/12", label: { en: "HackTrone international CTF", ro: "HackTrone, CTF internațional" } },
-    { value: 3, suffix: "×", label: { en: "National checkers champion", ro: "campion național la dame" } },
+  /* ---------- The 30-second proof block under the hero ----------
+     One row per fact. url can be a web address or a #section on this page.
+     highlight: true → the memorable one, drawn in amber. */
+  proof: [
+    {
+      label: "TryHackMe",
+      fact: { en: "Top 3% worldwide, 140+ rooms, SOC Level 1 path completed", ro: "Top 3% mondial, peste 140 de camere, parcursul SOC Level 1 finalizat" },
+      link: { label: { en: "See profile", ro: "Vezi profilul" }, url: "https://tryhackme.com/p/vicuvi1" },
+    },
+    {
+      label: "HackTrone",
+      fact: { en: "4th of 12 teams with team NAVI, international cybersecurity competition, Sep 2026", ro: "Locul 4 din 12 echipe cu echipa NAVI, competiție internațională de cybersecurity, sep. 2026" },
+      link: { label: { en: "Details", ro: "Detalii" }, url: "#achievements" },
+    },
+    {
+      label: "GigaHack",
+      fact: { en: "Team NAVI went from one web host to five domains. My role: operator/support, notes and timeline", ro: "Echipa NAVI a pornit de la un host web și a ajuns la cinci domenii. Rolul meu: operator/suport, notițe și cronologie" },
+      link: { label: { en: "Read the report", ro: "Citește raportul" }, url: "#incident" },
+    },
+    {
+      label: "Registru Digital",
+      fact: { en: "Replaced a paper library register. My mother uses it every day", ro: "A înlocuit un registru de bibliotecă pe hârtie. Mama mea îl folosește zilnic" },
+      link: { label: "GitHub", url: "https://github.com/vicuvi1/mother_app_registru" },
+    },
+    {
+      label: { en: "Languages", ro: "Limbi" },
+      fact: { en: "Romanian native, English certified B2 with C1 working level, Russian B2", ro: "Română nativ, engleză certificat B2 cu nivel de lucru C1, rusă B2" },
+      link: { label: { en: "Certificates", ro: "Certificări" }, url: "#certs" },
+    },
+    {
+      label: { en: "Memorable", ro: "De reținut" },
+      fact: { en: "3× national checkers champion of Moldova, black belt in Taekwondo", ro: "De 3 ori campion național la dame, centură neagră la Taekwondo" },
+      link: { label: { en: "More", ro: "Mai mult" }, url: "#achievements" },
+      highlight: true,
+    },
   ],
 
-  /* ---------- Scrolling "SOC log" strip under the numbers ----------
-     level: "ok" | "info" | "warn" | "block" | "alert"  (sets the color)  */
+  /* ---------- Scrolling log strip under the proof block. Only true lines and clear jokes. ----------
+     level: "ok" | "info" | "warn" | "alert"  (sets the color)  */
   feed: [
     { level: "ok", text: "hacktrone.ctf → placed 4/12 teams" },
     { level: "info", text: "tryhackme.rank → top 3% worldwide" },
-    { level: "block", text: "ssh brute-force from 203.0.113.7 → denied" },
     { level: "ok", text: "soc-level-1 → path completed" },
-    { level: "info", text: "registru-digital → nightly backup verified" },
     { level: "ok", text: "taekwondo → black belt acquired" },
     { level: "warn", text: "coffee.level → 12%, refill recommended" },
-    { level: "ok", text: "workout-crew → 346/346 tests passing" },
-    { level: "block", text: "phishing email → quarantined" },
+    { level: "ok", text: "workout-crew → 330+ automated tests" },
     { level: "alert", text: "new opportunity? → victor.barbuta@outlook.com" },
   ],
 
-  /* ---------- About ---------- */
+  /* ---------- Signature section: the GigaHack incident report ----------
+     Stays high-level on purpose. Add ATT&CK IDs only after checking the competition rules. */
+  incident: {
+    caseId: "CASE GH-2026",
+    meta: [
+      { en: "Authorized lab", ro: "Laborator autorizat" },
+      { en: "Team NAVI (4 people)", ro: "Echipa NAVI (4 persoane)" },
+      { en: "Role: operator / support", ro: "Rol: operator / suport" },
+      { en: "Sep 2026", ro: "sep. 2026" },
+    ],
+    title: "GigaHack 2026, Red Team CTF",
+    summary: {
+      en: "An authorized red-team competition on a shared practice lab: seven teams, one weekend, clear rules. Nothing touched real systems. My takeaway is a defender's one: watching these attacks from the inside is the fastest way to learn how to spot them.",
+      ro: "O competiție red-team autorizată pe un laborator comun de practică: șapte echipe, un weekend, reguli clare. Nimic nu a atins sisteme reale. Concluzia mea e una de apărare: să vezi aceste atacuri din interior e cel mai rapid mod de a învăța cum să le detectezi.",
+    },
+    chain: [
+      { value: "1", label: { en: "web host as the way in", ro: "host web ca punct de intrare" } },
+      { value: "5", label: { en: "linked domains controlled", ro: "domenii legate, controlate" } },
+      { value: "41", label: { en: "internal hosts mapped", ro: "hosturi interne cartografiate" } },
+    ],
+    tableHead: {
+      did: { en: "What the team did", ro: "Ce a făcut echipa" },
+      see: { en: "What a defender could look for", ro: "Ce ar putea căuta un apărător" },
+    },
+    rows: [
+      {
+        did: { en: "Used a known, published vulnerability in an identity server", ro: "A folosit o vulnerabilitate cunoscută și publicată dintr-un server de identitate" },
+        see: { en: "Logins with default or reused passwords", ro: "Autentificări cu parole implicite sau reutilizate" },
+      },
+      {
+        did: { en: "Used a known weakness in Active Directory Certificate Services", ro: "A folosit o slăbiciune cunoscută din Active Directory Certificate Services" },
+        see: { en: "Certificate requests that shouldn't happen", ro: "Cereri de certificate care n-ar trebui să existe" },
+      },
+      {
+        did: { en: "Moved between five linked domains by abusing the trust between them", ro: "S-a deplasat între cinci domenii legate, exploatând încrederea dintre ele" },
+        see: { en: "Unusual cross-domain logins, and directory replication from a machine that isn't a domain controller", ro: "Autentificări neobișnuite între domenii și replicare de director de la o mașină care nu e controler de domeniu" },
+      },
+    ],
+    tableNote: {
+      en: "These are detection ideas I'm learning from, not rules I have tested in a real SOC.",
+      ro: "Acestea sunt idei de detecție din care învăț, nu reguli testate de mine într-un SOC real.",
+    },
+    finding: {
+      label: { en: "Main finding", ro: "Descoperirea principală" },
+      text: {
+        en: "Industrial-control (OT/ICS) systems sat on the same reachable network as ordinary office machines. This flat-network risk is exactly what a blue team exists to catch.",
+        ro: "Sisteme de control industrial (OT/ICS) se aflau în aceeași rețea accesibilă ca stațiile de birou obișnuite. Exact genul de risc de rețea „plată” pe care un blue team există ca să-l prindă.",
+      },
+    },
+    myRole: {
+      label: { en: "My role, honestly", ro: "Rolul meu, sincer" },
+      text: {
+        en: "The lead operator drove the main work. I helped with early reconnaissance, kept the notes and timeline that became the team's report, and followed each stage so I understood it.",
+        ro: "Operatorul principal a condus partea grea. Am ajutat la recunoașterea inițială, am ținut notițele și cronologia care au devenit raportul echipei și am urmărit fiecare etapă ca să o înțeleg.",
+      },
+    },
+    cover: "assets/img/gigahack-team.jpg", // big photo at the top of the report (click to enlarge)
+    coverCaption: { en: "Team NAVI at the GigaHack arena", ro: "Echipa NAVI în arena GigaHack" },
+    photos: [
+      { src: "assets/img/gigahack-arena.jpg", caption: { en: "The main stage — DeepTech GigaHack 2026", ro: "Scena principală — DeepTech GigaHack 2026" } },
+      { src: "assets/img/gigahack-banner.jpg", caption: { en: "“The largest hackathon in Moldova”", ro: "„Cel mai mare hackathon din Moldova”" } },
+    ],
+    sections: [
+      {
+        h: { en: "What it was", ro: "Ce a fost" },
+        p: {
+          en: "GigaHack 2026's Cyber Arena was an authorized, scoped red-team CTF: seven teams sharing the same practice lab over a weekend, with clear rules of engagement and a defined list of targets. Nothing here touched real systems — everything happened inside the organizers' lab.",
+          ro: "Cyber Arena de la GigaHack 2026 a fost un CTF red-team autorizat și delimitat: șapte echipe pe același laborator de practică, pe parcursul unui weekend, cu reguli clare și o listă definită de ținte. Nimic nu a atins sisteme reale — totul s-a petrecut în laboratorul organizatorilor.",
+        },
+      },
+      {
+        h: { en: "My role — honestly", ro: "Rolul meu — sincer" },
+        p: {
+          en: "I joined as an operator/support member of team NAVI (four people). The lead operator drove the main work; I helped with the early reconnaissance, kept the notes and timeline that became the team's report, and followed the kill chain step by step so I understood each stage. I was learning next to stronger teammates, not leading the compromise — and that's exactly why it was worth it.",
+          ro: "Am participat ca operator/suport în echipa NAVI (patru persoane). Operatorul principal a condus partea grea; eu am ajutat la recunoașterea inițială, am ținut notițele și cronologia care au devenit raportul echipei și am urmărit pas cu pas lanțul de atac ca să înțeleg fiecare etapă. Învățam alături de colegi mai experimentați, nu conduceam compromiterea — și tocmai de asta a meritat.",
+        },
+      },
+      {
+        h: { en: "What the team achieved", ro: "Ce a reușit echipa" },
+        p: {
+          en: "Starting from one internet-facing web host, the team worked its way to control of five linked Windows/Linux domains and produced a full map of the 41-host internal network. It used known, published vulnerabilities in an identity server and in Active Directory Certificate Services, and abused trust between domains. The headline finding was a defensive one: industrial-control (OT/ICS) systems sat on the same reachable network as ordinary office machines — the kind of flat-network risk a blue team exists to catch.",
+          ro: "Pornind de la un singur host web expus în internet, echipa a ajuns să controleze cinci domenii Windows/Linux legate între ele și a produs o hartă completă a rețelei interne de 41 de hosturi. A folosit vulnerabilități cunoscute și publicate dintr-un server de identitate și din Active Directory Certificate Services și a exploatat relațiile de încredere dintre domenii. Descoperirea principală a fost una de apărare: sisteme de control industrial (OT/ICS) se aflau în aceeași rețea accesibilă ca stațiile de birou obișnuite — exact genul de risc de rețea „plată” pe care un blue team există ca să-l prindă.",
+        },
+      },
+      {
+        h: { en: "What I took away (the blue-team angle)", ro: "Ce am învățat (din perspectiva blue team)" },
+        p: {
+          en: "Every step the team used leaves traces a defender can hunt for: default or reused passwords, certificate requests that shouldn't happen, directory replication coming from a machine that isn't a domain controller, and unusual cross-domain logins. Mapping each attack technique to what it looks like in logs — with the MITRE ATT&CK framework — is the work I want to do. This competition turned textbook techniques into things I've now watched happen in front of me.",
+          ro: "Fiecare pas al echipei lasă urme pe care un apărător le poate căuta: parole implicite sau reutilizate, cereri de certificate care n-ar trebui să existe, replicare de director venită de la o mașină care nu e controler de domeniu și autentificări neobișnuite între domenii. Să mapez fiecare tehnică de atac la felul în care arată în loguri — cu framework-ul MITRE ATT&CK — este munca pe care vreau s-o fac. Competiția a transformat tehnici din manual în lucruri pe care le-am văzut acum întâmplându-se în fața mea.",
+        },
+      },
+      {
+        h: { en: "A note on detail", ro: "O notă despre detalii" },
+        p: {
+          en: "A full technical report exists for the competition judges. This page stays high-level on purpose — it isn't a how-to. I'm happy to walk through the specifics and the detection ideas in an interview.",
+          ro: "Există un raport tehnic complet pentru juriul competiției. Această pagină rămâne la nivel general intenționat — nu e un ghid pas cu pas. Pot explica detaliile și ideile de detecție într-un interviu.",
+        },
+      },
+    ],
+  },
+
+  /* ---------- "Triage this alert with me" demo ----------
+     All data is made up and uses reserved example addresses. Set hidden: true to remove it. */
+  triage: {
+    alert: { en: "ALERT · Suspicious login after a phishing email", ro: "ALERTĂ · Autentificare suspectă după un email de phishing" },
+    intro: {
+      en: "Read the sample logs, pick a verdict, then see how I reasoned about it. It takes about two minutes, and there is no wrong answer.",
+      ro: "Citește logurile de exemplu, alege un verdict, apoi vezi cum am raționat. Durează cam două minute și nu există răspuns greșit.",
+    },
+    label: { en: "MADE-UP SAMPLE DATA · not a real incident", ro: "DATE DE EXEMPLU INVENTATE · nu e un incident real" },
+    logs: [
+      "09:14:02 mail-gw RECEIVED from=billing@paypa1-support.example to=ana.p@company.example subject=\"Invoice overdue\"",
+      "09:14:02 mail-gw AUTH spf=fail dkim=none dmarc=fail src_ip=203.0.113.45",
+      "09:14:03 mail-gw URL count=1 url=hxxp://paypa1-support.example/login",
+      "09:14:03 mail-gw DELIVER folder=inbox action=delivered",
+      "09:21:40 proxy GET user=ana.p url=hxxp://paypa1-support.example/login status=200",
+      "09:22:15 proxy POST user=ana.p url=hxxp://paypa1-support.example/login status=302 bytes_out=412",
+      "09:22:16 proxy GET user=ana.p url=https://www.paypal.example/ status=200",
+      "09:48:03 idp LOGIN user=ana.p result=success src_ip=198.51.100.23 geo=unknown mfa=none",
+      "09:49:37 mail READ user=ana.p src_ip=198.51.100.23 folder=inbox messages=38",
+      "09:51:22 mail RULE_CREATED user=ana.p src_ip=198.51.100.23 action=forward_all to=x@mailbox.example",
+    ],
+    verdicts: [
+      { id: "fp", label: { en: "False positive: close it", ro: "Fals pozitiv: închid" } },
+      { id: "watch", label: { en: "Suspicious: keep watching", ro: "Suspect: urmăresc în continuare" } },
+      { id: "tp", label: { en: "True positive: escalate", ro: "Adevărat pozitiv: escaladez" } },
+    ],
+    answer: "tp",
+    responses: {
+      fp: { en: "I wouldn't close this one, because of the new forwarding rule. Here is why:", ro: "Nu l-aș închide, din cauza noii reguli de redirecționare. Iată de ce:" },
+      watch: { en: "I would go one step further and escalate now, because mail may already be leaving. Here is why:", ro: "Aș merge un pas mai departe și aș escalada acum, pentru că emailurile pot pleca deja. Iată de ce:" },
+      tp: { en: "That's my verdict too. Here is how I got there:", ro: "Acesta e și verdictul meu. Iată cum am ajuns la el:" },
+    },
+    verdictLabel: { en: "My verdict: true positive, escalate", ro: "Verdictul meu: adevărat pozitiv, escaladez" },
+    reasoning: [
+      { en: "The sender looks like PayPal but isn't (paypa1), and SPF and DMARC both failed. The email was still delivered.", ro: "Expeditorul pare PayPal, dar nu este (paypa1), iar SPF și DMARC au eșuat. Emailul a fost totuși livrat." },
+      { en: "The user opened the link and sent a POST to it, then was redirected to a real-looking site. That pattern suggests a password was entered.", ro: "Utilizatorul a deschis linkul și a trimis un POST, apoi a fost redirecționat către un site care pare real. Tiparul sugerează că a introdus o parolă." },
+      { en: "26 minutes later the account logged in from a new IP address without MFA.", ro: "După 26 de minute, contul s-a autentificat de pe un IP nou, fără MFA." },
+      { en: "The same IP read 38 messages and created a rule forwarding all mail outside. This is the step that turns a suspicious click into a probable compromise.", ro: "Același IP a citit 38 de mesaje și a creat o regulă care redirecționează tot emailul în afară. Acesta e pasul care transformă un clic suspect într-o compromitere probabilă." },
+    ],
+    escalationLabel: { en: "My escalation note", ro: "Nota mea de escaladare" },
+    escalation: {
+      en: "Probable account compromise of ana.p through phishing. Recommend: disable the session and reset the password, remove the forwarding rule, block the sender domain and IPs, find other recipients of this email, and check what the forwarded and read mail contained.",
+      ro: "Compromitere probabilă a contului ana.p prin phishing. Recomand: închiderea sesiunii și resetarea parolei, eliminarea regulii de redirecționare, blocarea domeniului și a IP-urilor, găsirea altor destinatari ai emailului și verificarea conținutului mesajelor citite și redirecționate.",
+    },
+  },
+
+  /* ---------- About (kept short) ---------- */
   about: {
     paragraphs: [
       {
-        en: "I'm aiming for defensive security: SOC analysis, network security and security automation. I learn by doing: TryHackMe paths (Pre Security, Cyber Security 101, SOC Level 1), pwn.college, Kali and Ubuntu VMs, Nmap and Wireshark.",
-        ro: "Țintesc spre securitatea defensivă: analiză SOC, securitatea rețelelor și automatizare. Învăț prin practică: parcursuri TryHackMe (Pre Security, Cyber Security 101, SOC Level 1), pwn.college, mașini virtuale Kali și Ubuntu, Nmap și Wireshark.",
-      },
-      {
-        en: "Alongside security, I build things people actually use: a Telegram fitness app, a records app my mother uses every day, and tools for my own AI agent setup. I use AI agents for speed, and I make sure I can explain, test and maintain every line myself.",
-        ro: "Pe lângă securitate, construiesc lucruri folosite de oameni reali: o aplicație de fitness în Telegram, un registru digital pe care mama mea îl folosește zilnic și unelte pentru propriul meu mediu de agenți AI. Folosesc agenți AI pentru viteză, dar pot explica, testa și întreține singur fiecare linie.",
+        en: "I'm aiming for defensive security: SOC analysis, network security and security automation. I learn by doing: TryHackMe paths, pwn.college, Kali and Ubuntu VMs, Nmap and Wireshark.",
+        ro: "Țintesc spre securitatea defensivă: analiză SOC, securitatea rețelelor și automatizare. Învăț prin practică: parcursuri TryHackMe, pwn.college, mașini virtuale Kali și Ubuntu, Nmap și Wireshark.",
       },
       {
         en: "Years of competitive checkers and a Taekwondo black belt taught me the part that's hard to put on a CV: patience, focus under pressure and showing up every day.",
         ro: "Anii de dame la nivel competițional și centura neagră la Taekwondo m-au învățat ce e greu de pus într-un CV: răbdare, concentrare sub presiune și consecvență zilnică.",
       },
     ],
-    interests: ["SOC analysis", "Blue Team", "Network Security", "Cloud Security", "Security Automation"],
   },
 
   /* ---------- How I work (AI-assisted pipeline) ---------- */
   workflow: [
-    { title: { en: "Research", ro: "Cercetare" }, text: { en: "Understand the problem, the docs and the threat model first.", ro: "Înțeleg problema, documentația și riscurile înainte de orice." } },
-    { title: { en: "Plan", ro: "Planificare" }, text: { en: "Break it into small steps with AI agents as a sparring partner.", ro: "Împart totul în pași mici, cu agenții AI ca partener de idei." } },
-    { title: { en: "Prototype", ro: "Prototip" }, text: { en: "Fast drafts with Claude Code, Cursor and other tools.", ro: "Schițe rapide cu Claude Code, Cursor și alte unelte." } },
-    { title: { en: "Verify", ro: "Verificare" }, text: { en: "I read, test and fix the code by hand. This is the step I never hand to the AI.", ro: "Citesc, testez și corectez manual codul. Pasul pe care nu-l deleg niciodată." }, key: true },
-    { title: { en: "Ship", ro: "Livrare" }, text: { en: "Git branches, pull requests and small, reviewable commits.", ro: "Branch-uri Git, pull request-uri și commit-uri mici, ușor de verificat." } },
+    { title: { en: "Research", ro: "Cercetare" }, text: { en: "Understand the problem and the risks first.", ro: "Înțeleg problema și riscurile mai întâi." } },
+    { title: { en: "Plan", ro: "Planificare" }, text: { en: "Break it into small steps.", ro: "Împart totul în pași mici." } },
+    { title: { en: "Prototype", ro: "Prototip" }, text: { en: "Fast drafts with AI tools.", ro: "Schițe rapide cu unelte AI." } },
+    { title: { en: "Verify", ro: "Verificare" }, text: { en: "I review, test and fix it myself. I never hand this step to the AI.", ro: "Verific, testez și corectez singur. Nu deleg niciodată acest pas." }, key: true },
+    { title: { en: "Ship", ro: "Livrare" }, text: { en: "Small, reviewable commits.", ro: "Commit-uri mici, ușor de verificat." } },
   ],
-  aiTools: ["Claude Code", "Cursor", "Hermes", "Qwen", "Grok", "DeepSeek", "Antigravity"],
+  aiTools: ["Claude Code", "Cursor"],
 
-  /* ---------- Skills ---------- */
+  /* ---------- Skills table ----------
+     level: "used" (real projects) | "lab" (guided labs and practice) | "next" (not yet, learning next)
+     proof is optional: { label, url } */
   skills: [
     {
-      icon: "shield",
-      group: { en: "Cybersecurity & networking", ro: "Securitate & rețelistică" },
-      items: ["TCP/IP", "DNS", "HTTP", "Nmap", "Wireshark", "Enumeration", "Traffic analysis"],
-      note: { en: "Fundamentals of defensive security and traffic analysis.", ro: "Fundamente de securitate defensivă și analiză de trafic." },
+      skill: { en: "Phishing email analysis", ro: "Analiză de emailuri phishing" },
+      tools: "CyberChef",
+      level: "lab",
+      proof: { label: "TryHackMe", url: "https://tryhackme.com/p/vicuvi1" },
     },
     {
-      icon: "terminal",
-      group: { en: "Operating systems", ro: "Sisteme de operare" },
-      items: ["Linux", "Kali Linux", "Ubuntu", "Windows", "Bash"],
-      note: { en: "Terminal work, permissions, processes, basic administration.", ro: "Terminal, permisiuni, procese, administrare de bază." },
+      skill: { en: "Network and traffic analysis", ro: "Analiză de rețea și trafic" },
+      tools: "Wireshark, Nmap, TCP/IP, DNS, HTTP",
+      level: "lab",
+      proof: { label: "TryHackMe", url: "https://tryhackme.com/p/vicuvi1" },
     },
     {
-      icon: "code",
-      group: { en: "Programming", ro: "Programare" },
-      items: ["Python", "C", "C++", "SQL", "HTML", "CSS", "JavaScript"],
-      note: { en: "From university labs to deployed side projects.", ro: "De la laboratoare la proiecte puse în producție." },
+      skill: { en: "Operating systems and labs", ro: "Sisteme de operare și laboratoare" },
+      tools: "Linux, Kali, Ubuntu, Windows, Bash, VirtualBox, VMware",
+      level: "lab",
     },
     {
-      icon: "layers",
-      group: { en: "Virtualization", ro: "Virtualizare" },
-      items: ["VirtualBox", "VMware", "Kali / Ubuntu labs"],
-      note: { en: "Isolated lab environments for practice.", ro: "Medii de laborator izolate pentru practică." },
+      skill: { en: "SIEM and log queries", ro: "SIEM și interogări de loguri" },
+      tools: { en: "Next to learn", ro: "Urmează să învăț" },
+      level: "next",
     },
     {
-      icon: "git",
-      group: { en: "Dev & collaboration", ro: "Development & colaborare" },
-      items: ["Git", "GitHub", "Pull requests", "VS Code", "Supabase", "Vercel"],
-      note: { en: "Team workflow with branches, reviews and clean merges.", ro: "Lucru în echipă cu branch-uri, review-uri și integrare curată." },
+      skill: { en: "Programming", ro: "Programare" },
+      tools: "Python, C, C++, SQL, JavaScript, HTML, CSS",
+      level: "used",
+      proof: { label: "GitHub", url: "https://github.com/vicuvi1" },
     },
     {
-      icon: "spark",
-      group: { en: "AI-assisted development", ro: "Dezvoltare asistată de AI" },
-      items: ["Claude Code", "Cursor", "Hermes", "Agentic workflows", "Code review"],
-      note: { en: "Research, prototyping, debugging, refactoring and docs, always verified by hand.", ro: "Cercetare, prototipare, debugging, refactorizare, documentație, verificate manual." },
+      skill: { en: "Access control and data safety", ro: "Controlul accesului și siguranța datelor" },
+      tools: "Supabase Auth, row-level security",
+      level: "used",
+      proof: { label: "Registru Digital", url: "https://github.com/vicuvi1/mother_app_registru" },
+    },
+    {
+      skill: { en: "Development workflow", ro: "Flux de dezvoltare" },
+      tools: "Git, GitHub, pull requests, Vercel, Claude Code, Cursor",
+      level: "used",
+      proof: { label: "GitHub", url: "https://github.com/vicuvi1" },
     },
   ],
 
   /* ---------- Projects ----------
-     featured: true  → big card at the top. Without it → small card under "More things I've built".
+     featured: true → main card. Without it → inside "See all projects".
+     onCv: true → also listed in the /cv page, resume.txt and the PDF.
      status: "live" | "building" | "done" | "team"  (shows a small colored label)  */
   projects: [
     {
       featured: true,
+      onCv: true,
       title: "Finance Helper",
       period: "2026",
       status: "live",
@@ -170,13 +363,69 @@ window.CV = {
       bullets: [
         { en: "Installs on the phone and works offline; Electron desktop app for Windows, Mac and Linux.", ro: "Se instalează pe telefon și merge offline; aplicație desktop Electron pentru Windows, Mac și Linux." },
         { en: "Own Telegram bot for logging and a weekly money report.", ro: "Bot Telegram propriu pentru înregistrare și un raport financiar săptămânal." },
-        { en: "No account, no server, no tracking: data stays on the device. Unit + Playwright tests.", ro: "Fără cont, fără server, fără tracking: datele rămân pe dispozitiv. Teste unitare + Playwright." },
+        { en: "No account and no tracking. Data stays on the device unless you choose to use the Telegram bot. Unit + Playwright tests.", ro: "Fără cont și fără tracking. Datele rămân pe dispozitiv, dacă nu alegi să folosești botul Telegram. Teste unitare + Playwright." },
       ],
-      tags: ["JavaScript", "PWA", "Electron", "Telegram Bot", "Playwright"],
+      tags: ["JavaScript", "PWA", "Electron"],
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Finance-Helper-App" }],
     },
     {
       featured: true,
+      onCv: true,
+      title: "Life OS",
+      period: "2026",
+      status: "building",
+      kind: { en: "Personal project · Web app", ro: "Proiect personal · Aplicație web" },
+      summary: {
+        en: "My operating system for goals, projects, tasks and habits: a dark-mode morning dashboard that shows the 3 things that matter today.",
+        ro: "Sistemul meu pentru obiective, proiecte, sarcini și obiceiuri: un dashboard de dimineață care arată cele 3 lucruri importante de azi.",
+      },
+      bullets: [
+        { en: "First milestone built: login, protected routes, app shell and morning dashboard.", ro: "Prima etapă e gata: autentificare, rute protejate, structura aplicației și dashboardul de dimineață." },
+        { en: "Firestore security rules keep each user's data scoped to their own account.", ro: "Regulile de securitate Firestore limitează datele fiecărui utilizator la propriul cont." },
+        { en: "Goals, projects, tasks, habits and weekly review screens are the next milestones.", ro: "Ecranele pentru obiective, proiecte, sarcini, obiceiuri și revizuire săptămânală urmează în etapele următoare." },
+      ],
+      tags: ["Next.js", "TypeScript", "Firebase"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/life_os" }],
+    },
+
+    /* ----- Everything below opens with "See all projects" ----- */
+    {
+      onCv: true,
+      title: "Registru Digital",
+      period: "2026",
+      status: "live",
+      kind: { en: "Real daily user · Web app", ro: "Utilizator real zilnic · Aplicație web" },
+      summary: {
+        en: "Replaced a paper library register with a web app my mother uses every day. Built with data safety in mind: login, history, and saving that survives a lost connection.",
+        ro: "Am înlocuit un registru de bibliotecă pe hârtie cu o aplicație web pe care mama mea o folosește zilnic. Construită cu accent pe siguranța datelor: autentificare, istoric și salvare care rezistă la pierderea conexiunii.",
+      },
+      bullets: [
+        { en: "Supabase (Postgres + Auth) with row-level security, deployed on Vercel.", ro: "Supabase (Postgres + Auth) cu row-level security, publicat pe Vercel." },
+        { en: "Nightly off-site backups with automated restore checks.", ro: "Backup-uri zilnice off-site cu verificare automată a restaurării." },
+        { en: "Offline-safe save queue, so edits survive a lost connection.", ro: "Coadă de salvare offline, ca modificările să reziste la pierderea conexiunii." },
+      ],
+      tags: ["JavaScript", "Supabase", "PostgreSQL"],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/mother_app_registru" }],
+    },
+    {
+      title: "Workout Crew",
+      period: "2026",
+      status: "live",
+      kind: { en: "Personal project · Telegram bot + Mini App", ro: "Proiect personal · Bot Telegram + Mini App" },
+      summary: {
+        en: "A self-hosted Telegram bot with a full app inside Telegram: live workout duels, crew chat, bets, proof clips, adaptive targets and an RPG-style progression system.",
+        ro: "Un bot Telegram self-hosted cu o aplicație completă în Telegram: dueluri live de antrenament, chat de echipă, pariuri, clipuri-dovadă, obiective adaptive și un sistem de progres tip RPG.",
+      },
+      bullets: [
+        { en: "330+ automated tests; no build step on the frontend.", ro: "Peste 330 de teste automate; frontend fără build step." },
+        { en: "Admin panel and moderator-approved quests.", ro: "Panou de administrare și quest-uri aprobate de moderator." },
+        { en: "Self-hosted, so app data stays on my server. Messages still pass through Telegram.", ro: "Self-hosted: datele aplicației rămân pe serverul meu. Mesajele trec totuși prin Telegram." },
+      ],
+      tags: ["Python", "SQLite", "pytest"],
+      shot: "assets/img/shot-workout.jpg", // screenshot banner on the card (click to enlarge)
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Sport-Bot-Telegram-" }],
+    },
+    {
       title: "Interview Manager",
       period: "2026",
       status: "live",
@@ -190,14 +439,13 @@ window.CV = {
         { en: "Telegram, Google Calendar and email integrations.", ro: "Integrări cu Telegram, Google Calendar și email." },
         { en: "Role-based access with Supabase Auth and row-level security.", ro: "Acces pe roluri cu Supabase Auth și row-level security." },
       ],
-      tags: ["Next.js", "TypeScript", "Supabase", "Realtime", "Zod"],
+      tags: ["Next.js", "TypeScript", "Supabase"],
       links: [
         { label: "Live", url: "https://interview-manager-umber.vercel.app" },
         { label: "GitHub", url: "https://github.com/vicuvi1/interview_manager" },
       ],
     },
     {
-      featured: true,
       title: "FounderHQ",
       period: "2026",
       status: "building",
@@ -211,65 +459,24 @@ window.CV = {
         { en: "Ideas are scored against 5 survival tests; weak ideas are filtered out.", ro: "Ideile sunt evaluate prin 5 teste de supraviețuire; cele slabe sunt eliminate." },
         { en: "Founder profiles and saved sessions in Supabase.", ro: "Profiluri de fondator și sesiuni salvate în Supabase." },
       ],
-      tags: ["Next.js", "TypeScript", "Claude API", "Supabase", "Vercel AI SDK"],
+      tags: ["Next.js", "Claude API", "Supabase"],
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/SaaS-Opportunity-Radar-In-App-AI" }],
     },
     {
-      featured: true,
-      title: "Workout Crew",
-      period: "2026",
-      status: "live",
-      kind: { en: "Personal project · Telegram bot + Mini App", ro: "Proiect personal · Bot Telegram + Mini App" },
-      summary: {
-        en: "A self-hosted Telegram bot with a full app inside Telegram: live workout duels, crew chat, bets, proof clips, adaptive targets and an RPG-style progression system.",
-        ro: "Un bot Telegram self-hosted cu o aplicație completă în Telegram: dueluri live de antrenament, chat de echipă, pariuri, clipuri-dovadă, obiective adaptive și un sistem de progres tip RPG.",
-      },
-      bullets: [
-        { en: "346 automated tests; no build step on the frontend.", ro: "346 de teste automate; frontend fără build step." },
-        { en: "Admin panel and moderator-approved quests.", ro: "Panou de administrare și quest-uri aprobate de moderator." },
-        { en: "Self-hosted, so user data never leaves the server.", ro: "Self-hosted: datele utilizatorilor nu părăsesc serverul." },
-      ],
-      tags: ["Python", "python-telegram-bot", "SQLite", "aiohttp", "pytest"],
-      shot: "assets/img/shot-workout.jpg", // screenshot banner on the card (click to enlarge)
-      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Sport-Bot-Telegram-" }],
-    },
-    {
-      featured: true,
-      title: "Registru Digital",
-      period: "2026",
-      status: "live",
-      kind: { en: "Real-world client · Web app", ro: "Client real · Aplicație web" },
-      summary: {
-        en: "Replaced a paper library register with a web app that is used every day. Built with data safety in mind: login, history, and saving that survives a lost connection.",
-        ro: "Am înlocuit un registru de bibliotecă pe hârtie cu o aplicație web folosită zilnic. Construită cu accent pe siguranța datelor: autentificare, istoric și salvare care rezistă la pierderea conexiunii.",
-      },
-      bullets: [
-        { en: "Supabase (Postgres + Auth) with row-level security, deployed on Vercel.", ro: "Supabase (Postgres + Auth) cu row-level security, publicat pe Vercel." },
-        { en: "Nightly off-site backups with automated restore checks (GitHub Actions).", ro: "Backup-uri zilnice off-site cu verificare automată a restaurării (GitHub Actions)." },
-        { en: "Offline-safe save queue, so edits are never lost.", ro: "Coadă de salvare offline, ca nicio modificare să nu se piardă." },
-      ],
-      tags: ["JavaScript", "Supabase", "PostgreSQL", "Vercel", "Backups"],
-      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/mother_app_registru" }],
-    },
-    {
-      featured: true,
-      title: "Deeptech GigaHack",
+      title: { en: "Deep-tech pitch at GigaHack", ro: "Prezentare deep-tech la GigaHack" },
       period: "2026",
       status: "team",
-      kind: { en: "Hackathon · Team of 5", ro: "Hackathon · Echipă de 5" },
+      kind: { en: "Hackathon · Team of 5, separate from the Red Team CTF", ro: "Hackathon · Echipă de 5, separat de CTF-ul Red Team" },
       summary: {
-        en: "Preparing a deep-tech project with a five-person team. I presented and defended it in English in front of investors, covering the problem, the solution and the technical approach.",
-        ro: "Pregătesc un proiect deeptech într-o echipă de 5 membri. L-am prezentat și susținut în engleză în fața investitorilor, explicând problema, soluția și abordarea tehnică.",
+        en: "A deep-tech project with a five-person team. I presented and defended it in English in front of investors, covering the problem, the solution and the technical approach.",
+        ro: "Un proiect deeptech într-o echipă de 5 membri. L-am prezentat și susținut în engleză în fața investitorilor, explicând problema, soluția și abordarea tehnică.",
       },
       bullets: [
         { en: "Team workflow on GitHub: branches, commits, pull requests, merging teammates' work.", ro: "Lucru în echipă pe GitHub: branch-uri, commit-uri, pull request-uri, integrarea contribuțiilor." },
-        { en: "Rapid iteration with Cursor, Claude Code, Qwen, Grok, DeepSeek and Antigravity.", ro: "Iterare rapidă cu Cursor, Claude Code, Qwen, Grok, DeepSeek și Antigravity." },
       ],
-      tags: ["Teamwork", "Pitching", "Git", "Prototyping"],
+      tags: ["Teamwork", "Pitching", "Git"],
       links: [],
     },
-
-    /* ----- Smaller projects (no "featured") ----- */
     {
       title: "Hermes Sync Hub",
       period: "2026",
@@ -286,10 +493,10 @@ window.CV = {
       period: "2026",
       status: "done",
       summary: {
-        en: "Describe an automation in plain English and Gemini builds the n8n workflow. Includes a SOC-style execution monitor that highlights failed runs.",
-        ro: "Descrii o automatizare în cuvinte și Gemini construiește workflow-ul n8n. Include un monitor de execuții în stil SOC care evidențiază erorile.",
+        en: "Describe an automation in plain English and Gemini builds the n8n workflow. Includes an execution monitor that highlights failed runs.",
+        ro: "Descrii o automatizare în cuvinte și Gemini construiește workflow-ul n8n. Include un monitor de execuții care evidențiază erorile.",
       },
-      tags: ["Python", "Streamlit", "Gemini API", "n8n"],
+      tags: ["Python", "Streamlit", "Gemini API"],
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/n8n_app" }],
     },
     {
@@ -300,7 +507,7 @@ window.CV = {
         en: "A fully offline voice assistant for Windows 11: wake word, local speech recognition and text-to-speech, with no cloud calls.",
         ro: "Un asistent vocal complet offline pentru Windows 11: cuvânt de activare, recunoaștere vocală și sinteză locală, fără apeluri în cloud.",
       },
-      tags: ["Python", "faster-whisper", "openWakeWord", "Piper TTS"],
+      tags: ["Python", "faster-whisper", "Piper TTS"],
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/jarvis-assistant" }],
     },
     {
@@ -315,17 +522,6 @@ window.CV = {
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/roblox_game-horror" }],
     },
     {
-      title: "Life OS",
-      period: "2026",
-      status: "building",
-      summary: {
-        en: "A dark-mode morning dashboard for goals, projects, tasks and habits that shows the 3 things that matter today.",
-        ro: "Un dashboard de dimineață pentru obiective, proiecte, sarcini și obiceiuri, care arată cele 3 lucruri importante de azi.",
-      },
-      tags: ["Next.js", "TypeScript", "Firebase"],
-      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/life_os" }],
-    },
-    {
       title: { en: "Memory Constellation", ro: "Constelația amintirilor" },
       period: "2026",
       status: "live",
@@ -338,69 +534,7 @@ window.CV = {
     },
   ],
 
-  /* ---------- Write-ups ----------
-     Each is a card that expands to the full text.
-     To add one, copy a block. `sections` are the parts of the article;
-     each has a heading (h) and a paragraph (p). status is optional. */
-  writeups: [
-    {
-      title: "GigaHack 2026 — Red Team CTF",
-      date: "Sep 2026",
-      meta: { en: "Chișinău Cyber Arena · Team NAVI (4 people)", ro: "Chișinău Cyber Arena · Echipa NAVI (4 persoane)" },
-      role: { en: "Operator / support", ro: "Operator / suport" },
-      status: "team",
-      tags: ["Red Team", "Active Directory", "MITRE ATT&CK", "CTF"],
-      cover: "assets/img/gigahack-team.jpg",
-      photos: [
-        { src: "assets/img/gigahack-team.jpg", caption: { en: "Team NAVI at the GigaHack arena", ro: "Echipa NAVI în arena GigaHack" } },
-        { src: "assets/img/gigahack-arena.jpg", caption: { en: "The main stage — DeepTech GigaHack 2026", ro: "Scena principală — DeepTech GigaHack 2026" } },
-        { src: "assets/img/gigahack-banner.jpg", caption: { en: "“The largest hackathon in Moldova”", ro: "„Cel mai mare hackathon din Moldova”" } },
-      ],
-      summary: {
-        en: "An authorized red-team competition on a shared practice lab. I was an operator/support member of the four-person team NAVI, which chained a single web foothold into control of five Windows/Linux domains and mapped a 41-host internal network. My takeaway is a defender's one: watching these attacks from the inside is the fastest way to learn how to spot them.",
-        ro: "O competiție autorizată de tip red-team pe un laborator comun de practică. Am fost operator/suport în echipa de patru persoane NAVI, care a pornit de la un singur punct de intrare web și a ajuns să controleze cinci domenii Windows/Linux, cartografiind o rețea internă de 41 de hosturi. Concluzia mea e una de apărare: să vezi aceste atacuri din interior e cel mai rapid mod de a învăța cum să le detectezi.",
-      },
-      sections: [
-        {
-          h: { en: "What it was", ro: "Ce a fost" },
-          p: {
-            en: "GigaHack 2026's Cyber Arena was an authorized, scoped red-team CTF: seven teams sharing the same practice lab over a weekend, with clear rules of engagement and a defined list of targets. Nothing here touched real systems — everything happened inside the organizers' lab.",
-            ro: "Cyber Arena de la GigaHack 2026 a fost un CTF red-team autorizat și delimitat: șapte echipe pe același laborator de practică, pe parcursul unui weekend, cu reguli clare și o listă definită de ținte. Nimic nu a atins sisteme reale — totul s-a petrecut în laboratorul organizatorilor.",
-          },
-        },
-        {
-          h: { en: "My role — honestly", ro: "Rolul meu — sincer" },
-          p: {
-            en: "I joined as an operator/support member of team NAVI (four people). The lead operator drove the main work; I helped with the early reconnaissance, kept the notes and timeline that became the team's report, and followed the kill chain step by step so I understood each stage. I was learning next to stronger teammates, not leading the compromise — and that's exactly why it was worth it.",
-            ro: "Am participat ca operator/suport în echipa NAVI (patru persoane). Operatorul principal a condus partea grea; eu am ajutat la recunoașterea inițială, am ținut notițele și cronologia care au devenit raportul echipei și am urmărit pas cu pas lanțul de atac ca să înțeleg fiecare etapă. Învățam alături de colegi mai experimentați, nu conduceam compromiterea — și tocmai de asta a meritat.",
-          },
-        },
-        {
-          h: { en: "What the team achieved", ro: "Ce a reușit echipa" },
-          p: {
-            en: "Starting from one internet-facing web host, the team worked its way to control of five linked Windows/Linux domains and produced a full map of the 41-host internal network. It used known, published vulnerabilities in an identity server and in Active Directory Certificate Services, and abused trust between domains. The headline finding was a defensive one: industrial-control (OT/ICS) systems sat on the same reachable network as ordinary office machines — the kind of flat-network risk a blue team exists to catch.",
-            ro: "Pornind de la un singur host web expus în internet, echipa a ajuns să controleze cinci domenii Windows/Linux legate între ele și a produs o hartă completă a rețelei interne de 41 de hosturi. A folosit vulnerabilități cunoscute și publicate dintr-un server de identitate și din Active Directory Certificate Services și a exploatat relațiile de încredere dintre domenii. Descoperirea principală a fost una de apărare: sisteme de control industrial (OT/ICS) se aflau în aceeași rețea accesibilă ca stațiile de birou obișnuite — exact genul de risc de rețea „plată” pe care un blue team există ca să-l prindă.",
-          },
-        },
-        {
-          h: { en: "What I took away (the blue-team angle)", ro: "Ce am învățat (din perspectiva blue team)" },
-          p: {
-            en: "Every step the team used leaves traces a defender can hunt for: default or reused passwords, certificate requests that shouldn't happen, directory replication coming from a machine that isn't a domain controller, and unusual cross-domain logins. Mapping each attack technique to what it looks like in logs — with the MITRE ATT&CK framework — is the work I want to do. This competition turned textbook techniques into things I've now watched happen in front of me.",
-            ro: "Fiecare pas al echipei lasă urme pe care un apărător le poate căuta: parole implicite sau reutilizate, cereri de certificate care n-ar trebui să existe, replicare de director venită de la o mașină care nu e controler de domeniu și autentificări neobișnuite între domenii. Să mapez fiecare tehnică de atac la felul în care arată în loguri — cu framework-ul MITRE ATT&CK — este munca pe care vreau s-o fac. Competiția a transformat tehnici din manual în lucruri pe care le-am văzut acum întâmplându-se în fața mea.",
-          },
-        },
-        {
-          h: { en: "A note on detail", ro: "O notă despre detalii" },
-          p: {
-            en: "A full technical report exists for the competition judges. This page stays high-level on purpose — it isn't a how-to. I'm happy to walk through the specifics and the detection ideas in an interview.",
-            ro: "Există un raport tehnic complet pentru juriul competiției. Această pagină rămâne la nivel general intenționat — nu e un ghid pas cu pas. Pot explica detaliile și ideile de detecție într-un interviu.",
-          },
-        },
-      ],
-    },
-  ],
-
-  /* ---------- Labs & practice (timeline) ---------- */
+  /* ---------- Labs & practice (inside "See all projects") ---------- */
   labs: [
     {
       title: { en: "Linux & virtualization", ro: "Linux & virtualizare" },
@@ -429,26 +563,31 @@ window.CV = {
     },
   ],
 
-  /* ---------- Certifications ---------- */
+  /* ---------- Certifications & training ----------
+     kind: "cert" (certificate) | "training" (course path). url is the proof link. */
   certifications: [
     {
       name: "TryHackMe",
+      kind: "training",
       date: "2026",
-      detail: { en: "Top 3% · 140 rooms · 25 badges. Completed Pre Security, Cyber Security 101 and SOC Level 1.", ro: "Top 3% · 140 camere · 25 insigne. Finalizate: Pre Security, Cyber Security 101 și SOC Level 1." },
+      detail: { en: "Pre Security, Cyber Security 101 and SOC Level 1 paths completed. 140+ rooms, 25 badges.", ro: "Parcursuri finalizate: Pre Security, Cyber Security 101 și SOC Level 1. Peste 140 de camere, 25 de insigne." },
       url: "https://tryhackme.com/p/vicuvi1",
     },
     {
       name: "pwn.college",
+      kind: "training",
       date: "2026",
       detail: { en: "Completed Introduction and Linux Luminarium (command-line practice).", ro: "Finalizate: Introduction și Linux Luminarium (practică în linia de comandă)." },
     },
     {
       name: "Certiport IT Specialist",
+      kind: "cert",
       date: "2024",
       detail: { en: "3 certifications: Python · Device Configuration & Management · Databases.", ro: "3 certificări: Python · Device Configuration & Management · Databases." },
     },
     {
       name: "Cambridge English",
+      kind: "cert",
       date: "2025",
       detail: { en: "International certificate, B2 level.", ro: "Certificare internațională, nivel B2." },
     },
@@ -460,7 +599,7 @@ window.CV = {
       icon: "trophy",
       title: "HackTrone",
       date: "Sep 2026",
-      detail: { en: "4th of 12 teams at an international cybersecurity competition with a 90,000 MDL prize pool.", ro: "Locul 4 din 12 echipe la o competiție internațională de cybersecurity cu fond de premiere de 90.000 MDL." },
+      detail: { en: "4th of 12 teams with team NAVI at an international cybersecurity competition with a 90,000 MDL prize pool.", ro: "Locul 4 din 12 echipe cu echipa NAVI, la o competiție internațională de cybersecurity cu fond de premiere de 90.000 MDL." },
     },
     {
       icon: "belt",
@@ -480,7 +619,7 @@ window.CV = {
   education: [
     {
       school: { en: "Technical University of Moldova (UTM), FCIM", ro: "Universitatea Tehnică a Moldovei (UTM), FCIM" },
-      degree: { en: "B.Sc. Information Security · Year 1 · Group SI-266", ro: "Securitate Informațională · Anul I · Grupa SI-266" },
+      degree: { en: "B.Sc. Information Security · Year 1", ro: "Securitate Informațională · Anul I" },
       period: { en: "2026 – present", ro: "2026 – prezent" },
       detail: { en: "Relevant courses: Cryptography, Computer Programming (C), Programming Techniques, Mathematical Analysis.", ro: "Discipline relevante: Criptografie, Programarea Calculatoarelor (C), Tehnici de Programare, Analiză Matematică." },
     },
@@ -491,18 +630,18 @@ window.CV = {
     },
   ],
 
-  /* ---------- Languages (level: 0–100 fills the bar) ---------- */
+  /* ---------- Languages ---------- */
   languages: [
-    { name: { en: "Romanian", ro: "Română" }, level: { en: "Native", ro: "Nativ" }, value: 100 },
-    { name: { en: "English", ro: "Engleză" }, level: "C1", value: 85 },
-    { name: { en: "Russian", ro: "Rusă" }, level: "B2", value: 70 },
+    { name: { en: "Romanian", ro: "Română" }, level: { en: "Native", ro: "Nativ" } },
+    { name: { en: "English", ro: "Engleză" }, level: { en: "Certified B2 (Cambridge), working level C1", ro: "Certificat B2 (Cambridge), nivel de lucru C1" } },
+    { name: { en: "Russian", ro: "Rusă" }, level: "B2" },
   ],
 
-  /* ---------- Who I can help (contact section) ---------- */
+  /* ---------- Who I can help (contact section). The first one is drawn bigger. ---------- */
   offers: [
     {
       audience: { en: "For hiring managers", ro: "Pentru angajatori" },
-      title: { en: "Internship or junior SOC / Blue Team role", ro: "Stagiu sau rol junior SOC / Blue Team" },
+      title: { en: "SOC / Blue Team internship", ro: "Stagiu SOC / Blue Team" },
       points: [
         { en: "Hands-on Linux, networking and traffic analysis", ro: "Practică reală în Linux, rețelistică și analiză de trafic" },
         { en: "I learn fast and keep going (Top 3% on TryHackMe)", ro: "Învăț repede și sunt consecvent (Top 3% pe TryHackMe)" },
@@ -524,30 +663,31 @@ window.CV = {
 /* ---------- Interface labels (rename sections here) ---------- */
 window.UI = {
   nav: {
-    about: { en: "About", ro: "Despre" },
+    incident: { en: "Incident report", ro: "Raport" },
+    triage: { en: "Triage demo", ro: "Demo triaj" },
     skills: { en: "Skills", ro: "Competențe" },
+    certs: { en: "Certificates", ro: "Certificări" },
     projects: { en: "Projects", ro: "Proiecte" },
-    writeups: { en: "Write-ups", ro: "Articole" },
-    certs: { en: "Certifications", ro: "Certificări" },
     contact: { en: "Contact", ro: "Contact" },
   },
   sections: {
-    about: { en: "Who I am", ro: "Cine sunt" },
-    workflow: { en: "How I work with AI", ro: "Cum lucrez cu AI" },
-    skills: { en: "Technical skills", ro: "Competențe tehnice" },
-    projects: { en: "Projects & experience", ro: "Proiecte și experiență" },
-    more: { en: "More things I've built", ro: "Alte proiecte construite" },
-    writeups: { en: "Write-ups", ro: "Articole & analize" },
+    proof: { en: "30-second proof", ro: "Dovezi în 30 de secunde" },
+    incident: { en: "Incident report", ro: "Raport de incident" },
+    triage: { en: "Triage this alert with me", ro: "Triază alerta asta cu mine" },
+    skills: { en: "Skills, with proof", ro: "Competențe, cu dovezi" },
+    certs: { en: "Certificates & training", ro: "Certificări și formare" },
+    projects: { en: "Projects", ro: "Proiecte" },
     labs: { en: "Labs & practice", ro: "Laboratoare și practică" },
-    certs: { en: "Certifications & training", ro: "Certificări și formare" },
+    workflow: { en: "How I work with AI", ro: "Cum lucrez cu AI" },
+    about: { en: "Who I am", ro: "Cine sunt" },
     achievements: { en: "Beyond the keyboard", ro: "Dincolo de tastatură" },
     education: { en: "Education", ro: "Educație" },
     languages: { en: "Languages", ro: "Limbi" },
     contact: { en: "Let's work together", ro: "Hai să lucrăm împreună" },
   },
   workflowIntro: {
-    en: "AI makes me faster. It doesn't make my decisions. Every project goes through the same five steps, and one of them is always done by hand.",
-    ro: "AI-ul mă face mai rapid, dar nu decide în locul meu. Fiecare proiect trece prin aceiași cinci pași, iar unul dintre ei îl fac mereu manual.",
+    en: "AI makes me faster. It doesn't make my decisions. One step is always done by hand.",
+    ro: "AI-ul mă face mai rapid, dar nu decide în locul meu. Un pas îl fac mereu manual.",
   },
   achievementsIntro: {
     en: "Competition taught me focus long before code did.",
@@ -557,23 +697,47 @@ window.UI = {
     en: "Have an internship, a role, or an idea that needs building? I reply within a day.",
     ro: "Ai un stagiu, un post sau o idee care trebuie construită? Răspund în maximum o zi.",
   },
-  writeupsIntro: {
-    en: "Short notes on things I've taken apart and what I learned from them. More coming as I finish them.",
-    ro: "Note scurte despre lucruri pe care le-am analizat și ce am învățat. Urmează mai multe pe măsură ce le finalizez.",
+  workLabels: {
+    start: { en: "Start", ro: "Început" },
+    hours: { en: "Hours", ro: "Ore" },
+    mode: { en: "Where", ro: "Unde" },
+    shifts: { en: "Shifts", ro: "Ture" },
+  },
+  skillHead: {
+    skill: { en: "Skill", ro: "Competență" },
+    tools: { en: "Tools", ro: "Unelte" },
+    level: { en: "Honest level", ro: "Nivel real" },
+    proof: { en: "Proof", ro: "Dovadă" },
+  },
+  levels: {
+    used: { en: "Used in projects", ro: "Folosit în proiecte" },
+    lab: { en: "Used in guided labs", ro: "Folosit în laboratoare ghidate" },
+    next: { en: "Not yet: learning next", ro: "Încă nu: urmează" },
+  },
+  certKind: {
+    cert: { en: "Certificate", ro: "Certificat" },
+    training: { en: "Training", ro: "Formare" },
+  },
+  triageUi: {
+    pick: { en: "What's your verdict?", ro: "Care e verdictul tău?" },
+    skip: { en: "Just show me your answer", ro: "Arată-mi direct răspunsul" },
   },
   cta: {
-    contact: { en: "Get in touch", ro: "Contactează-mă" },
+    contact: { en: "Email me", ro: "Scrie-mi" },
     projects: { en: "See my work", ro: "Vezi proiectele" },
     cv: { en: "Download CV", ro: "Descarcă CV" },
+    cvShort: "CV",
+    emailShort: "Email",
+    plainCv: { en: "Plain text version", ro: "Versiune text simplu" },
     copy: { en: "Copy email", ro: "Copiază emailul" },
     copied: { en: "Copied!", ro: "Copiat!" },
     email: { en: "Write me an email", ro: "Scrie-mi un email" },
     telegram: { en: "Message on Telegram", ro: "Scrie-mi pe Telegram" },
-    aiTools: { en: "Tools I use daily", ro: "Unelte folosite zilnic" },
-    interests: { en: "What I'm aiming at", ro: "Ce țintesc" },
-    readMore: { en: "Read write-up", ro: "Citește articolul" },
-    readLess: { en: "Close", ro: "Închide" },
-    terminalHint: { en: "Press ` to open the terminal", ro: "Apasă ` pentru terminal" },
+    aiTools: { en: "Tools I use most", ro: "Unelte folosite cel mai des" },
+    readMore: { en: "Read the full write-up", ro: "Citește articolul complet" },
+    allProjects: { en: "See all projects", ro: "Vezi toate proiectele" },
+    terminalHint: { en: "Prefer a terminal? Try it", ro: "Preferi un terminal? Încearcă-l" },
+    menu: { en: "Menu", ro: "Meniu" },
   },
   status: {
     live: { en: "Live", ro: "Live" },

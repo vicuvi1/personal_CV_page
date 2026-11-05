@@ -1,4 +1,4 @@
-/* Visual effects: intro screen, scrambled headings, cursor light, magnetic buttons,
+/* Visual effects: intro screen, scrambled headings, magnetic buttons,
    scroll-linked progress. Pure decoration; the page works without this file.
    Everything is skipped for visitors who ask their system for reduced motion. */
 (() => {
@@ -98,7 +98,7 @@
   const onScroll = () => { if (!sraf) sraf = requestAnimationFrame(scrollFx); };
   window.fxRefresh = onScroll;
 
-  /* ---------- pointer: cursor light, card glow, magnetic buttons ---------- */
+  /* ---------- pointer: magnetic buttons ---------- */
   function pointerFx() {
     if (!finePointer || reduced) return;
     let raf = 0, x = 0, y = 0, target = null, magnet = null;
@@ -108,16 +108,7 @@
     }, { passive: true });
     function apply() {
       raf = 0;
-      root.style.setProperty("--cx", x + "px");
-      root.style.setProperty("--cy", y + "px");
       if (!(target instanceof Element)) return;
-
-      const card = target.closest(".panel, .stat, .footer-name");
-      if (card) {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty("--mx", (x - r.left).toFixed(0) + "px");
-        card.style.setProperty("--my", (y - r.top).toFixed(0) + "px");
-      }
 
       const m = target.closest(".btn, .icon-btn, .lang, .brand-mark");
       if (magnet && magnet !== m) magnet.style.translate = "";

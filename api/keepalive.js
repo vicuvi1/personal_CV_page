@@ -1,6 +1,9 @@
 // Daily keep-alive for the free Supabase databases (scheduled in vercel.json).
 // Free projects pause after ~7 days without activity; one request a day prevents that.
 // Database URLs and keys come from the project's environment variables.
+// Vercel sends "Authorization: Bearer <CRON_SECRET>" with its cron requests, so only the cron can run this.
+const { timingSafeEqual } = require("crypto");
+
 const TARGETS = [
   {
     name: "registru",
@@ -20,7 +23,18 @@ const TARGETS = [
   },
 ];
 
+function authorized(req) {
+  const secret = process.env.CRON_SECRET;
+  if (!secret) return false; // no secret configured: stay closed
+  const given = Buffer.from(req.headers.authorization || "");
+  const expected = Buffer.from(`Bearer ${secret}`);
+  return given.length === expected.length && timingSafeEqual(given, expected);
+}
+
 module.exports = async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  if (!authorized(req)) return res.status(401).json({ ok: false });
+
   const results = await Promise.all(TARGETS.map(async (t) => {
     if (!t.url || !t.key) return { name: t.name, ok: false, error: "missing env vars" };
     try {
@@ -36,6 +50,7 @@ module.exports = async (req, res) => {
     }
   }));
   const ok = results.every((r) => r.ok);
-  res.setHeader("Cache-Control", "no-store");
-  res.status(ok ? 200 : 502).json({ ok, at: new Date().toISOString(), results });
+  // Details go to the private Vercel logs, never to the public response.
+  if (!ok) console.error("keepalive failed", results);
+  res.status(ok ? 200 : 502).json({ ok, at: new Date().toISOString() });
 };

@@ -3,7 +3,7 @@
 Live: https://victor-barbuta.vercel.app
 Backup: https://vicuvi1.github.io/personal_CV_page/ (GitHub Pages, updated on every push by `.github/workflows/pages.yml`)
 
-A fast, single-page CV for an Information Security student (SOC / Blue Team). Plain HTML, CSS and JavaScript: no framework, no build step, no trackers.
+A fast, single-page CV for an Information Security student looking for a SOC / Blue Team internship. Plain HTML, CSS and JavaScript: no framework, no build step for the site, no trackers.
 
 ## How to update the content
 
@@ -11,7 +11,8 @@ A fast, single-page CV for an Information Security student (SOC / Blue Team). Pl
 
 1. Open `content.js` (on GitHub: click the file, then the ✏️ pencil icon).
 2. Change the text, or copy an existing block to add a new one (a project, certificate, achievement…).
-3. Commit. Vercel redeploys automatically in about 30 seconds.
+3. If you changed facts, update the plain CV (see below).
+4. Commit. Vercel redeploys automatically in about 30 seconds.
 
 Rules of thumb:
 
@@ -21,14 +22,25 @@ Rules of thumb:
 | Same text in both languages | a plain string: `"Python"` |
 | Hide something without deleting it | add `hidden: true` to that block |
 | Add a project | copy a block in `projects: [ … ]`, paste it below, edit it |
-| Add a write-up | copy a block in `writeups: [ … ]`; each has `sections` (heading + paragraph) |
+| Say when you can work | fill in `person.work` (`start`, `hours`, `mode`, `shifts`) |
+| Edit the incident report | `incident` (add ATT&CK IDs only after checking the competition rules) |
+| Remove the triage demo | add `hidden: true` to `triage` |
 | Change your photo | replace `assets/img/victor.jpg` (portrait, ~3:4) |
 | Show your phone number | `showPhone: true` |
-| Offer a real PDF | put it in `assets/` and set `cvPdf: "assets/your-file.pdf"` |
 | Rename a section | edit `window.UI.sections` at the bottom of `content.js` |
-| Make a project big or small | add or remove `featured: true` |
+| Make a project main or move it behind "See all projects" | add or remove `featured: true` |
 
 Project status labels: `"live"`, `"building"`, `"done"`, `"team"`.
+
+## Update the plain CV and the PDF
+
+`cv.html`, `resume.txt` and the PDF are built from `content.js` and don't update by themselves.
+
+```bash
+node tools/build-cv.js
+```
+
+Then open `cv.html` from the local server below, print it to PDF with headers and footers off, and replace `assets/Victor_Barbuta_CV_SOC_Intern.pdf`. It should stay one page.
 
 ## Run it locally
 
@@ -38,19 +50,21 @@ py -m http.server 5173
 
 Then open http://localhost:5173.
 
+## Vercel setting
+
+`/api/keepalive` only answers Vercel's cron. Add an environment variable named `CRON_SECRET` with a long random value in the Vercel project settings. Vercel then sends it with each cron request. Never put the value in this repo.
+
 ## Features
 
 - English / Romanian switch (remembers the visitor's choice, defaults to the browser language)
-- Light / dark theme toggle in the header (dark by default, follows the visitor's system, remembers their choice)
+- Dark by default, with a light theme toggle in the header
+- SOC console style: colours mean something (cyan = clickable, green = real or done, amber = in progress)
+- Phone layout: name, goal, proof and buttons on the first screen, a menu, and an Email + CV bar
+- GigaHack incident report and a "Triage this alert" demo with clearly labelled made-up data
+- Plain `/cv` page, `resume.txt` and a one-page PDF that work without JavaScript
+- Terminal: click `>_` or press <kbd>`</kbd>, with tappable commands on phones (`proof`, `triage`, `cv`, `help`)
+- Short "access granted" intro on the first visit of a session (click or any key skips it; add `?noboot` to skip it entirely)
 - A social share card (`assets/img/og.png`) so links look good on Telegram, X, LinkedIn, etc.
-- A back-to-top button that appears after you scroll
-- Footer shows a "last updated" line (edit `updated` in `content.js`)
-- Short "access granted" intro on the first visit of a session (click or any key skips it; add `?noboot` to the URL to skip it entirely)
-- Animated ID badge, letter-by-letter name, aurora background, cursor light, glowing cards, magnetic buttons, scroll progress bar
-- Scrolling "SOC log" strip: edit `feed` in `content.js`
-- The "How I work" steps and the education timeline light up as you scroll
 - All effects live in `assets/js/fx.js` + `assets/css/fx.css` and switch off for visitors who choose *reduce motion*
-- Hidden terminal: press <kbd>`</kbd> or click `>_`, then try `help`, `nmap victor`, `sudo hire victor`
-- "Download CV" prints a clean, light, one-column CV (or serves your PDF if `cvPdf` is set)
 - Strict security headers in `vercel.json` (CSP, HSTS, X-Frame-Options, etc.) and `/.well-known/security.txt`
 - SEO: Open Graph tags and schema.org `Person` data

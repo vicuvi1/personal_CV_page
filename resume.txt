@@ -1,0 +1,54 @@
+Victor Bărbuță
+First-year Information Security student · Looking for a SOC / Blue Team internship
+victor.barbuta@outlook.com · Chișinău, Moldova
+https://www.linkedin.com/in/victor-barbuta-a0b69b2b9
+https://github.com/vicuvi1
+https://tryhackme.com/p/vicuvi1
+https://t.me/vicuvi27
+
+AVAILABILITY
+Where: On-site in Chișinău, hybrid or remote
+Shifts: Day shifts and weekends
+
+HIGHLIGHTS
+- TryHackMe: Top 3% worldwide, 140+ rooms, SOC Level 1 path completed
+- HackTrone: 4th of 12 teams with team NAVI, international cybersecurity competition, Sep 2026
+- GigaHack: Team NAVI went from one web host to five domains. My role: operator/support, notes and timeline
+- Registru Digital: Replaced a paper library register. My mother uses it every day
+
+SECURITY WORK
+GigaHack 2026, Red Team CTF
+An authorized red-team competition on a shared practice lab: seven teams, one weekend, clear rules. Nothing touched real systems. My takeaway is a defender's one: watching these attacks from the inside is the fastest way to learn how to spot them.
+The lead operator drove the main work. I helped with early reconnaissance, kept the notes and timeline that became the team's report, and followed each stage so I understood it.
+Industrial-control (OT/ICS) systems sat on the same reachable network as ordinary office machines. This flat-network risk is exactly what a blue team exists to catch.
+
+SKILLS
+- Phishing email analysis (used in guided labs): CyberChef
+- Network and traffic analysis (used in guided labs): Wireshark, Nmap, TCP/IP, DNS, HTTP
+- Operating systems and labs (used in guided labs): Linux, Kali, Ubuntu, Windows, Bash, VirtualBox, VMware
+- Programming (used in projects): Python, C, C++, SQL, JavaScript, HTML, CSS
+- Access control and data safety (used in projects): Supabase Auth, row-level security
+- Development workflow (used in projects): Git, GitHub, pull requests, Vercel, Claude Code, Cursor
+- Learning next: SIEM and log queries
+
+CERTIFICATES AND TRAINING
+- TryHackMe, 2026: Pre Security, Cyber Security 101 and SOC Level 1 paths completed. 140+ rooms, 25 badges.
+- pwn.college, 2026: Completed Introduction and Linux Luminarium (command-line practice).
+- Certiport IT Specialist, 2024: 3 certifications: Python · Device Configuration & Management · Databases.
+- Cambridge English, 2025: International certificate, B2 level.
+
+PROJECTS
+- Finance Helper: A private personal-finance app that replaced my budgeting spreadsheet: 5-second expense logging, smart category rules and a single "safe to spend today" number. https://github.com/vicuvi1/Finance-Helper-App
+- Life OS: My operating system for goals, projects, tasks and habits: a dark-mode morning dashboard that shows the 3 things that matter today. https://github.com/vicuvi1/life_os
+- Registru Digital: Replaced a paper library register with a web app my mother uses every day. Built with data safety in mind: login, history, and saving that survives a lost connection. https://github.com/vicuvi1/mother_app_registru
+
+EDUCATION
+- Technical University of Moldova (UTM), FCIM, 2026 – present: B.Sc. Information Security · Year 1
+- “B. P. Hasdeu” Theoretical High School, Drochia, 2023 – 2026: High school diploma
+
+LANGUAGES
+Romanian: Native · English: Certified B2 (Cambridge), working level C1 · Russian: B2
+
+OUTSIDE SECURITY
+- Taekwondo black belt (2026): Years of consistent training, discipline and long-term work.
+- National checkers champion (2019 – 2023): Champion of the Republic of Moldova in 2019, 2020 and 2022; 2nd place at the Moldova Cup in 2023.
