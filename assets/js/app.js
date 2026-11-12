@@ -51,12 +51,14 @@
   function projectCard(p) {
     return `
       <article class="row-card project reveal">
-        ${p.shot ? `<div class="proj-shot"><img src="${esc(p.shot)}" alt="${T(p.title)} screenshot" loading="lazy"></div>` : ""}
+        ${p.shot ? `<div class="proj-shot"><img src="${esc(p.shot)}" alt="${p.shotCaption ? T(p.shotCaption) : `${T(p.title)} screenshot`}" loading="lazy"></div>` : ""}
         <div class="project-top">${p.kind ? `<span class="project-kind">${T(p.kind)}</span>` : "<span></span>"}${p.status ? `<span class="pill ${esc(p.status)}">${T(UI.status[p.status] || p.status)}</span>` : ""}</div>
         <h3>${T(p.title)}<span class="yr">${T(p.period)}</span></h3>
         <p>${T(p.summary)}</p>
         ${p.bullets?.length ? `<ul class="pts">${p.bullets.map((b) => `<li>${T(b)}</li>`).join("")}</ul>` : ""}
         <ul class="tags">${(p.tags || []).map((x) => `<li class="tag">${T(x)}</li>`).join("")}</ul>
+        ${p.photos?.length ? `<div class="wu-gallery proj-gallery">${p.photos.map((ph) =>
+          `<button class="wu-thumb" type="button" data-full="${esc(ph.src)}" data-cap="${T(ph.caption)}" aria-label="${T(ph.caption)}"><img src="${esc(ph.src)}" alt="${T(ph.caption)}" loading="lazy"></button>`).join("")}</div>` : ""}
         ${p.links?.length ? `<div class="project-links">${p.links.map((l) => anchor(l.url, `${T(l.label)} ↗`)).join("")}</div>` : ""}
       </article>`;
   }

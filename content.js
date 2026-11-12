@@ -114,6 +114,16 @@ window.CV = {
       link: { label: { en: "See profile", ro: "Vezi profilul" }, url: "https://tryhackme.com/p/vicuvi1" },
     },
     {
+      label: "SiteSentry",
+      fact: { en: "Built a website security scanner and used it on 100 popular sites: only 31% earn an A", ro: "Am construit un scanner de securitate pentru site-uri și l-am rulat pe 100 de site-uri populare: doar 31% iau nota A" },
+      link: { label: { en: "Read the research", ro: "Citește cercetarea" }, url: "https://vicuvi1.github.io/SiteSentry/research.html" },
+    },
+    {
+      label: "HiveWatch SOC",
+      fact: { en: "Built a honeypot mini-SOC: 11 detection rules mapped to 25 MITRE ATT&CK techniques", ro: "Am construit un mini SOC cu honeypot-uri: 11 reguli de detecție mapate pe 25 de tehnici MITRE ATT&CK" },
+      link: { label: { en: "See the project", ro: "Vezi proiectul" }, url: "#projects" },
+    },
+    {
       label: "HackTrone",
       fact: { en: "4th of 12 teams with team NAVI, international cybersecurity competition, Sep 2026", ro: "Locul 4 din 12 echipe cu echipa NAVI, competiție internațională de cybersecurity, sep. 2026" },
       link: { label: { en: "Details", ro: "Detalii" }, url: "#achievements" },
@@ -146,6 +156,8 @@ window.CV = {
   feed: [
     { level: "ok", text: "hacktrone.ctf → placed 4/12 teams" },
     { level: "info", text: "tryhackme.rank → top 3% worldwide" },
+    { level: "info", text: "sitesentry.research → 100 popular sites scanned, only 31% earn an A" },
+    { level: "ok", text: "hivewatch.detection → 11 rules mapped to 25 MITRE ATT&CK techniques" },
     { level: "ok", text: "soc-level-1 → path completed" },
     { level: "ok", text: "taekwondo → black belt acquired" },
     { level: "warn", text: "coffee.level → 12%, refill recommended" },
@@ -378,6 +390,62 @@ window.CV = {
     {
       featured: true,
       onCv: true,
+      title: "SiteSentry",
+      period: "2026",
+      status: "live",
+      kind: { en: "Security tool · Website scanner (Python, web UI + CLI)", ro: "Instrument de securitate · Scanner de site-uri (Python, interfață web + CLI)" },
+      summary: {
+        en: "A passive website security scanner. Give it a URL and in a few seconds it grades HTTPS, TLS, security headers, cookies, CORS and SPF/DMARC from A+ to F, explains every issue in plain English and generates the server config that fixes it.",
+        ro: "Un scanner pasiv de securitate pentru site-uri. Îi dai o adresă și în câteva secunde notează HTTPS, TLS, headerele de securitate, cookie-urile, CORS și SPF/DMARC de la A+ la F, explică fiecare problemă pe înțeles și generează configurația de server care o rezolvă.",
+      },
+      bullets: [
+        { en: "Research: I scanned 100 popular websites (99 responded). Only 31% earn an A or better, 52% have no Content-Security-Policy and 13% still accept TLS 1.0/1.1.", ro: "Cercetare: am scanat 100 de site-uri populare (99 au răspuns). Doar 31% iau A sau mai bine, 52% nu au deloc Content-Security-Policy, iar 13% acceptă încă TLS 1.0/1.1." },
+        { en: "22 checks, all normal browser-like requests: it never tries to break in.", ro: "22 de verificări, toate cereri normale, ca un browser: nu încearcă niciodată să pătrundă în sistem." },
+        { en: "Copy-paste fixes for nginx, Apache, Caddy and Express; a --fail-under flag turns it into a CI/CD security gate.", ro: "Remedieri gata de copiat pentru nginx, Apache, Caddy și Express; opțiunea --fail-under îl transformă într-o barieră de securitate în CI/CD." },
+        { en: "Zero dependencies, 103 tests, CI and CodeQL on every push, Docker image.", ro: "Zero dependențe, 103 teste, CI și CodeQL la fiecare push, imagine Docker." },
+      ],
+      tags: ["Python", "AppSec", "TLS", "OWASP", "DevSecOps"],
+      shot: "assets/img/sec-sitesentry-report.jpg",
+      shotCaption: { en: "SiteSentry: a real report for github.com (A+)", ro: "SiteSentry: un raport real pentru github.com (A+)" },
+      photos: [
+        { src: "assets/img/sec-sitesentry-home.jpg", caption: { en: "SiteSentry: the scan screen", ro: "SiteSentry: ecranul de scanare" } },
+        { src: "assets/img/sec-sitesentry-compare.jpg", caption: { en: "SiteSentry: comparing two sites check by check", ro: "SiteSentry: compararea a două site-uri, verificare cu verificare" } },
+        { src: "assets/img/sec-sitesentry-research.jpg", caption: { en: "Research: 100 popular websites scanned with SiteSentry", ro: "Cercetare: 100 de site-uri populare scanate cu SiteSentry" } },
+      ],
+      links: [
+        { label: { en: "Project page", ro: "Pagina proiectului" }, url: "https://vicuvi1.github.io/SiteSentry/" },
+        { label: { en: "Research", ro: "Cercetarea" }, url: "https://vicuvi1.github.io/SiteSentry/research.html" },
+        { label: "GitHub", url: "https://github.com/vicuvi1/SiteSentry" },
+      ],
+    },
+    {
+      featured: true,
+      onCv: true,
+      title: "HiveWatch SOC",
+      period: "2026",
+      status: "building",
+      kind: { en: "Blue team · Honeypot-driven mini SOC (Python, FastAPI)", ro: "Blue team · Mini SOC bazat pe honeypot-uri (Python, FastAPI)" },
+      summary: {
+        en: "A honeypot-driven mini Security Operations Center. SSH, Telnet, HTTP and TCP honeypots feed a pipeline that enriches every attacker with threat intel, detects attacks in real time, maps their behaviour to MITRE ATT&CK and streams it all to a live 3D dashboard.",
+        ro: "Un mini centru de operațiuni de securitate (SOC) bazat pe honeypot-uri. Capcane SSH, Telnet, HTTP și TCP alimentează un pipeline care îmbogățește fiecare atacator cu threat intel, detectează atacurile în timp real, le mapează comportamentul pe MITRE ATT&CK și le afișează pe un dashboard 3D live.",
+      },
+      bullets: [
+        { en: "11 streaming detection rules: brute force, username enumeration, botnet credential stuffing across IPs, port scans, malware downloads, persistence, anti-forensics and more.", ro: "11 reguli de detecție în timp real: brute force, enumerare de utilizatori, credential stuffing de botnet pe mai multe IP-uri, scanări de porturi, descărcări de malware, persistență, anti-forensics și altele." },
+        { en: "25 MITRE ATT&CK techniques across 9 tactics as a live heatmap; threat-actor profiles replay each captured shell session.", ro: "25 de tehnici MITRE ATT&CK din 9 tactici, ca hartă termică live; profilurile atacatorilor redau fiecare sesiune de shell capturată." },
+        { en: "Response built in: IOC export (JSON/CSV), a firewall-ready blocklist and Telegram alerts for high and critical detections.", ro: "Răspuns inclus: export de IOC-uri (JSON/CSV), listă de blocare pentru firewall și alerte Telegram pentru detecțiile grave și critice." },
+        { en: "Secure by design: XSS-proof dashboard, strict CSP, hardened non-root Docker container, and the fake shell never executes anything. The screenshots show demo mode with simulated attacks.", ro: "Securizat din proiectare: dashboard protejat de XSS, CSP strict, container Docker restricționat, fără root, iar shell-ul fals nu execută nimic. Capturile arată modul demo, cu atacuri simulate." },
+      ],
+      tags: ["Python", "FastAPI", "MITRE ATT&CK", "Detection engineering", "Docker"],
+      shot: "assets/img/sec-hivewatch-dashboard.jpg",
+      shotCaption: { en: "HiveWatch: live SOC dashboard (demo mode, simulated attacks)", ro: "HiveWatch: dashboard SOC live (mod demo, atacuri simulate)" },
+      photos: [
+        { src: "assets/img/sec-hivewatch-mitre.jpg", caption: { en: "HiveWatch: MITRE ATT&CK coverage heatmap (demo mode, simulated attacks)", ro: "HiveWatch: harta de acoperire MITRE ATT&CK (mod demo, atacuri simulate)" } },
+        { src: "assets/img/sec-hivewatch-full.jpg", caption: { en: "HiveWatch: the full SOC dashboard (demo mode, simulated attacks)", ro: "HiveWatch: dashboardul SOC complet (mod demo, atacuri simulate)" } },
+      ],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/hivewatch-soc" }],
+    },
+    {
+      featured: true,
       title: "Finance Helper",
       period: "2026",
       status: "live",
@@ -395,8 +463,6 @@ window.CV = {
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Finance-Helper-App" }],
     },
     {
-      featured: true,
-      onCv: true,
       title: "Life OS",
       period: "2026",
       status: "building",

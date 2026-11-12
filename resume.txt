@@ -12,6 +12,8 @@ Shifts: Day shifts and weekends
 
 HIGHLIGHTS
 - TryHackMe: Top 3% worldwide, 140+ rooms, SOC Level 1 path completed
+- SiteSentry: Built a website security scanner and used it on 100 popular sites: only 31% earn an A
+- HiveWatch SOC: Built a honeypot mini-SOC: 11 detection rules mapped to 25 MITRE ATT&CK techniques
 - HackTrone: 4th of 12 teams with team NAVI, international cybersecurity competition, Sep 2026
 - GigaHack: Team NAVI went from one web host to five domains. My role: operator/support, notes and timeline
 - Registru Digital: Replaced a paper library register. My mother uses it every day
@@ -38,8 +40,8 @@ CERTIFICATES AND TRAINING
 - Cambridge English, 2025: International certificate, B2 level.
 
 PROJECTS
-- Finance Helper: A private personal-finance app that replaced my budgeting spreadsheet: 5-second expense logging, smart category rules and a single "safe to spend today" number. https://github.com/vicuvi1/Finance-Helper-App
-- Life OS: My operating system for goals, projects, tasks and habits: a dark-mode morning dashboard that shows the 3 things that matter today. https://github.com/vicuvi1/life_os
+- SiteSentry: A passive website security scanner. Give it a URL and in a few seconds it grades HTTPS, TLS, security headers, cookies, CORS and SPF/DMARC from A+ to F, explains every issue in plain English and generates the server config that fixes it. https://vicuvi1.github.io/SiteSentry/
+- HiveWatch SOC: A honeypot-driven mini Security Operations Center. SSH, Telnet, HTTP and TCP honeypots feed a pipeline that enriches every attacker with threat intel, detects attacks in real time, maps their behaviour to MITRE ATT&CK and streams it all to a live 3D dashboard. https://github.com/vicuvi1/hivewatch-soc
 - Registru Digital: Replaced a paper library register with a web app my mother uses every day. Built with data safety in mind: login, history, and saving that survives a lost connection. https://github.com/vicuvi1/mother_app_registru
 
 EDUCATION

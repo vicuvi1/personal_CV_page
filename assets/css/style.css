@@ -489,3 +489,9 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
   .case, .project, .cert, .ach, .offer, .proof-row, .data-table tr { break-inside: avoid; }
   a { color: var(--text); }
 }
+
+/* Project screenshot gallery (thumbnails under a card; click opens the lightbox) */
+.proj-gallery { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 14px 0 4px; }
+.proj-gallery .wu-thumb { aspect-ratio: 16 / 10; }
+.proj-gallery .wu-thumb img { object-position: top center; }
+@media print { .proj-gallery { display: none; } }
