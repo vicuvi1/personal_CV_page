@@ -446,6 +446,33 @@ window.CV = {
     },
     {
       featured: true,
+      onCv: true,
+      title: "SOC Log & Traffic Analyzer",
+      period: "2026",
+      status: "done",
+      kind: { en: "Blue team · Log triage platform (Python, Streamlit)", ro: "Blue team · Platformă de triere a logurilor (Python, Streamlit)" },
+      summary: {
+        en: "A SOC triage prototype that turns raw logs into alerts. It ingests Apache/Nginx access logs, Linux syslog and PCAP captures (or a live syslog stream), normalizes them, runs YAML detection rules, enriches IPs with AbuseIPDB threat intel and generates containment playbooks.",
+        ro: "Un prototip de triere SOC care transformă logurile brute în alerte. Primește loguri Apache/Nginx, syslog Linux și capturi PCAP (sau un flux syslog live), le normalizează, rulează reguli de detecție YAML, îmbogățește IP-urile cu threat intel din AbuseIPDB și generează playbook-uri de izolare.",
+      },
+      bullets: [
+        { en: "5 Sigma-style YAML rules mapped to MITRE ATT&CK (T1110, T1046, T1190, T1595): brute force, port scans, directory traversal and recon probes. A new rule is a YAML file, no code changes.", ro: "5 reguli YAML în stil Sigma, mapate pe MITRE ATT&CK (T1110, T1046, T1190, T1595): brute force, scanări de porturi, directory traversal și sondări de recunoaștere. O regulă nouă e un fișier YAML, fără modificări de cod." },
+        { en: "SOAR playbooks for every alert: iptables, Windows Firewall and AWS Security Group rules, generated for review and never run automatically.", ro: "Playbook-uri SOAR pentru fiecare alertă: reguli iptables, Windows Firewall și AWS Security Group, generate pentru verificare și niciodată rulate automat." },
+        { en: "Case management in SQLite and an optional AI triage assistant (local Ollama or OpenAI) that summarizes what happened and the next steps.", ro: "Gestionarea cazurilor în SQLite și un asistent AI opțional de triere (Ollama local sau OpenAI) care rezumă ce s-a întâmplat și pașii următori." },
+        { en: "The screenshots show the real app analysing its bundled sample logs: 19 records, 7 alerts.", ro: "Capturile arată aplicația reală analizând logurile de test incluse: 19 înregistrări, 7 alerte." },
+      ],
+      tags: ["Python", "Streamlit", "Sigma rules", "MITRE ATT&CK", "SOAR"],
+      shot: "assets/img/sec-soclogs-overview.jpg",
+      shotCaption: { en: "SOC Log & Traffic Analyzer: analysing its sample logs (19 records, 7 alerts)", ro: "SOC Log & Traffic Analyzer: analiza logurilor de test (19 înregistrări, 7 alerte)" },
+      photos: [
+        { src: "assets/img/sec-soclogs-alerts.jpg", caption: { en: "Alerts with severity, the rule that fired and containment actions", ro: "Alerte cu gravitatea, regula declanșată și acțiunile de izolare" } },
+        { src: "assets/img/sec-soclogs-charts.jpg", caption: { en: "Attack timeline and most attacked endpoints", ro: "Cronologia atacurilor și endpoint-urile cele mai atacate" } },
+        { src: "assets/img/sec-soclogs-soar.jpg", caption: { en: "SOAR containment: per-IP playbooks, never auto-executed", ro: "Izolare SOAR: playbook-uri per IP, niciodată rulate automat" } },
+      ],
+      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/analyzing-logs-traffic-Defensive-SOC-" }],
+    },
+    {
+      featured: true,
       title: "Finance Helper",
       period: "2026",
       status: "live",
