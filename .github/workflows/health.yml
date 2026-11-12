@@ -1,0 +1,53 @@
+# Weekly health check. If anything below is broken, this job fails and GitHub emails you.
+# Nothing to do otherwise. It stays enabled thanks to the monthly heartbeat in keepalive.yml.
+name: Health check
+
+on:
+  schedule:
+    - cron: "0 8 * * 1" # Mondays 08:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Main site (Vercel) is up
+        run: |
+          curl -fsS --retry 3 --retry-all-errors --retry-delay 20 https://victor-barbuta.vercel.app/ -o page.html
+          grep -q "Victor B" page.html
+          echo "main site OK"
+
+      - name: Backup site (GitHub Pages) is up
+        run: |
+          curl -fsS --retry 3 --retry-all-errors --retry-delay 20 https://vicuvi1.github.io/personal_CV_page/ -o mirror.html
+          grep -q "Victor B" mirror.html
+          echo "backup site OK"
+
+      - name: Registru database answers
+        env:
+          URL: ${{ secrets.SUPABASE_REGISTRU_URL }}
+          KEY: ${{ secrets.SUPABASE_REGISTRU_KEY }}
+        run: |
+          curl -fsS --retry 3 --retry-all-errors --retry-delay 20 -o /dev/null \
+            "$URL/rest/v1/app_settings?select=*&limit=0" -H "apikey: $KEY"
+          echo "registru database OK"
+
+      - name: Both keep-alive pingers (Vercel cron and GitHub) ran in the last 3 days
+        env:
+          URL: ${{ secrets.SUPABASE_CV_URL }}
+          KEY: ${{ secrets.SUPABASE_CV_KEY }}
+        run: |
+          rows=$(curl -fsS --retry 3 --retry-all-errors --retry-delay 20             "$URL/rest/v1/keepalive_sources?select=source,pinged_at" -H "apikey: $KEY")
+          echo "$rows"
+          fail=0
+          for src in vercel-cron github-actions; do
+            last=$(echo "$rows" | grep -o "\"source\":\"$src\",\"pinged_at\":\"[^\"]*\"" | cut -d'"' -f8)
+            if [ -z "$last" ]; then echo "::error::$src has never pinged"; fail=1; continue; fi
+            age=$(( ( $(date -u +%s) - $(date -u -d "$last" +%s) ) / 86400 ))
+            echo "$src: last ping $last ($age day(s) ago)"
+            if [ "$age" -gt 3 ]; then echo "::error::$src has not pinged for $age days"; fail=1; fi
+          done
+          exit $fail

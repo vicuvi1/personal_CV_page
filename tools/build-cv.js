@@ -42,7 +42,7 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; img-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'; upgrade-insecure-requests">
   <title>${esc(P.name)} | CV</title>
-  <meta name="description" content="${esc(t(P.goal))}">
+  <meta name="description" content="${esc(t(P.goalPrint || P.goal))}">
   <link rel="canonical" href="https://victor-barbuta.vercel.app/cv">
   <link rel="stylesheet" href="assets/css/cv.css">
 </head>
@@ -50,7 +50,7 @@ const html = `<!doctype html>
 <main>
   <header>
     <h1>${esc(P.name)}</h1>
-    <p class="goal">${esc(t(P.goal))}</p>
+    <p class="goal">${esc(t(P.goalPrint || P.goal))}</p>
     <p class="contact"><a href="mailto:${esc(P.email)}">${esc(P.email)}</a> · ${esc(t(P.location))}<br>${links.map((l) => `<a href="${esc(l.url)}">${esc(bare(l.url))}</a>`).join(" · ")}</p>
   </header>
 
@@ -74,7 +74,7 @@ const html = `<!doctype html>
   <ul>${projects.map(projectText).map((p) => `<li><strong>${esc(p.title)}</strong>: ${esc(p.summary)}${p.url ? ` <a href="${esc(p.url)}">${esc(bare(p.url))}</a>` : ""}</li>`).join("")}</ul>
 
   <h2>Education</h2>
-  <ul>${edu.map((e) => `<li><strong>${esc(t(e.school))}</strong>, ${esc(t(e.period))}: ${esc(t(e.degree))}</li>`).join("")}</ul>
+  <ul>${edu.map((e) => `<li><strong>${esc(t(e.school))}</strong>, ${esc(t(e.periodPrint || e.period))}: ${esc(t(e.degreePrint || e.degree))}</li>`).join("")}</ul>
 
   <h2>Languages</h2>
   <p>${esc(langs)}</p>
@@ -93,7 +93,7 @@ fs.writeFileSync(path.join(root, "cv.html"), html);
 const head = (s) => `\n${s.toUpperCase()}\n`;
 const txt = [
   P.name,
-  t(P.goal),
+  t(P.goalPrint || P.goal),
   `${P.email} · ${t(P.location)}`,
   ...links.map((l) => l.url),
   head("Availability") + work.join("\n"),
@@ -102,7 +102,7 @@ const txt = [
   head("Skills") + skills.map((s) => `- ${t(s.skill)} (${t(UI.levels[s.level]).toLowerCase()}): ${t(s.tools)}`).concat(next.map((s) => `- Learning next: ${t(s.skill)}`)).join("\n"),
   head("Certificates and training") + certs.map((c) => `- ${t(c.name)}, ${t(c.date)}: ${t(c.detail)}`).join("\n"),
   head("Projects") + projects.map(projectText).map((p) => `- ${p.title}: ${p.summary}${p.url ? ` ${p.url}` : ""}`).join("\n"),
-  head("Education") + edu.map((e) => `- ${t(e.school)}, ${t(e.period)}: ${t(e.degree)}`).join("\n"),
+  head("Education") + edu.map((e) => `- ${t(e.school)}, ${t(e.periodPrint || e.period)}: ${t(e.degreePrint || e.degree)}`).join("\n"),
   head("Languages") + langs,
   head("Outside security") + wins.map((a) => `- ${t(a.title)} (${t(a.date)}): ${t(a.detail)}`).join("\n"),
 ].join("\n") + "\n";

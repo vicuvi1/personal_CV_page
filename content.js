@@ -11,6 +11,24 @@
    • Save → commit to GitHub → Vercel redeploys in about 30 seconds.
    ===================================================================== */
 
+/* ---------- Study dates ----------
+   Your year of study and the "student" / "graduate" wording are worked out from these
+   dates every time the page loads, so the site stays correct each year without edits.
+   Months are 1–12. */
+const STUDY = { startYear: 2026, startMonth: 9, endYear: 2030, endMonth: 7 };
+const study = (() => {
+  const now = new Date();
+  const months = now.getFullYear() * 12 + now.getMonth();
+  const total = STUDY.endYear - STUDY.startYear;
+  const year = Math.min(total, Math.max(1, Math.floor((months - (STUDY.startYear * 12 + STUDY.startMonth - 1)) / 12) + 1));
+  return {
+    done: months >= STUDY.endYear * 12 + STUDY.endMonth - 1,
+    year,
+    en: ["First", "Second", "Third", "Fourth", "Fifth", "Sixth"][year - 1],
+    ro: ["I", "II", "III", "IV", "V", "VI"][year - 1],
+  };
+})();
+
 window.CV = {
   /* ---------- Basic info ---------- */
   person: {
@@ -23,20 +41,26 @@ window.CV = {
     phone: "", // e.g. "+373 ..."; it only shows when showPhone is true
     showPhone: false,
     telegram: "vicuvi27", // without @; adds a "Message me on Telegram" button
-    role: { en: "Information Security Student", ro: "Student la Securitate Informațională" },
+    role: study.done
+      ? { en: "Information Security Graduate", ro: "Absolvent de Securitate Informațională" }
+      : { en: "Information Security Student", ro: "Student la Securitate Informațională" },
     focus: "SOC / Blue Team",
     badgeId: "VB-2026-SI266",
     // Green status dot in the header and on the badge. Set available: false to hide it.
     available: true,
     // The fixed line under your name. Never rotates: this is what you want.
-    goal: {
-      en: "First-year Information Security student · Looking for a SOC / Blue Team internship",
-      ro: "Student în anul I la Securitate Informațională · Caut un stagiu SOC / Blue Team",
+    // The year updates itself every September (see STUDY at the top of this file).
+    goal: study.done
+      ? { en: "Information Security graduate · Looking for a SOC / Blue Team role", ro: "Absolvent de Securitate Informațională · Caut un post SOC / Blue Team" }
+      : { en: `${study.en}-year Information Security student · Looking for a SOC / Blue Team internship`, ro: `Student în anul ${study.ro} la Securitate Informațională · Caut un stagiu SOC / Blue Team` },
+    // Used in the PDF, /cv and resume.txt: those files don't change by themselves, so no year number here.
+    goalPrint: {
+      en: `Information Security student, UTM (${STUDY.startYear} – ${STUDY.endYear}) · Looking for a SOC / Blue Team internship`,
+      ro: `Student la Securitate Informațională, UTM (${STUDY.startYear} – ${STUDY.endYear}) · Caut un stagiu SOC / Blue Team`,
     },
-    availability: {
-      en: "Open to SOC / Blue Team internships. I reply within a day.",
-      ro: "Disponibil pentru stagii SOC / Blue Team. Răspund în maximum o zi.",
-    },
+    availability: study.done
+      ? { en: "Open to SOC / Blue Team roles. I reply within a day.", ro: "Disponibil pentru posturi SOC / Blue Team. Răspund în maximum o zi." }
+      : { en: "Open to SOC / Blue Team internships. I reply within a day.", ro: "Disponibil pentru stagii SOC / Blue Team. Răspund în maximum o zi." },
     // When and how you can work. Empty fields ("") are not shown on the page.
     work: {
       start: "", // e.g. { en: "From February 2027", ro: "Din februarie 2027" }
@@ -66,8 +90,10 @@ window.CV = {
   /* Link to the PDF version of your CV. Leave empty ("") and the button uses the browser's "Save as PDF" instead. */
   cvPdf: "assets/Victor_Barbuta_CV_SOC_Intern.pdf",
 
-  /* Shown in the footer as "Updated <this>". Bump it when you make changes. */
+  /* Shown in the footer as "Updated <this>". Bump both when you make changes.
+     It hides itself 9 months after updatedOn, so the page never shows an old date. */
   updated: { en: "Updated November 2026", ro: "Actualizat noiembrie 2026" },
+  updatedOn: "2026-11",
 
   /* ---------- Links (header, contact, terminal) ---------- */
   links: [
@@ -619,8 +645,15 @@ window.CV = {
   education: [
     {
       school: { en: "Technical University of Moldova (UTM), FCIM", ro: "Universitatea Tehnică a Moldovei (UTM), FCIM" },
-      degree: { en: "B.Sc. Information Security · Year 1", ro: "Securitate Informațională · Anul I" },
-      period: { en: "2026 – present", ro: "2026 – prezent" },
+      degree: study.done
+        ? { en: "B.Sc. Information Security", ro: "Licență în Securitate Informațională" }
+        : { en: `B.Sc. Information Security · Year ${study.year}`, ro: `Securitate Informațională · Anul ${study.ro}` },
+      period: study.done
+        ? `${STUDY.startYear} – ${STUDY.endYear}`
+        : { en: `${STUDY.startYear} – present`, ro: `${STUDY.startYear} – prezent` },
+      // PDF, /cv and resume.txt version (never goes stale)
+      degreePrint: { en: `B.Sc. Information Security (expected ${STUDY.endYear})`, ro: `Licență în Securitate Informațională (estimat ${STUDY.endYear})` },
+      periodPrint: `${STUDY.startYear} – ${STUDY.endYear}`,
       detail: { en: "Relevant courses: Cryptography, Computer Programming (C), Programming Techniques, Mathematical Analysis.", ro: "Discipline relevante: Criptografie, Programarea Calculatoarelor (C), Tehnici de Programare, Analiză Matematică." },
     },
     {

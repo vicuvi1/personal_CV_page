@@ -251,7 +251,13 @@
       `<a class="btn primary" href="mailto:${esc(P.email)}">${icon("mail")}${T(UI.cta.emailShort)}</a>` + cvButton(T(UI.cta.cvShort));
 
     $("#footer-text").textContent = `© ${new Date().getFullYear()} ${P.name}. ${t(UI.footer)}`;
-    $("#footer-updated").textContent = t(CV.updated);
+    // hide "Updated …" once it's more than 9 months old, so the page never looks abandoned
+    const [uy, um] = String(CV.updatedOn || "").split("-").map(Number);
+    const now = new Date(), age = uy ? (now.getFullYear() - uy) * 12 + now.getMonth() + 1 - um : 0;
+    const showUpdated = uy && age <= 9;
+    $("#footer-updated").textContent = showUpdated ? t(CV.updated) : "";
+    const sep = $("#footer-updated")?.nextElementSibling;
+    if (sep?.classList.contains("dot-sep")) sep.hidden = !showUpdated;
     $("#footer-plain").innerHTML = `<a href="cv.html">${T(UI.cta.plainCv)}</a> <span class="dot-sep">·</span> <a href="resume.txt">resume.txt</a>`;
 
     if (firstRender) observeReveals();

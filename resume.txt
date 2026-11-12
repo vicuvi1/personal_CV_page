@@ -1,5 +1,5 @@
 Victor Bărbuță
-First-year Information Security student · Looking for a SOC / Blue Team internship
+Information Security student, UTM (2026 – 2030) · Looking for a SOC / Blue Team internship
 victor.barbuta@outlook.com · Chișinău, Moldova
 https://www.linkedin.com/in/victor-barbuta-a0b69b2b9
 https://github.com/vicuvi1
@@ -43,7 +43,7 @@ PROJECTS
 - Registru Digital: Replaced a paper library register with a web app my mother uses every day. Built with data safety in mind: login, history, and saving that survives a lost connection. https://github.com/vicuvi1/mother_app_registru
 
 EDUCATION
-- Technical University of Moldova (UTM), FCIM, 2026 – present: B.Sc. Information Security · Year 1
+- Technical University of Moldova (UTM), FCIM, 2026 – 2030: B.Sc. Information Security (expected 2030)
 - “B. P. Hasdeu” Theoretical High School, Drochia, 2023 – 2026: High school diploma
 
 LANGUAGES

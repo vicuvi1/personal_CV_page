@@ -1,7 +1,7 @@
 # Victor Bărbuță — personal CV page
 
 Live: https://victor-barbuta.vercel.app
-Backup: https://vicuvi1.github.io/personal_CV_page/ (GitHub Pages, updated on every push by `.github/workflows/pages.yml`)
+Backup: https://vicuvi1.github.io/personal_CV_page/ (GitHub Pages, "deploy from branch" mode: GitHub republishes it on every push, no workflow to maintain)
 
 A fast, single-page CV for an Information Security student looking for a SOC / Blue Team internship. Plain HTML, CSS and JavaScript: no framework, no build step for the site, no trackers.
 
@@ -42,6 +42,15 @@ node tools/build-cv.js
 
 Then open `cv.html` from the local server below, print it to PDF with headers and footers off, and replace `assets/Victor_Barbuta_CV_SOC_Intern.pdf`. It should stay one page.
 
+## Runs by itself for years
+
+Nothing here needs regular attention:
+
+- **Study year** on the site is worked out from `STUDY` at the top of `content.js`: it moves to "Second-year", "Third-year"… every September and to "graduate" in July 2030. The PDF, `/cv` and `resume.txt` use wording without a year number, so they never go stale.
+- **"Updated …"** in the footer hides itself 9 months after `updatedOn`, so the page never shows an old date.
+- **Databases stay awake**: the Vercel cron (`/api/keepalive`, daily) and `.github/workflows/keepalive.yml` (daily) both ping the Registru and CV Supabase databases. The GitHub job commits a heartbeat on the 1st of each month, so GitHub never disables its schedules.
+- **Health check**: `.github/workflows/health.yml` runs every Monday. It checks both sites, the Registru database, and that both pingers ran in the last 3 days. If anything fails, GitHub emails you. No email means everything is fine.
+
 ## Run it locally
 
 ```bash
@@ -52,7 +61,7 @@ Then open http://localhost:5173.
 
 ## Vercel setting
 
-`/api/keepalive` only answers Vercel's cron. Add an environment variable named `CRON_SECRET` with a long random value in the Vercel project settings. Vercel then sends it with each cron request. Never put the value in this repo.
+`/api/keepalive` only answers Vercel's cron. Add an environment variable named `CRON_SECRET` with a long random value in the Vercel project settings. Vercel then sends it with each cron request. Never put the value in this repo. (It is already set.)
 
 ## Features
 
