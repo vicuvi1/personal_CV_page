@@ -535,6 +535,14 @@ window.CV = {
         { en: "No account and no tracking. Data stays on the device unless you choose to use the Telegram bot. Unit + Playwright tests.", ro: "Fără cont și fără tracking. Datele rămân pe dispozitiv, dacă nu alegi să folosești botul Telegram. Teste unitare + Playwright." },
       ],
       tags: ["JavaScript", "PWA", "Electron"],
+      shot: "assets/img/shot-finance-home.jpg",
+      shotCaption: { en: "Finance Helper: the home screen with today's 'safe to spend' amount, suggested next steps and the month's totals (demo data)", ro: "Finance Helper: ecranul principal cu suma „sigur de cheltuit azi”, pașii următori sugerați și totalurile lunii (date demo)" },
+      photos: [
+        { src: "assets/img/shot-finance-new-record.jpg", caption: { en: "Finance Helper: logging an expense in 5 seconds, with the category picked automatically from the note (demo data)", ro: "Finance Helper: înregistrarea unei cheltuieli în 5 secunde, cu categoria aleasă automat din descriere (date demo)" } },
+        { src: "assets/img/shot-finance-reports.jpg", caption: { en: "Finance Helper: monthly report with key numbers, a cash-flow chart (income → jars → spending) and spending per day (demo data)", ro: "Finance Helper: raport lunar cu cifrele cheie, o diagramă a fluxului de bani (venituri → borcane → cheltuieli) și cheltuielile pe zile (date demo)" } },
+        { src: "assets/img/shot-finance-accounts.jpg", caption: { en: "Finance Helper: all accounts as cards, in MDL and USD, with a savings overview (demo data)", ro: "Finance Helper: toate conturile sub formă de carduri, în MDL și USD, cu o privire de ansamblu asupra economiilor (date demo)" } },
+        { src: "assets/img/shot-finance-phone.jpg", caption: { en: "Finance Helper on a phone: 'safe to spend today' and the last 7 days (demo data)", ro: "Finance Helper pe telefon: „sigur de cheltuit azi” și ultimele 7 zile (date demo)" } },
+      ],
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Finance-Helper-App" }],
     },
     {
@@ -552,6 +560,14 @@ window.CV = {
         { en: "Goals, projects, tasks, habits and weekly review screens are the next milestones.", ro: "Ecranele pentru obiective, proiecte, sarcini, obiceiuri și revizuire săptămânală urmează în etapele următoare." },
       ],
       tags: ["Next.js", "TypeScript", "Firebase"],
+      shot: "assets/img/shot-lifeos-dashboard.jpg",
+      shotCaption: { en: "Life OS: the morning dashboard with focus-goal momentum, a priority stack and today's tasks (demo data)", ro: "Life OS: tabloul de bord de dimineață cu progresul obiectivelor prioritare, lista de priorități și sarcinile zilei (date demo)" },
+      photos: [
+        { src: "assets/img/shot-lifeos-goals.jpg", caption: { en: "Life OS: goals with today's next steps, recent milestone wins and progress cards (demo data)", ro: "Life OS: obiective cu pașii de azi, etapele încheiate recent și carduri de progres (date demo)" } },
+        { src: "assets/img/shot-lifeos-habits.jpg", caption: { en: "Life OS: habit tracker with today's progress, streaks and a 4-week grid (demo data)", ro: "Life OS: monitorizarea obiceiurilor cu progresul de azi, serii de zile la rând și un tabel pe 4 săptămâni (date demo)" } },
+        { src: "assets/img/shot-lifeos-tasks.jpg", caption: { en: "Life OS: today's tasks grouped by time of day, with time blocks and linked goals (demo data)", ro: "Life OS: sarcinile zilei grupate pe momente ale zilei, cu intervale orare și obiective asociate (date demo)" } },
+        { src: "assets/img/shot-lifeos-phone.jpg", caption: { en: "Life OS on a phone: the morning dashboard (demo data)", ro: "Life OS pe telefon: tabloul de bord de dimineață (date demo)" } },
+      ],
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/life_os" }],
     },
 
