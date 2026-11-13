@@ -658,3 +658,30 @@ main { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .cover-ids .cover-big { color: var(--warn); }
 .cover-qr .cover-big { color: var(--danger); }
 .article-card:hover .article-cover::before { opacity: .55; }
+
+/* project details folded so the Projects section stays short */
+.pts-fold { margin: 4px 0 14px; }
+.pts-fold > summary { min-height: 36px; font-size: 13px; }
+.pts-fold .pts { margin-top: 6px; }
+
+/* project galleries: one row of 4, the 4th shows how many more; arrows in the lightbox */
+.proj-gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.proj-gallery .wu-thumb.extra { display: none; }
+.wu-thumb[data-more] { position: relative; }
+.wu-thumb[data-more]::after { content: attr(data-more); position: absolute; inset: 0; display: grid; place-items: center; background: rgba(5, 8, 15, .64); color: #fff; font: 600 18px var(--display); letter-spacing: .02em; }
+.lb-nav { display: none; position: absolute; top: 50%; translate: 0 -50%; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); background: rgba(5,8,15,.6); color: #fff; font-size: 28px; line-height: 1; cursor: pointer; z-index: 2; }
+.lb-nav:hover { background: rgba(5,8,15,.85); border-color: #fff; }
+.lb-prev { left: 16px; } .lb-next { right: 16px; }
+.lightbox.multi .lb-nav { display: grid; place-items: center; }
+@media (max-width: 640px) { .lb-nav { top: auto; bottom: 18px; translate: none; } .lb-prev { left: calc(50% - 60px); } .lb-next { right: calc(50% - 60px); } }
+
+/* What people say */
+.quotes-section { padding: clamp(40px, 6vw, 72px) 0 0; }
+.quotes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.quote { margin: 0; padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--bg-2); display: flex; flex-direction: column; gap: 18px; }
+.quote blockquote { margin: 0; font-size: var(--fs-18); line-height: 1.5; color: var(--text); }
+.quote figcaption { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+.quote figcaption strong { display: block; color: var(--text); }
+.quote figcaption span span { color: var(--muted); font-size: var(--fs-14); }
+.quote-avatar { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: color-mix(in srgb, var(--accent) 18%, var(--bg)); color: var(--accent); font-weight: 700; }
+#quotes:not([hidden]) + .writing-section { padding-top: clamp(40px, 6vw, 72px); }

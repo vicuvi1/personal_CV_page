@@ -70,3 +70,30 @@
 [data-look="command"] .project h3 { font-size: 28px; font-weight: 800; }
 [data-look="command"] .proj-shot { margin: -28px -28px 18px; }
 [data-look="command"] .wu-thumb { border-radius: 12px; }
+
+/* phones and small tablets: the rules above are desktop sizes, so undo the ones that would squeeze the layout */
+@media (max-width: 860px) {
+  [data-look="command"] .hero { grid-template-columns: 1fr; padding: 16px 0 28px; }
+  [data-look="command"] .moments-grid { grid-template-rows: auto; gap: 12px; }
+  [data-look="command"] .m-main { min-height: 0; aspect-ratio: 4 / 3; }
+  [data-look="command"] .m-main img { object-position: center 35%; }
+}
+@media (max-width: 560px) {
+  :root[data-look="command"] { --fs-hero: clamp(40px, 12.5vw, 56px); --fs-32: 32px; --fs-24: 23px; }
+  [data-look="command"] .hero-headline { font-size: 26px; }
+  [data-look="command"] .hero-goal, [data-look="command"] .hero-pitch { font-size: 16px; }
+  [data-look="command"] .hero-stats li { padding: 14px; }
+  [data-look="command"] .hero-stats strong { font-size: 26px; }
+  [data-look="command"] .btn { min-height: 48px; }
+  [data-look="command"] .moment-text { padding: 20px; }
+  [data-look="command"] .moment-text p { font-size: 16px; }
+  [data-look="command"] .work-head h2 { font-size: 34px; }
+  [data-look="command"] .why-title { font-size: 30px; }
+  [data-look="command"] .project { padding: 20px; }
+  [data-look="command"] .proj-shot { margin: -20px -20px 16px; }
+  [data-look="command"] .project h3 { font-size: 24px; }
+  [data-look="command"] .proof-fact { font-size: 16px; }
+}
+@media (max-width: 560px) {
+  [data-look="command"] .hero-cta .btn { padding: 0 14px; font-size: 14.5px; white-space: nowrap; }
+}

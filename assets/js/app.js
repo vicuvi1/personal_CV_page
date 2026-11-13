@@ -31,6 +31,7 @@
     telegram: svg('<path d="M21 4L3 11l6 2.5M21 4l-3 16-9-6.5M21 4L9 13.5V19l3-3.5"/>'),
     x: svg('<path fill="currentColor" stroke="none" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77zm-1.08 16.2h1.7L7.4 4.73H5.58z"/>'),
     linkedin: svg('<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 014 0v4M12 10v7"/>'),
+    calendar: svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>'),
     mail: svg('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>'),
     arrow: svg('<path d="M5 12h14M13 6l6 6-6 6"/>'),
     download: svg('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
@@ -63,10 +64,10 @@
         <div class="project-top">${p.kind ? `<span class="project-kind">${T(p.kind)}</span>` : "<span></span>"}${p.status ? `<span class="pill ${esc(p.status)}">${T(UI.status[p.status] || p.status)}</span>` : ""}</div>
         <h3>${T(p.title)}<span class="yr">${T(p.period)}</span></h3>
         <p>${T(p.summary)}</p>
-        ${p.bullets?.length ? `<ul class="pts">${p.bullets.map((b) => `<li>${T(b)}</li>`).join("")}</ul>` : ""}
+        ${p.bullets?.length ? `<details class="fold pts-fold"><summary>${T(UI.cta.details)}</summary><ul class="pts">${p.bullets.map((b) => `<li>${T(b)}</li>`).join("")}</ul></details>` : ""}
         <ul class="tags">${(p.tags || []).map((x) => `<li class="tag">${T(x)}</li>`).join("")}</ul>
-        ${p.photos?.length ? `<div class="wu-gallery proj-gallery">${p.photos.map((ph) =>
-          `<button class="wu-thumb" type="button" data-full="${esc(ph.src)}" data-cap="${T(ph.caption)}" aria-label="${T(ph.caption)}"><img src="${esc(ph.src)}" alt="${T(ph.caption)}" loading="lazy"></button>`).join("")}</div>` : ""}
+        ${p.photos?.length ? `<div class="wu-gallery proj-gallery">${p.photos.map((ph, i, all) =>
+          `<button class="wu-thumb${i > 3 ? " extra" : ""}" type="button" data-full="${esc(ph.src)}" data-cap="${T(ph.caption)}" aria-label="${T(ph.caption)}"${i === 3 && all.length > 4 ? ` data-more="+${all.length - 3}"` : ""}><img src="${esc(ph.src)}" alt="${T(ph.caption)}" loading="lazy"></button>`).join("")}</div>` : ""}
         ${p.links?.length ? `<div class="project-links">${p.links.map((l) => anchor(l.url, `${T(l.label)} ↗`)).join("")}</div>` : ""}
       </article>`;
   }
@@ -153,6 +154,7 @@
   }
 
   function render() {
+    (CV.hideSections || []).forEach((id) => { const s = document.getElementById(id); if (s) s.hidden = true; });
     document.documentElement.lang = lang;
     $$("[data-l]", $("#lang")).forEach((s) => s.classList.toggle("on", s.dataset.l === lang));
     $$("[data-ui]").forEach((el) => (el.textContent = ui(el.dataset.ui)));
@@ -199,6 +201,12 @@
         <span class="article-body"><span class="article-kicker">${T(a.kicker)}</span><strong>${T(a.title)}</strong><span class="article-sum">${T(a.summary)}</span><span class="article-read">${T(UI.cta.read)} →</span></span>
       </a>`).join("");
     $("#writing").hidden = !shown(CV.articles).length;
+    const quotes = shown(CV.testimonials);
+    $("#quotes").hidden = !quotes.length;
+    $("#quotes-grid").innerHTML = quotes.map((q) => `
+      <figure class="quote reveal"><blockquote>“${T(q.quote)}”</blockquote>
+        <figcaption><span class="quote-avatar" aria-hidden="true">${esc(String(q.name).split(/\s+/).map((w) => w[0]).slice(0, 2).join(""))}</span>
+        <span><strong>${esc(q.name)}</strong><span>${T(q.role)}${q.relation ? ` · ${T(q.relation)}` : ""}</span></span></figcaption></figure>`).join("");
     $("#why-grid").innerHTML = shown(CV.whyHire).map((w) => `
       <article class="why reveal"><div class="why-ico">${icon(w.icon)}</div><h3>${T(w.title)}</h3><p>${T(w.text)}</p></article>`).join("");
     $("#status").innerHTML = P.available ? `<span class="pulse"></span>${T(P.availability)}` : "";
@@ -302,6 +310,7 @@
       </div>
       <div class="contact-actions">
         <a class="btn primary" href="mailto:${esc(P.email)}">${icon("mail")}${T(UI.cta.email)}</a>
+        ${P.booking ? `<a class="btn" href="${esc(P.booking)}" target="_blank" rel="noopener">${icon("calendar")}${T(UI.cta.book)}</a>` : ""}
         ${P.telegram ? `<a class="btn" href="https://t.me/${esc(P.telegram)}" target="_blank" rel="noopener">${icon("telegram")}${T(UI.cta.telegram)}</a>` : ""}
         <button class="btn" type="button" data-copy>${icon("copy")}<span>${T(UI.cta.copy)}</span></button>
       </div>`;
@@ -626,15 +635,30 @@
   /* ---------- photo lightbox (write-up gallery + covers) ---------- */
   const lb = { el: $("#lightbox"), img: $("#lb-img"), cap: $("#lb-cap") };
   if (lb.el) {
+    let set = [], at = 0;
+    const show = () => {
+      const { full, cap } = set[at].dataset;
+      lb.img.src = full; lb.img.alt = cap || "";
+      lb.cap.textContent = (set.length > 1 ? `${at + 1} / ${set.length}  ·  ` : "") + (cap || "");
+      lb.cap.style.display = cap || set.length > 1 ? "" : "none";
+    };
+    const step = (d) => { if (set.length > 1) { at = (at + d + set.length) % set.length; show(); } };
     const openLb = (src, cap) => {
       lb.img.src = src; lb.img.alt = cap || ""; lb.cap.textContent = cap || "";
       lb.cap.style.display = cap ? "" : "none";
       lb.el.hidden = false; $("#lb-close").focus();
     };
-    const closeLb = () => { lb.el.hidden = true; lb.img.src = ""; };
+    const openSet = (thumb) => {
+      set = [...thumb.parentElement.querySelectorAll(".wu-thumb")]; at = Math.max(0, set.indexOf(thumb));
+      lb.el.classList.toggle("multi", set.length > 1); show(); lb.el.hidden = false; $("#lb-close").focus();
+    };
+    const closeLb = () => { lb.el.hidden = true; lb.img.src = ""; set = []; lb.el.classList.remove("multi"); };
+    $("#lb-prev")?.addEventListener("click", () => step(-1));
+    $("#lb-next")?.addEventListener("click", () => step(1));
+    document.addEventListener("keydown", (e) => { if (lb.el.hidden) return; if (e.key === "ArrowLeft") step(-1); if (e.key === "ArrowRight") step(1); });
     document.addEventListener("click", (e) => {
       const thumb = e.target.closest(".wu-thumb");
-      if (thumb) { openLb(thumb.dataset.full, thumb.dataset.cap); return; }
+      if (thumb) { openSet(thumb); return; }
       const cover = e.target.closest(".proj-shot, .case-cover");
       const im = cover?.querySelector("img");
       if (cover && im) { e.preventDefault(); openLb(im.src, im.alt); }

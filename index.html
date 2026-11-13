@@ -104,6 +104,12 @@
       <div class="why-grid" id="why-grid"></div>
     </section>
 
+    <!-- WHAT PEOPLE SAY: real quotes, hidden while CV.testimonials is empty -->
+    <section class="quotes-section" id="quotes" aria-labelledby="quotes-title" hidden>
+      <h2 class="why-title" id="quotes-title" data-ui="sections.testimonials"></h2>
+      <div class="quotes-grid" id="quotes-grid"></div>
+    </section>
+
     <!-- WRITING: short technical articles -->
     <section class="writing-section" id="writing" aria-labelledby="writing-title">
       <h2 class="why-title" id="writing-title" data-ui="sections.writing"></h2>
@@ -209,6 +215,8 @@
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo" hidden>
     <button class="lb-close" id="lb-close" type="button" aria-label="Close">×</button>
+    <button class="lb-nav lb-prev" id="lb-prev" type="button" aria-label="Previous photo">‹</button>
+    <button class="lb-nav lb-next" id="lb-next" type="button" aria-label="Next photo">›</button>
     <figure class="lb-fig"><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
   </div>
 

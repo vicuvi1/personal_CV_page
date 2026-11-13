@@ -41,6 +41,7 @@ window.CV = {
     phone: "", // e.g. "+373 ..."; it only shows when showPhone is true
     showPhone: false,
     telegram: "vicuvi27", // without @; adds a "Message me on Telegram" button
+    booking: "", // e.g. "https://cal.com/your-name/15min"; adds a "Book a 15-min call" button (hidden while empty)
     role: study.done
       ? { en: "Information Security Graduate", ro: "Absolvent de Securitate Informațională" }
       : { en: "Information Security Student", ro: "Student la Securitate Informațională" },
@@ -106,6 +107,9 @@ window.CV = {
      It hides itself 9 months after updatedOn, so the page never shows an old date. */
   updated: { en: "Updated November 2026", ro: "Actualizat noiembrie 2026" },
   updatedOn: "2026-11",
+  // Sections left off the page to keep it short for HR. Their content stays here: it is still
+  // used by the PDF / plain CV and the terminal. Remove an id to show that section again.
+  hideSections: ["workflow", "achievements"],
 
   /* ---------- Links (header, contact, terminal) ---------- */
   links: [
@@ -132,6 +136,11 @@ window.CV = {
   },
 
   /* ---------- "Why hire me": 3 plain-language points for HR (no jargon) ---------- */
+  /* ---------- What people say ----------
+     Only real quotes, and only with the person's OK to show their name. The section stays hidden while the list is empty.
+     Example: { quote: { en: "…", ro: "…" }, name: "Full Name", role: { en: "Lecturer, UTM", ro: "Lector, UTM" }, relation: { en: "Taught me Cryptography", ro: "Mi-a predat Criptografia" } } */
+  testimonials: [],
+
   whyHire: [
     {
       icon: "trophy",
@@ -355,6 +364,7 @@ window.CV = {
   /* ---------- "Triage this alert with me" demo ----------
      All data is made up and uses reserved example addresses. Set hidden: true to remove it. */
   triage: {
+    hidden: true, // interactive demo, off the page to keep it short (set to false to bring it back)
     alert: { en: "ALERT · Suspicious login after a phishing email", ro: "ALERTĂ · Autentificare suspectă după un email de phishing" },
     intro: {
       en: "Read the sample logs, pick a verdict, then see how I reasoned about it. It takes about two minutes, and there is no wrong answer.",
@@ -974,6 +984,7 @@ window.UI = {
     contact: { en: "Contact", ro: "Contact" },
   },
   sections: {
+    testimonials: { en: "What people say", ro: "Ce spun alții" },
     proof: { en: "30-second proof", ro: "Dovezi în 30 de secunde" },
     work: { en: "What I've built", ro: "Ce am construit" },
     workIntro: { en: "Working tools with real screenshots, tests and code. Open any of them right now.", ro: "Unelte funcționale, cu capturi reale, teste și cod. Le poți deschide chiar acum." },
@@ -1035,6 +1046,7 @@ window.UI = {
     demo: { en: "Try a live demo", ro: "Încearcă un demo live" },
     read: { en: "Read the article", ro: "Citește articolul" },
     moreProof: { en: "More", ro: "Mai mult" },
+    details: { en: "Details", ro: "Detalii" },
     allWork: { en: "All projects, with photos", ro: "Toate proiectele, cu fotografii" },
     flagLive: { en: "Live demo", ro: "Demo live" },
     flagCode: { en: "Code", ro: "Cod" },
@@ -1048,6 +1060,7 @@ window.UI = {
     email: { en: "Write me an email", ro: "Scrie-mi un email" },
     telegram: { en: "Message on Telegram", ro: "Scrie-mi pe Telegram" },
     aiTools: { en: "Tools I use most", ro: "Unelte folosite cel mai des" },
+    book: { en: "Book a 15-min call", ro: "Programează un apel de 15 min" },
     readMore: { en: "Read the full write-up", ro: "Citește articolul complet" },
     allProjects: { en: "See all projects", ro: "Vezi toate proiectele" },
     terminalHint: { en: "Prefer a terminal? Try it", ro: "Preferi un terminal? Încearcă-l" },
@@ -1060,7 +1073,7 @@ window.UI = {
     team: { en: "Team", ro: "Echipă" },
   },
   footer: {
-    en: "Built from scratch with plain HTML, CSS and JS. Strict security headers, no trackers.",
-    ro: "Construit de la zero cu HTML, CSS și JS. Headere de securitate stricte, fără trackere.",
+    en: "Built from scratch with plain HTML, CSS and JS. Strict security headers, no cookies, only anonymous visit counts.",
+    ro: "Construit de la zero cu HTML, CSS și JS. Headere de securitate stricte, fără cookie-uri, doar statistici anonime de vizite.",
   },
 };
