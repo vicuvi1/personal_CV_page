@@ -573,32 +573,6 @@ window.CV = {
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/analyzing-logs-traffic-Defensive-SOC-" }],
     },
     {
-      featured: true,
-      title: "Finance Helper",
-      period: "2026",
-      status: "live",
-      kind: { en: "Personal project · PWA + desktop app", ro: "Proiect personal · PWA + aplicație desktop" },
-      summary: {
-        en: "A private personal-finance app that replaced my budgeting spreadsheet: 5-second expense logging, smart category rules and a single \"safe to spend today\" number.",
-        ro: "O aplicație privată de finanțe personale care mi-a înlocuit tabelul de buget: înregistrare în 5 secunde, reguli inteligente de categorii și un singur număr „cât pot cheltui azi”.",
-      },
-      bullets: [
-        { en: "Installs on the phone and works offline; Electron desktop app for Windows, Mac and Linux.", ro: "Se instalează pe telefon și merge offline; aplicație desktop Electron pentru Windows, Mac și Linux." },
-        { en: "Own Telegram bot for logging and a weekly money report.", ro: "Bot Telegram propriu pentru înregistrare și un raport financiar săptămânal." },
-        { en: "No account and no tracking. Data stays on the device unless you choose to use the Telegram bot. Unit + Playwright tests.", ro: "Fără cont și fără tracking. Datele rămân pe dispozitiv, dacă nu alegi să folosești botul Telegram. Teste unitare + Playwright." },
-      ],
-      tags: ["JavaScript", "PWA", "Electron"],
-      shot: "assets/img/shot-finance-home.jpg",
-      shotCaption: { en: "Finance Helper: the home screen with today's 'safe to spend' amount, suggested next steps and the month's totals (demo data)", ro: "Finance Helper: ecranul principal cu suma „sigur de cheltuit azi”, pașii următori sugerați și totalurile lunii (date demo)" },
-      photos: [
-        { src: "assets/img/shot-finance-new-record.jpg", caption: { en: "Finance Helper: logging an expense in 5 seconds, with the category picked automatically from the note (demo data)", ro: "Finance Helper: înregistrarea unei cheltuieli în 5 secunde, cu categoria aleasă automat din descriere (date demo)" } },
-        { src: "assets/img/shot-finance-reports.jpg", caption: { en: "Finance Helper: monthly report with key numbers, a cash-flow chart (income → jars → spending) and spending per day (demo data)", ro: "Finance Helper: raport lunar cu cifrele cheie, o diagramă a fluxului de bani (venituri → borcane → cheltuieli) și cheltuielile pe zile (date demo)" } },
-        { src: "assets/img/shot-finance-accounts.jpg", caption: { en: "Finance Helper: all accounts as cards, in MDL and USD, with a savings overview (demo data)", ro: "Finance Helper: toate conturile sub formă de carduri, în MDL și USD, cu o privire de ansamblu asupra economiilor (date demo)" } },
-        { src: "assets/img/shot-finance-phone.jpg", caption: { en: "Finance Helper on a phone: 'safe to spend today' and the last 7 days (demo data)", ro: "Finance Helper pe telefon: „sigur de cheltuit azi” și ultimele 7 zile (date demo)" } },
-      ],
-      links: [{ label: "GitHub", url: "https://github.com/vicuvi1/Finance-Helper-App" }],
-    },
-    {
       title: "Life OS",
       period: "2026",
       status: "building",
