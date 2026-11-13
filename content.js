@@ -75,7 +75,19 @@ window.CV = {
       { en: "national checkers champion", ro: "campion național la dame" },
       { en: "black belt in Taekwondo", ro: "centură neagră la Taekwondo" },
     ],
-    // Three short facts right under the goal.
+    // Big results-first line under your name (what a recruiter should remember).
+    headline: {
+      en: "I build security tools that catch real attacks.",
+      ro: "Construiesc unelte de securitate care prind atacuri reale.",
+    },
+    // Numbers bar in the hero: value + what it means. Keep it to 4, all true and checkable.
+    stats: [
+      { value: "Top 3%", label: { en: "TryHackMe worldwide", ro: "TryHackMe mondial" } },
+      { value: "4", label: { en: "security tools built", ro: "unelte de securitate construite" } },
+      { value: "100", label: { en: "websites researched", ro: "site-uri cercetate" } },
+      { value: "4th/12", label: { en: "international CTF", ro: "CTF internațional" } },
+    ],
+    // Old chip row (kept for the terminal / plain CV; the hero now shows `stats`).
     chips: [
       { en: "Top 3% TryHackMe", ro: "Top 3% TryHackMe" },
       { en: "SOC Level 1 done", ro: "SOC Level 1 finalizat" },
@@ -104,6 +116,25 @@ window.CV = {
     { label: "X", url: "https://x.com/vicuvi_1", icon: "x" },
   ],
 
+  /* ---------- "Why hire me": 3 plain-language points for HR (no jargon) ---------- */
+  whyHire: [
+    {
+      icon: "trophy",
+      title: { en: "I learn fast", ro: "Învăț repede" },
+      text: { en: "Top 3% on TryHackMe and the full SOC Level 1 path in my first months, on my own initiative.", ro: "Top 3% pe TryHackMe și tot parcursul SOC Level 1 în primele luni, din proprie inițiativă." },
+    },
+    {
+      icon: "check",
+      title: { en: "I finish what I start", ro: "Duc lucrurile la capăt" },
+      text: { en: "Four working security tools, each with tests, documentation and a demo you can open right now.", ro: "Patru unelte de securitate funcționale, fiecare cu teste, documentație și un demo pe care îl poți deschide acum." },
+    },
+    {
+      icon: "shield",
+      title: { en: "I'm honest about my level", ro: "Sunt sincer despre nivelul meu" },
+      text: { en: "Every skill below says exactly where I am: used in projects, practised in labs, or still learning.", ro: "Fiecare competență de mai jos spune exact unde sunt: folosită în proiecte, exersată în laboratoare sau încă în învățare." },
+    },
+  ],
+
   /* ---------- The 30-second proof block under the hero ----------
      One row per fact. url can be a web address or a #section on this page.
      highlight: true → the memorable one, drawn in amber. */
@@ -115,16 +146,19 @@ window.CV = {
     },
     {
       label: "SiteSentry",
+      more: true, // shown as a flagship card above, so folded here
       fact: { en: "Built a website security scanner and used it on 100 popular sites: only 31% earn an A", ro: "Am construit un scanner de securitate pentru site-uri și l-am rulat pe 100 de site-uri populare: doar 31% iau nota A" },
       link: { label: { en: "Read the research", ro: "Citește cercetarea" }, url: "https://vicuvi1.github.io/SiteSentry/research.html" },
     },
     {
       label: "HiveWatch SOC",
+      more: true, // shown as a flagship card above, so folded here
       fact: { en: "Built a honeypot mini-SOC: 11 detection rules mapped to 25 MITRE ATT&CK techniques", ro: "Am construit un mini SOC cu honeypot-uri: 11 reguli de detecție mapate pe 25 de tehnici MITRE ATT&CK" },
       link: { label: { en: "See the project", ro: "Vezi proiectul" }, url: "#projects" },
     },
     {
       label: "PhishLens",
+      more: true, // shown as a flagship card above, so folded here
       fact: { en: "Built a phishing email analyzer that runs in the browser: look-alike domains, QR-code phishing, macros, MITRE ATT&CK", ro: "Am construit un analizor de emailuri de phishing care rulează în browser: domenii care imită branduri, phishing prin QR, macro-uri, MITRE ATT&CK" },
       link: { label: { en: "Try the demo", ro: "Încearcă demo-ul" }, url: "https://vicuvi1.github.io/phishlens/" },
       noPrint: true, // already listed under Projects in the one-page PDF
@@ -141,11 +175,13 @@ window.CV = {
     },
     {
       label: "Registru Digital",
+      more: true, // folded under "More" on the page
       fact: { en: "Replaced a paper library register. My mother uses it every day", ro: "A înlocuit un registru de bibliotecă pe hârtie. Mama mea îl folosește zilnic" },
       link: { label: "GitHub", url: "https://github.com/vicuvi1/mother_app_registru" },
     },
     {
       label: { en: "Languages", ro: "Limbi" },
+      more: true, // folded under "More" on the page
       fact: { en: "Romanian native, English certified B2 with C1 working level, Russian B2", ro: "Română nativ, engleză certificat B2 cu nivel de lucru C1, rusă B2" },
       link: { label: { en: "Certificates", ro: "Certificări" }, url: "#certs" },
     },
@@ -398,6 +434,9 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "SiteSentry",
+      flagship: 2,
+      flagshipLine: { en: "Scanned 100 popular websites: only 31% earn an A. Grades any site in seconds and writes the fix.", ro: "Am scanat 100 de site-uri populare: doar 31% iau nota A. Notează orice site în câteva secunde și scrie remedierea." },
+      flagshipShot: "assets/img/sec-sitesentry-report.jpg",
       period: "2026",
       status: "live",
       kind: { en: "Security tool · Website scanner (Python, web UI + CLI)", ro: "Instrument de securitate · Scanner de site-uri (Python, interfață web + CLI)" },
@@ -433,6 +472,9 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "PhishLens",
+      flagship: 1,
+      flagshipLine: { en: "Drop a suspicious email and see in one second why it is phishing. Try it live with 7 sample attacks.", ro: "Încarci un email suspect și vezi într-o secundă de ce e phishing. Încearcă-l live cu 7 atacuri de test." },
+      flagshipShot: "assets/img/sec-phishlens-cover.jpg",
       period: "2026",
       status: "live",
       kind: { en: "Blue team · Phishing email analyzer (JavaScript, web app + CLI)", ro: "Blue team · Analizor de emailuri de phishing (JavaScript, aplicație web + CLI)" },
@@ -471,6 +513,9 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "HiveWatch SOC",
+      flagship: 3,
+      flagshipLine: { en: "Honeypots built to bait attackers, detect them live and map every move to MITRE ATT&CK (screens show demo mode).", ro: "Capcane construite să atragă atacatori, să-i detecteze live și să mapeze fiecare mișcare pe MITRE ATT&CK (capturile arată modul demo)." },
+      flagshipShot: "assets/img/sec-hivewatch-profile.jpg",
       period: "2026",
       status: "building",
       kind: { en: "Blue team · Honeypot-driven mini SOC (Python, FastAPI)", ro: "Blue team · Mini SOC bazat pe honeypot-uri (Python, FastAPI)" },
@@ -861,6 +906,7 @@ window.CV = {
 /* ---------- Interface labels (rename sections here) ---------- */
 window.UI = {
   nav: {
+    work: { en: "Work", ro: "Proiecte" },
     incident: { en: "Incident report", ro: "Raport" },
     triage: { en: "Triage demo", ro: "Demo triaj" },
     skills: { en: "Skills", ro: "Competențe" },
@@ -870,6 +916,9 @@ window.UI = {
   },
   sections: {
     proof: { en: "30-second proof", ro: "Dovezi în 30 de secunde" },
+    work: { en: "What I've built", ro: "Ce am construit" },
+    workIntro: { en: "Working tools with real screenshots, tests and code. Open any of them right now.", ro: "Unelte funcționale, cu capturi reale, teste și cod. Le poți deschide chiar acum." },
+    why: { en: "Why hire me", ro: "De ce să mă alegi" },
     incident: { en: "Incident report", ro: "Raport de incident" },
     triage: { en: "Triage this alert with me", ro: "Triază alerta asta cu mine" },
     skills: { en: "Skills, with proof", ro: "Competențe, cu dovezi" },
@@ -923,6 +972,12 @@ window.UI = {
   cta: {
     contact: { en: "Email me", ro: "Scrie-mi" },
     projects: { en: "See my work", ro: "Vezi proiectele" },
+    demo: { en: "Try a live demo", ro: "Încearcă un demo live" },
+    moreProof: { en: "More", ro: "Mai mult" },
+    allWork: { en: "All projects, with photos", ro: "Toate proiectele, cu fotografii" },
+    flagLive: { en: "Live demo", ro: "Demo live" },
+    flagCode: { en: "Code", ro: "Cod" },
+    flagDetails: { en: "Details", ro: "Detalii" },
     cv: { en: "Download CV", ro: "Descarcă CV" },
     cvShort: "CV",
     emailShort: "Email",

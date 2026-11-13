@@ -36,6 +36,9 @@
     download: svg('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>'),
     copy: svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h8"/>'),
     link: svg('<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>'),
+    check: svg('<path d="M20 6L9 17l-5-5"/>'),
+    shield: svg('<path d="M12 3l8 3v6c0 4.5-3.4 8.4-8 9-4.6-.6-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>'),
+    play: svg('<path d="M7 5l12 7-12 7z"/>'),
   };
   const icon = (n) => ICONS[n] || ICONS.link;
 
@@ -60,6 +63,32 @@
         ${p.photos?.length ? `<div class="wu-gallery proj-gallery">${p.photos.map((ph) =>
           `<button class="wu-thumb" type="button" data-full="${esc(ph.src)}" data-cap="${T(ph.caption)}" aria-label="${T(ph.caption)}"><img src="${esc(ph.src)}" alt="${T(ph.caption)}" loading="lazy"></button>`).join("")}</div>` : ""}
         ${p.links?.length ? `<div class="project-links">${p.links.map((l) => anchor(l.url, `${T(l.label)} ↗`)).join("")}</div>` : ""}
+      </article>`;
+  }
+
+  // first link that is a live demo / project page, and the GitHub link
+  const liveLink = (p) => (p.links || []).find((l) => /live demo|demo live|project page|pagina proiectului/i.test(t(l.label)) || (/github\.io|vercel\.app/.test(l.url) && !/github\.com/.test(l.url)));
+  const codeLink = (p) => (p.links || []).find((l) => /github\.com/.test(l.url));
+
+  function flagshipCard(p, i) {
+    const live = liveLink(p), code = codeLink(p);
+    const shotHref = live ? live.url : "#projects";
+    return `
+      <article class="flag reveal${i === 0 ? " flag-main" : ""}">
+        <a class="flag-shot" href="${esc(shotHref)}"${shotHref.startsWith("#") ? "" : ' target="_blank" rel="noopener"'} aria-label="${T(p.title)}: ${live ? T(UI.cta.flagLive) : T(UI.cta.flagDetails)}">
+          <img src="${esc(p.flagshipShot || p.shot)}" alt="${p.shotCaption ? T(p.shotCaption) : T(p.title)}" loading="${i === 0 ? "eager" : "lazy"}">
+          ${live ? `<span class="flag-live"><span class="pulse"></span>${T(UI.cta.flagLive)}</span>` : ""}
+        </a>
+        <div class="flag-body">
+          ${p.kind ? `<span class="project-kind">${T(p.kind)}</span>` : ""}
+          <h3>${T(p.title)}</h3>
+          <p>${T(p.flagshipLine || p.summary)}</p>
+          <ul class="tags">${(p.tags || []).slice(0, 4).map((x) => `<li class="tag">${T(x)}</li>`).join("")}</ul>
+          <div class="flag-actions">
+            ${live ? `<a class="btn primary" href="${esc(live.url)}" target="_blank" rel="noopener">${icon("play")}${T(UI.cta.flagLive)}</a>` : `<a class="btn primary" href="#projects">${T(UI.cta.flagDetails)}${icon("arrow")}</a>`}
+            ${code ? `<a class="btn" href="${esc(code.url)}" target="_blank" rel="noopener">${icon("github")}${T(UI.cta.flagCode)}</a>` : ""}
+          </div>
+        </div>
       </article>`;
   }
 
@@ -139,13 +168,19 @@
       $$(".c", nameEl).forEach((c) => c.style.setProperty("--i", c.dataset.i));
       nameEl.dataset.name = P.name;
     }
+    $("#hero-headline").textContent = t(P.headline);
     $("#hero-goal").textContent = t(P.goal);
-    $("#hero-chips").innerHTML = shown(P.chips).map((c) => `<li>${T(c)}</li>`).join("");
+    $("#hero-stats").innerHTML = shown(P.stats).map((s) => `<li><strong>${T(s.value)}</strong><span>${T(s.label)}</span></li>`).join("");
     $("#hero-pitch").textContent = t(P.pitch);
+    const flags = shown(CV.projects).filter((p) => p.flagship).sort((a, b) => a.flagship - b.flagship);
+    const demo = flags.map(liveLink).find(Boolean);
     $("#hero-cta").innerHTML =
       `<a class="btn primary" href="mailto:${esc(P.email)}">${icon("mail")}${T(UI.cta.contact)}</a>` +
-      cvButton(T(UI.cta.cv)) +
-      `<a class="btn hide-phone" href="#incident">${T(UI.cta.projects)}${icon("arrow")}</a>`;
+      (demo ? `<a class="btn demo" href="${esc(demo.url)}" target="_blank" rel="noopener">${icon("play")}${T(UI.cta.demo)}</a>` : "") +
+      cvButton(T(UI.cta.cv));
+    $("#flagships").innerHTML = flags.map(flagshipCard).join("");
+    $("#why-grid").innerHTML = shown(CV.whyHire).map((w) => `
+      <article class="why reveal"><div class="why-ico">${icon(w.icon)}</div><h3>${T(w.title)}</h3><p>${T(w.text)}</p></article>`).join("");
     $("#status").innerHTML = P.available ? `<span class="pulse"></span>${T(P.availability)}` : "";
     $("#term-hint").textContent = `>_ ${t(UI.cta.terminalHint)}`;
     const W = P.work || {};
@@ -155,12 +190,16 @@
     renderBadge();
 
     // 30-second proof
-    $("#proof").innerHTML = shown(CV.proof).map((r) => `
+    const proofRow = (r) => `
       <li class="proof-row reveal${r.highlight ? " highlight" : ""}">
         <span class="proof-label">${T(r.label)}</span>
         <span class="proof-fact">${T(r.fact)}</span>
         ${r.link ? `<span class="proof-link">${anchor(r.link.url, `${T(r.link.label)}${r.link.url.startsWith("#") ? "" : " ↗"}`)}</span>` : ""}
-      </li>`).join("");
+      </li>`;
+    $("#proof").innerHTML = shown(CV.proof).filter((r) => !r.more).map(proofRow).join("");
+    const extra = shown(CV.proof).filter((r) => r.more);
+    $("#proof-more").innerHTML = extra.map(proofRow).join("");
+    $(".proof-more").hidden = !extra.length;
 
     // log strip: the list is printed twice so the scroll loops seamlessly
     const feed = shown(CV.feed).map((f) => `<span class="fl ${esc(f.level)}"><b>[${esc(f.level.toUpperCase())}]</b>${T(f.text)}</span>`).join("");

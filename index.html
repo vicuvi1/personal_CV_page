@@ -66,9 +66,10 @@
       <div class="hero-copy">
         <p class="prompt"><span class="prompt-user">guest@vb</span>:<span class="prompt-path">~</span>$ <span id="whoami-typed"></span><span class="caret" aria-hidden="true"></span></p>
         <h1 id="hero-name" class="hero-name"></h1>
+        <p class="hero-headline" id="hero-headline"></p>
         <p class="hero-goal" id="hero-goal"></p>
         <p class="hero-role"><span class="rotator" id="rotator"></span></p>
-        <ul class="hero-chips" id="hero-chips"></ul>
+        <ul class="hero-stats" id="hero-stats"></ul>
         <p class="hero-pitch" id="hero-pitch"></p>
         <div class="hero-cta" id="hero-cta"></div>
         <p class="status" id="status"></p>
@@ -81,9 +82,26 @@
       </div>
     </section>
 
+    <!-- FLAGSHIP WORK: the 3 projects a recruiter should see first -->
+    <section class="work-section" id="work" aria-labelledby="work-title">
+      <header class="work-head">
+        <h2 id="work-title" data-ui="sections.work"></h2>
+        <p data-ui="sections.workIntro"></p>
+      </header>
+      <div class="flagships" id="flagships"></div>
+      <p class="work-more"><a href="#projects" data-ui="cta.allWork"></a></p>
+    </section>
+
+    <!-- WHY HIRE ME: plain language for HR -->
+    <section class="why-section" id="why" aria-labelledby="why-title">
+      <h2 class="why-title" id="why-title" data-ui="sections.why"></h2>
+      <div class="why-grid" id="why-grid"></div>
+    </section>
+
     <section class="proof-section" aria-labelledby="proof-title">
       <h2 class="proof-title" id="proof-title" data-ui="sections.proof"></h2>
       <ul class="proof" id="proof"></ul>
+      <details class="fold proof-more"><summary data-ui="cta.moreProof"></summary><ul class="proof" id="proof-more"></ul></details>
     </section>
     <div class="feed" id="feed" aria-hidden="true"></div>
 
