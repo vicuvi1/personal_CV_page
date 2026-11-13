@@ -19,7 +19,7 @@ const bare = (url) => url.replace(/^https?:\/\/(www\.)?/, "");
 const P = CV.person;
 const links = shown(CV.links).filter((l) => l.label !== "X");
 const work = ["start", "hours", "mode", "shifts"].filter((k) => t(P.work[k])).map((k) => `${t(UI.workLabels[k])}: ${t(P.work[k])}`);
-const proof = shown(CV.proof).filter((r) => t(r.label) !== "Languages" && t(r.label) !== "Memorable");
+const proof = shown(CV.proof).filter((r) => !r.noPrint && t(r.label) !== "Languages" && t(r.label) !== "Memorable");
 const R = CV.incident;
 const incident = [t(R.summary), t(R.myRole.text), t(R.finding.text)];
 const projects = shown(CV.projects).filter((p) => p.onCv);
@@ -31,7 +31,7 @@ const langs = shown(CV.languages).map((l) => `${t(l.name)}: ${t(l.level)}`).join
 const wins = shown(CV.achievements).filter((a) => t(a.title) !== "HackTrone");
 const projectText = (p) => {
   const url = p.links?.[0]?.url;
-  return { title: t(p.title), kind: t(p.kind), summary: t(p.summary), url };
+  return { title: t(p.title), kind: t(p.kind), summary: t(p.summaryPrint || p.summary), url };
 };
 
 /* ---------- cv.html ---------- */

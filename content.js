@@ -124,6 +124,12 @@ window.CV = {
       link: { label: { en: "See the project", ro: "Vezi proiectul" }, url: "#projects" },
     },
     {
+      label: "PhishLens",
+      fact: { en: "Built a phishing email analyzer that runs in the browser: look-alike domains, QR-code phishing, macros, MITRE ATT&CK", ro: "Am construit un analizor de emailuri de phishing care rulează în browser: domenii care imită branduri, phishing prin QR, macro-uri, MITRE ATT&CK" },
+      link: { label: { en: "Try the demo", ro: "Încearcă demo-ul" }, url: "https://vicuvi1.github.io/phishlens/" },
+      noPrint: true, // already listed under Projects in the one-page PDF
+    },
+    {
       label: "HackTrone",
       fact: { en: "4th of 12 teams with team NAVI, international cybersecurity competition, Sep 2026", ro: "Locul 4 din 12 echipe cu echipa NAVI, competiție internațională de cybersecurity, sep. 2026" },
       link: { label: { en: "Details", ro: "Detalii" }, url: "#achievements" },
@@ -158,6 +164,7 @@ window.CV = {
     { level: "info", text: "tryhackme.rank → top 3% worldwide" },
     { level: "info", text: "sitesentry.research → 100 popular sites scanned, only 31% earn an A" },
     { level: "ok", text: "hivewatch.detection → 11 rules mapped to 25 MITRE ATT&CK techniques" },
+    { level: "alert", text: "phishlens.verdict → micros0ft-secure-login.com: DANGEROUS 97/100" },
     { level: "ok", text: "soc-level-1 → path completed" },
     { level: "ok", text: "taekwondo → black belt acquired" },
     { level: "warn", text: "coffee.level → 12%, refill recommended" },
@@ -342,9 +349,9 @@ window.CV = {
   skills: [
     {
       skill: { en: "Phishing email analysis", ro: "Analiză de emailuri phishing" },
-      tools: "CyberChef",
-      level: "lab",
-      proof: { label: "TryHackMe", url: "https://tryhackme.com/p/vicuvi1" },
+      tools: "Email headers, SPF/DKIM/DMARC, PhishLens (built it), CyberChef",
+      level: "used",
+      proof: { label: "PhishLens", url: "https://vicuvi1.github.io/phishlens/" },
     },
     {
       skill: { en: "Network and traffic analysis", ro: "Analiză de rețea și trafic" },
@@ -421,6 +428,44 @@ window.CV = {
     {
       featured: true,
       onCv: true,
+      title: "PhishLens",
+      period: "2026",
+      status: "live",
+      kind: { en: "Blue team · Phishing email analyzer (JavaScript, web app + CLI)", ro: "Blue team · Analizor de emailuri de phishing (JavaScript, aplicație web + CLI)" },
+      summary: {
+        en: "Drop a suspicious email and in about a second PhishLens checks the sender's SPF, DKIM and DMARC, the links, the attachments, any QR codes and the wording, then explains in plain English why it is (or isn't) phishing. It runs entirely in the browser, so the email is never uploaded anywhere.",
+        ro: "Încarci un email suspect și în aproximativ o secundă PhishLens verifică SPF, DKIM și DMARC ale expeditorului, linkurile, atașamentele, codurile QR și formulările, apoi explică pe înțeles de ce este (sau nu este) phishing. Rulează în întregime în browser, așa că emailul nu este încărcat nicăieri.",
+      },
+      // shorter text for the one-page PDF / cv.html / resume.txt
+      summaryPrint: "Phishing email analyzer that runs in the browser: SPF/DKIM/DMARC, look-alike domains, QR-code phishing, macros and HTML smuggling, mapped to MITRE ATT&CK with STIX 2.1 export.",
+      bullets: [
+        { en: "Catches look-alike and homograph domains (micros0ft, pаypal with a Cyrillic \"а\"), links whose text lies about the destination, QR-code phishing, HTML smuggling, Office macros and remote template injection.", ro: "Detectează domenii care imită branduri și homografe (micros0ft, pаypal cu „а” chirilic), linkuri al căror text minte despre destinație, phishing prin coduri QR, HTML smuggling, macro-uri Office și template injection de la distanță." },
+        { en: "Every finding is mapped to MITRE ATT&CK; IOCs export as a Markdown incident report, CSV or STIX 2.1, with batch triage for many emails at once.", ro: "Fiecare constatare e mapată pe MITRE ATT&CK; IOC-urile se exportă ca raport de incident Markdown, CSV sau STIX 2.1, cu triere în lot pentru mai multe emailuri deodată." },
+        { en: "Catches a CEO-fraud email that passes SPF, DKIM and DMARC, yet scores a real GitHub notification 0/100: it doesn't cry wolf.", ro: "Prinde un email de tip „fraudă CEO” care trece de SPF, DKIM și DMARC, dar dă scorul 0/100 unei notificări reale de la GitHub: nu dă alarme false." },
+        { en: "Zero dependencies: own MIME parser, punycode decoder and PNG decoder. Same engine in a CLI with a CI gate (--fail-above). 24 tests, CI and CodeQL. The screenshots show the 7 bundled synthetic sample emails.", ro: "Zero dependențe: parser MIME, decodor punycode și decodor PNG proprii. Același motor și în CLI, cu barieră pentru CI (--fail-above). 24 de teste, CI și CodeQL. Capturile arată cele 7 emailuri sintetice de test incluse." },
+      ],
+      tags: ["JavaScript", "Email security", "MITRE ATT&CK", "Threat intel", "STIX 2.1"],
+      shot: "assets/img/sec-phishlens-cover.jpg",
+      shotCaption: { en: "PhishLens: a Microsoft 365 credential-phishing sample scored 97/100 (synthetic sample)", ro: "PhishLens: un email de test care fură date Microsoft 365, scor 97/100 (exemplu sintetic)" },
+      photos: [
+        { src: "assets/img/sec-phishlens-overview.jpg", caption: { en: "Findings with evidence and ATT&CK links, plus what to do next", ro: "Constatările cu dovezi și linkuri ATT&CK, plus pașii următori" } },
+        { src: "assets/img/sec-phishlens-quishing.jpg", caption: { en: "QR-code phishing: the QR image is decoded and its link flagged as a SharePoint look-alike", ro: "Phishing prin cod QR: imaginea QR e decodată, iar linkul e marcat ca imitație SharePoint" } },
+        { src: "assets/img/sec-phishlens-links.jpg", caption: { en: "Links: a Cyrillic homograph of paypal.com and a bit.ly link posing as PayPal", ro: "Linkuri: un homograf chirilic al paypal.com și un link bit.ly care se dă drept PayPal" } },
+        { src: "assets/img/sec-phishlens-attachments.jpg", caption: { en: "Attachments: a .pdf.js hidden in a ZIP, VBA macros and remote template injection", ro: "Atașamente: un .pdf.js ascuns într-un ZIP, macro-uri VBA și template injection de la distanță" } },
+        { src: "assets/img/sec-phishlens-sender.jpg", caption: { en: "Header forensics: Reply-To and Return-Path mismatches, SPF/DKIM/DMARC and the delivery path", ro: "Analiza antetelor: nepotriviri Reply-To și Return-Path, SPF/DKIM/DMARC și traseul de livrare" } },
+        { src: "assets/img/sec-phishlens-mitre.jpg", caption: { en: "MITRE ATT&CK coverage for a malware-delivery email", ro: "Acoperirea MITRE ATT&CK pentru un email care livrează malware" } },
+        { src: "assets/img/sec-phishlens-batch.jpg", caption: { en: "Batch triage: 7 emails ranked by risk in one go", ro: "Triere în lot: 7 emailuri ordonate după risc dintr-o dată" } },
+        { src: "assets/img/sec-phishlens-preview.jpg", caption: { en: "Safe preview: sandboxed, scripts removed, remote images blocked, links disabled", ro: "Previzualizare sigură: izolată, fără scripturi, imagini externe blocate, linkuri dezactivate" } },
+        { src: "assets/img/sec-phishlens-landing.jpg", caption: { en: "Start screen: drop an .eml or try one of the 7 sample attacks", ro: "Ecranul de start: încarci un .eml sau încerci unul dintre cele 7 atacuri de test" } },
+      ],
+      links: [
+        { label: { en: "Live demo", ro: "Demo live" }, url: "https://vicuvi1.github.io/phishlens/" },
+        { label: "GitHub", url: "https://github.com/vicuvi1/phishlens" },
+      ],
+    },
+    {
+      featured: true,
+      onCv: true,
       title: "HiveWatch SOC",
       period: "2026",
       status: "building",
@@ -439,7 +484,10 @@ window.CV = {
       shot: "assets/img/sec-hivewatch-dashboard.jpg",
       shotCaption: { en: "HiveWatch: live SOC dashboard (demo mode, simulated attacks)", ro: "HiveWatch: dashboard SOC live (mod demo, atacuri simulate)" },
       photos: [
+        { src: "assets/img/sec-hivewatch-profile.jpg", caption: { en: "HiveWatch: threat-actor profile with risk score, ATT&CK techniques and the captured shell session (demo mode, simulated attacks)", ro: "HiveWatch: profilul atacatorului cu scorul de risc, tehnicile ATT&CK și sesiunea de shell capturată (mod demo, atacuri simulate)" } },
+        { src: "assets/img/sec-hivewatch-attackers.jpg", caption: { en: "HiveWatch: top threat actors ranked by risk, with origin and network type (demo mode, simulated attacks)", ro: "HiveWatch: atacatorii principali, ordonați după risc, cu originea și tipul rețelei (mod demo, atacuri simulate)" } },
         { src: "assets/img/sec-hivewatch-mitre.jpg", caption: { en: "HiveWatch: MITRE ATT&CK coverage heatmap (demo mode, simulated attacks)", ro: "HiveWatch: harta de acoperire MITRE ATT&CK (mod demo, atacuri simulate)" } },
+        { src: "assets/img/sec-hivewatch-creds.jpg", caption: { en: "HiveWatch: usernames and passwords bots try most (demo mode, simulated attacks)", ro: "HiveWatch: utilizatorii și parolele încercate cel mai des de boți (mod demo, atacuri simulate)" } },
         { src: "assets/img/sec-hivewatch-full.jpg", caption: { en: "HiveWatch: the full SOC dashboard (demo mode, simulated attacks)", ro: "HiveWatch: dashboardul SOC complet (mod demo, atacuri simulate)" } },
       ],
       links: [{ label: "GitHub", url: "https://github.com/vicuvi1/hivewatch-soc" }],

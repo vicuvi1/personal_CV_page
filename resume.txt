@@ -25,7 +25,7 @@ The lead operator drove the main work. I helped with early reconnaissance, kept 
 Industrial-control (OT/ICS) systems sat on the same reachable network as ordinary office machines. This flat-network risk is exactly what a blue team exists to catch.
 
 SKILLS
-- Phishing email analysis (used in guided labs): CyberChef
+- Phishing email analysis (used in projects): Email headers, SPF/DKIM/DMARC, PhishLens (built it), CyberChef
 - Network and traffic analysis (used in guided labs): Wireshark, Nmap, TCP/IP, DNS, HTTP
 - Operating systems and labs (used in guided labs): Linux, Kali, Ubuntu, Windows, Bash, VirtualBox, VMware
 - Programming (used in projects): Python, C, C++, SQL, JavaScript, HTML, CSS
@@ -41,6 +41,7 @@ CERTIFICATES AND TRAINING
 
 PROJECTS
 - SiteSentry: A passive website security scanner. Give it a URL and in a few seconds it grades HTTPS, TLS, security headers, cookies, CORS and SPF/DMARC from A+ to F, explains every issue in plain English and generates the server config that fixes it. https://vicuvi1.github.io/SiteSentry/
+- PhishLens: Phishing email analyzer that runs in the browser: SPF/DKIM/DMARC, look-alike domains, QR-code phishing, macros and HTML smuggling, mapped to MITRE ATT&CK with STIX 2.1 export. https://vicuvi1.github.io/phishlens/
 - HiveWatch SOC: A honeypot-driven mini Security Operations Center. SSH, Telnet, HTTP and TCP honeypots feed a pipeline that enriches every attacker with threat intel, detects attacks in real time, maps their behaviour to MITRE ATT&CK and streams it all to a live 3D dashboard. https://github.com/vicuvi1/hivewatch-soc
 - SOC Log & Traffic Analyzer: A SOC triage prototype that turns raw logs into alerts. It ingests Apache/Nginx access logs, Linux syslog and PCAP captures (or a live syslog stream), normalizes them, runs YAML detection rules, enriches IPs with AbuseIPDB threat intel and generates containment playbooks. https://github.com/vicuvi1/analyzing-logs-traffic-Defensive-SOC-
 - Registru Digital: Replaced a paper library register with a web app my mother uses every day. Built with data safety in mind: login, history, and saving that survives a lost connection. https://github.com/vicuvi1/mother_app_registru
