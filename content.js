@@ -130,6 +130,13 @@ window.CV = {
       noPrint: true, // already listed under Projects in the one-page PDF
     },
     {
+      label: "WinTrace",
+      more: true,
+      fact: { en: "Built a Windows event log attack hunter with my own EVTX parser: Kerberoasting, pass-the-hash, DCSync, Mimikatz", ro: "Am construit un analizor de atacuri în logurile Windows, cu propriul parser EVTX: Kerberoasting, pass-the-hash, DCSync, Mimikatz" },
+      link: { label: { en: "Try the demo", ro: "Încearcă demo-ul" }, url: "https://vicuvi1.github.io/wintrace/" },
+      noPrint: true,
+    },
+    {
       label: "HackTrone",
       fact: { en: "4th of 12 teams with team NAVI, international cybersecurity competition, Sep 2026", ro: "Locul 4 din 12 echipe cu echipa NAVI, competiție internațională de cybersecurity, sep. 2026" },
       link: { label: { en: "Details", ro: "Detalii" }, url: "#achievements" },
@@ -164,6 +171,7 @@ window.CV = {
     { level: "info", text: "tryhackme.rank → top 3% worldwide" },
     { level: "info", text: "sitesentry.research → 100 popular sites scanned, only 31% earn an A" },
     { level: "ok", text: "hivewatch.detection → 11 rules mapped to 25 MITRE ATT&CK techniques" },
+    { level: "alert", text: "wintrace.story → 4625 x46 → 4624 → 4720 → vssadmin delete shadows → 1102: ACTIVE COMPROMISE" },
     { level: "alert", text: "phishlens.verdict → micros0ft-secure-login.com: DANGEROUS 97/100" },
     { level: "ok", text: "soc-level-1 → path completed" },
     { level: "ok", text: "taekwondo → black belt acquired" },
@@ -465,6 +473,42 @@ window.CV = {
       links: [
         { label: { en: "Live demo", ro: "Demo live" }, url: "https://vicuvi1.github.io/phishlens/" },
         { label: "GitHub", url: "https://github.com/vicuvi1/phishlens" },
+      ],
+    },
+    {
+      featured: true,
+      onCv: true,
+      title: "WinTrace",
+      period: "2026",
+      status: "live",
+      kind: { en: "Blue team · Windows event log attack hunter (JavaScript, web app + CLI)", ro: "Blue team · Analizor de atacuri în logurile Windows (JavaScript, aplicație web + CLI)" },
+      summary: {
+        en: "Drop Windows event logs (.evtx straight from a machine, or XML / JSON exports) and WinTrace rebuilds what the attacker did, step by step: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync, persistence and log wiping, mapped to MITRE ATT&CK and explained in plain English. The logs never leave the browser.",
+        ro: "Încarci loguri de evenimente Windows (.evtx direct de pe calculator sau exporturi XML / JSON), iar WinTrace reconstruiește pas cu pas ce a făcut atacatorul: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync, persistență și ștergerea logurilor, mapate pe MITRE ATT&CK și explicate pe înțeles. Logurile nu părăsesc browserul.",
+      },
+      summaryPrint: "Windows event log attack hunter with its own EVTX parser: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync and log clearing as an attack timeline mapped to MITRE ATT&CK.",
+      bullets: [
+        { en: "I wrote the EVTX binary parser myself (chunks, Binary XML templates, SIDs, FILETIMEs) and tested it record for record against the python-evtx reference files: 2,261 records, 0 errors.", ro: "Am scris singur parserul binar EVTX (chunk-uri, șabloane Binary XML, SID-uri, FILETIME) și l-am testat înregistrare cu înregistrare pe fișierele de referință python-evtx: 2.261 de înregistrări, 0 erori." },
+        { en: "30+ detections with correlation over time: brute force followed by a successful logon, password spraying, Kerberoasting bursts, a new account made admin, and encoded PowerShell decoded and re-checked.", ro: "Peste 30 de detecții cu corelare în timp: brute force urmat de o autentificare reușită, password spraying, rafale de Kerberoasting, cont nou făcut administrator și PowerShell codat, decodat și reverificat." },
+        { en: "Turns alerts into an attack story (\"the attacker guessed passwords… got in… created a backdoor admin… cleared the log\"), plus an ATT&CK matrix, Markdown incident report and ATT&CK Navigator layer.", ro: "Transformă alertele într-o poveste a atacului („atacatorul a ghicit parole… a intrat… a creat un administrator ascuns… a șters logul”), plus o matrice ATT&CK, raport de incident Markdown și strat ATT&CK Navigator." },
+        { en: "A normal workday sample scores 0/100 (no false alarms). Zero dependencies, 17 tests, CI and CodeQL. Screenshots show the 7 bundled synthetic incidents.", ro: "Un eșantion cu o zi normală de lucru primește 0/100 (fără alarme false). Zero dependențe, 17 teste, CI și CodeQL. Capturile arată cele 7 incidente sintetice incluse." },
+      ],
+      tags: ["Windows", "EVTX", "Active Directory", "MITRE ATT&CK", "Threat hunting"],
+      shot: "assets/img/sec-wintrace-cover.jpg",
+      shotCaption: { en: "WinTrace: an RDP brute force that ends in ransomware preparation, as an attack story (synthetic sample)", ro: "WinTrace: un brute force RDP care se termină cu pregătirea unui ransomware, ca poveste a atacului (exemplu sintetic)" },
+      photos: [
+        { src: "assets/img/sec-wintrace-story.jpg", caption: { en: "Attack story: what the attacker did, step by step, with what to do now", ro: "Povestea atacului: ce a făcut atacatorul, pas cu pas, și ce trebuie făcut acum" } },
+        { src: "assets/img/sec-wintrace-detections.jpg", caption: { en: "Detections: encoded PowerShell decoded automatically, Mimikatz and an LSASS dump", ro: "Detecții: PowerShell codat decodat automat, Mimikatz și o copie a memoriei LSASS" } },
+        { src: "assets/img/sec-wintrace-kerberoast.jpg", caption: { en: "Kerberoasting and AS-REP roasting caught on a domain controller", ro: "Kerberoasting și AS-REP roasting detectate pe un controller de domeniu" } },
+        { src: "assets/img/sec-wintrace-timeline.jpg", caption: { en: "Timeline: pass-the-hash and PsExec lateral movement, every event searchable", ro: "Cronologie: pass-the-hash și deplasare laterală cu PsExec, fiecare eveniment poate fi căutat" } },
+        { src: "assets/img/sec-wintrace-mitre.jpg", caption: { en: "MITRE ATT&CK matrix coloured by the worst severity seen", ro: "Matricea MITRE ATT&CK colorată după cea mai gravă detecție" } },
+        { src: "assets/img/sec-wintrace-entities.jpg", caption: { en: "Accounts, hosts and IPs after a password-spraying attack", ro: "Conturi, calculatoare și IP-uri după un atac de password spraying" } },
+        { src: "assets/img/sec-wintrace-clean.jpg", caption: { en: "A normal workday stays at 0/100: no false alarms", ro: "O zi normală de lucru rămâne la 0/100: fără alarme false" } },
+        { src: "assets/img/sec-wintrace-landing.jpg", caption: { en: "Start screen: drop .evtx, XML or JSON logs, or try one of 7 attack samples", ro: "Ecranul de start: încarci loguri .evtx, XML sau JSON ori încerci unul din cele 7 atacuri de test" } },
+      ],
+      links: [
+        { label: { en: "Live demo", ro: "Demo live" }, url: "https://vicuvi1.github.io/wintrace/" },
+        { label: "GitHub", url: "https://github.com/vicuvi1/wintrace" },
       ],
     },
     {
