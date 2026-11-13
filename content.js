@@ -362,6 +362,13 @@ window.CV = {
       proof: { label: "PhishLens", url: "https://vicuvi1.github.io/phishlens/" },
     },
     {
+      skill: { en: "Windows event log analysis", ro: "Analiza logurilor Windows" },
+      tools: "EVTX, Security & Sysmon events, Active Directory attacks, WinTrace (built it)",
+      level: "used",
+      proof: { label: "WinTrace", url: "https://vicuvi1.github.io/wintrace/" },
+      noPrint: true, // website only: the one-page PDF has no room
+    },
+    {
       skill: { en: "Network and traffic analysis", ro: "Analiză de rețea și trafic" },
       tools: "Wireshark, Nmap, TCP/IP, DNS, HTTP",
       level: "lab",
@@ -599,7 +606,7 @@ window.CV = {
 
     /* ----- Everything below opens with "See all projects" ----- */
     {
-      onCv: true,
+      onCv: false, // in the PDF it is already in Highlights; frees space for WinTrace
       title: "Registru Digital",
       period: "2026",
       status: "live",
