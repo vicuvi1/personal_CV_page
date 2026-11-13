@@ -23,7 +23,7 @@ const proof = shown(CV.proof).filter((r) => !r.noPrint && t(r.label) !== "Langua
 const R = CV.incident;
 const incident = [t(R.summary), t(R.myRole.text), t(R.finding.text)];
 const projects = shown(CV.projects).filter((p) => p.onCv);
-const skills = shown(CV.skills).filter((s) => s.level !== "next");
+const skills = shown(CV.skills).filter((s) => s.level !== "next" && !s.noPrint);
 const next = shown(CV.skills).filter((s) => s.level === "next");
 const certs = shown(CV.certifications);
 const edu = shown(CV.education);
