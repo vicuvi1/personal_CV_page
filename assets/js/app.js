@@ -259,7 +259,8 @@
 
     // projects
     const projects = shown(CV.projects);
-    $("#projects-grid").innerHTML = projects.filter((p) => p.featured).map(projectCard).join("");
+    // projects with a demo video come first, the rest keep their order from content.js
+    $("#projects-grid").innerHTML = projects.filter((p) => p.featured).sort((a, b) => !!b.video - !!a.video).map(projectCard).join("");
     $("#more-grid").innerHTML = projects.filter((p) => !p.featured).map(projectCard).join("");
     $("#labs").innerHTML = shown(CV.labs).map((l) => `
       <li class="row-card lab-card">
