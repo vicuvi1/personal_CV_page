@@ -26,6 +26,13 @@ jobs:
           grep -q "Victor B" mirror.html
           echo "backup site OK"
 
+      - name: Project demos linked from the CV are up
+        run: |
+          for u in https://vicuvi1.github.io/phishlens/ https://vicuvi1.github.io/wintrace/ https://vicuvi1.github.io/SiteSentry/ https://vicuvi1.github.io/SiteSentry/research.html; do
+            curl -fsS --retry 3 --retry-all-errors --retry-delay 20 -o /dev/null "$u"
+            echo "OK $u"
+          done
+
       - name: Registru database answers
         env:
           URL: ${{ secrets.SUPABASE_REGISTRU_URL }}

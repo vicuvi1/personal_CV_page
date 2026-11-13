@@ -120,8 +120,8 @@ window.CV = {
   moments: {
     title: { en: "In the arena", ro: "În arenă" },
     caption: {
-      en: "DeepTech GigaHack 2026, the largest hackathon in Moldova: team NAVI in the red-team CTF, from one web host to five domains. Also in September: 4th of 12 teams at HackTrone.",
-      ro: "DeepTech GigaHack 2026, cel mai mare hackathon din Moldova: echipa NAVI în CTF-ul red team, de la un host web la cinci domenii. Tot în septembrie: locul 4 din 12 echipe la HackTrone.",
+      en: "DeepTech GigaHack 2026, the largest hackathon in Moldova: team NAVI in the red-team CTF, from one web host to five domains. Also in September 2026: 4th of 12 teams at HackTrone.",
+      ro: "DeepTech GigaHack 2026, cel mai mare hackathon din Moldova: echipa NAVI în CTF-ul red team, de la un host web la cinci domenii. Tot în septembrie 2026: locul 4 din 12 echipe la HackTrone.",
     },
     link: { label: { en: "Read the incident report", ro: "Citește raportul" }, url: "#incident" },
     photos: [
