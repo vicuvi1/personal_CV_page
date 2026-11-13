@@ -135,6 +135,31 @@ window.CV = {
     },
   ],
 
+  /* ---------- Writing: articles under /articles/ (English only) ---------- */
+  articles: [
+    {
+      url: "articles/evtx-parser.html",
+      kicker: { en: "Windows forensics · 8 min", ro: "Criminalistică Windows · 8 min" },
+      title: "I wrote a Windows EVTX parser from scratch",
+      summary: { en: "How Windows stores logs in binary, how Binary XML templates work, and the byte-order bug a hex dump found for me.", ro: "Cum stochează Windows logurile în format binar, cum funcționează șabloanele Binary XML și bug-ul găsit cu un hex dump. (articol în engleză)" },
+      image: "assets/img/sec-wintrace-story.jpg",
+    },
+    {
+      url: "articles/windows-events-attackers.html",
+      kicker: { en: "Blue team · 7 min", ro: "Blue team · 7 min" },
+      title: "Six Windows events that give attackers away",
+      summary: { en: "Brute force that works, Kerberoasting, backdoor admins, DCSync, PsExec and cleared logs: the event IDs, the patterns and the false positives.", ro: "Brute force reușit, Kerberoasting, administratori ascunși, DCSync, PsExec și loguri șterse: ID-urile, tiparele și alarmele false. (articol în engleză)" },
+      image: "assets/img/sec-wintrace-detections.jpg",
+    },
+    {
+      url: "articles/quishing-detection.html",
+      kicker: { en: "Email security · 6 min", ro: "Securitate email · 6 min" },
+      title: "Catching QR-code phishing without uploading the email",
+      summary: { en: "Decoding QR codes in the browser, punycode homographs like pаypal.com, and why privacy shaped PhishLens.", ro: "Decodarea codurilor QR în browser, homografe punycode precum pаypal.com și de ce confidențialitatea a modelat PhishLens. (articol în engleză)" },
+      image: "assets/img/sec-phishlens-quishing.jpg",
+    },
+  ],
+
   /* ---------- The 30-second proof block under the hero ----------
      One row per fact. url can be a web address or a #section on this page.
      highlight: true → the memorable one, drawn in amber. */
@@ -487,6 +512,7 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "PhishLens",
+      video: "assets/video/phishlens-demo.mp4", // 14 s screen recording, plays muted while visible
       flagship: 1,
       flagshipLine: { en: "Drop a suspicious email and see in one second why it is phishing. Try it live with 7 sample attacks.", ro: "Încarci un email suspect și vezi într-o secundă de ce e phishing. Încearcă-l live cu 7 atacuri de test." },
       flagshipShot: "assets/img/sec-phishlens-cover.jpg",
@@ -528,6 +554,7 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "WinTrace",
+      video: "assets/video/wintrace-demo.mp4",
       flagship: 3,
       flagshipLine: { en: "Drop Windows logs and watch it rebuild the attack: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync. My own EVTX parser, live demo with 7 incidents.", ro: "Încarci loguri Windows și reconstruiește atacul: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync. Parser EVTX propriu, demo live cu 7 incidente." },
       flagshipShot: "assets/img/sec-wintrace-cover.jpg",
@@ -567,6 +594,7 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "HiveWatch SOC",
+      video: "assets/video/hivewatch-demo.mp4",
       period: "2026",
       status: "building",
       kind: { en: "Blue team · Honeypot-driven mini SOC (Python, FastAPI)", ro: "Blue team · Mini SOC bazat pe honeypot-uri (Python, FastAPI)" },
@@ -944,6 +972,7 @@ window.UI = {
     work: { en: "What I've built", ro: "Ce am construit" },
     workIntro: { en: "Working tools with real screenshots, tests and code. Open any of them right now.", ro: "Unelte funcționale, cu capturi reale, teste și cod. Le poți deschide chiar acum." },
     why: { en: "Why hire me", ro: "De ce să mă alegi" },
+    writing: { en: "Writing", ro: "Articole" },
     incident: { en: "Incident report", ro: "Raport de incident" },
     triage: { en: "Triage this alert with me", ro: "Triază alerta asta cu mine" },
     skills: { en: "Skills, with proof", ro: "Competențe, cu dovezi" },
@@ -998,6 +1027,7 @@ window.UI = {
     contact: { en: "Email me", ro: "Scrie-mi" },
     projects: { en: "See my work", ro: "Vezi proiectele" },
     demo: { en: "Try a live demo", ro: "Încearcă un demo live" },
+    read: { en: "Read the article", ro: "Citește articolul" },
     moreProof: { en: "More", ro: "Mai mult" },
     allWork: { en: "All projects, with photos", ro: "Toate proiectele, cu fotografii" },
     flagLive: { en: "Live demo", ro: "Demo live" },

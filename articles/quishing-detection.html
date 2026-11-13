@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self' mailto:; object-src 'none'; upgrade-insecure-requests">
+  <title>Catching QR-code phishing without uploading the email | Victor Bărbuță</title>
+  <meta name="description" content="How PhishLens finds QR-code phishing and look-alike domains like pаypal.com (with a Cyrillic а) entirely in the browser: image decoding, punycode, confusable characters and why privacy shaped the design.">
+  <meta name="author" content="Victor Bărbuță">
+  <link rel="canonical" href="https://victor-barbuta.vercel.app/articles/quishing-detection">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Catching QR-code phishing without uploading the email">
+  <meta property="og:description" content="QR decoding, punycode and confusable letters, all in the browser. Behind the scenes of PhishLens.">
+  <meta property="og:image" content="https://victor-barbuta.vercel.app/assets/img/sec-phishlens-quishing.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/article.css">
+  <script src="../assets/js/theme.js"></script>
+</head>
+<body>
+  <header class="art-nav">
+    <a class="brand" href="../"><span class="brand-mark">VB</span><span>Victor Bărbuță</span></a>
+    <nav><a href="../#writing">All writing</a><a href="../#work" class="hide-sm">Projects</a><a href="https://vicuvi1.github.io/phishlens/" target="_blank" rel="noopener" class="hide-sm">PhishLens demo ↗</a><button class="icon-btn theme-btn" id="theme-toggle" type="button" aria-label="Switch theme"></button></nav>
+  </header>
+
+  <main class="article">
+    <p class="art-kicker">Email security · 6 min read · November 2026</p>
+    <h1>Catching QR-code phishing without uploading the email</h1>
+    <p class="art-lede">The newest phishing emails barely contain any text: just a logo and a QR code saying "re-enroll your MFA". Link scanners see no link at all. Here's how <a href="https://vicuvi1.github.io/phishlens/">PhishLens</a> finds the hidden URL, recognises a fake domain even when it's spelled with letters from another alphabet, and does all of it without the email ever leaving your browser.</p>
+    <div class="art-meta"><img src="../assets/img/victor.jpg" alt="" width="36" height="36"><span><strong>Victor Bărbuță</strong></span><span>Information Security student, UTM</span></div>
+
+    <h2>Why QR codes work so well for attackers</h2>
+    <ul>
+      <li><strong>No URL in the text.</strong> Gateways rewrite and scan links; an image has nothing to rewrite.</li>
+      <li><strong>The click moves to a phone</strong>, which usually has no corporate web filter and a tiny address bar.</li>
+      <li><strong>Image-only emails dodge text filters</strong> that look for words like "verify your password".</li>
+    </ul>
+    <p>So the first signal PhishLens uses is simple: an HTML email with images but almost no visible text gets flagged on its own, because that's how quishing is delivered.</p>
+
+    <h2>Step 1: find every image, even the hidden ones</h2>
+    <p>PhishLens parses the raw <code>.eml</code> with its own MIME parser (multipart, base64, quoted-printable, RFC 2047 headers), so it sees attachments byte for byte. QR codes hide in three places: real attachments, <em>inline</em> images referenced as <code>cid:</code> from the HTML, and images embedded directly as <code>data:image/png;base64,…</code> inside the HTML. All three are collected.</p>
+
+    <h2>Step 2: decode the QR code locally</h2>
+    <p>In the browser, the image bytes go into a <code>Blob</code>, then <code>createImageBitmap</code> and a canvas give raw pixels, which <a href="https://github.com/cozmo/jsQR">jsQR</a> turns into text. Small codes decode better when enlarged, so a second pass upscales 2× with smoothing off.</p>
+    <p>The command-line version has no canvas. Rather than pulling in an image library, I wrote a small <strong>PNG decoder</strong>: walk the chunks, inflate the <code>IDAT</code> data with Node's zlib, undo the per-row filters (Sub, Up, Average, Paeth), expand 1-bit grayscale or palette pixels to RGBA. About 100 lines, and the CLI stays dependency-free.</p>
+    <pre><code>// Paeth filter: predict each byte from left, up and upper-left
+const p = a + up - c;
+const pa = Math.abs(p - a), pb = Math.abs(p - up), pc = Math.abs(p - c);
+v += pa &lt;= pb &amp;&amp; pa &lt;= pc ? a : pb &lt;= pc ? up : c;</code></pre>
+
+    <figure>
+      <img src="../assets/img/sec-phishlens-quishing.jpg" alt="PhishLens decoding a QR code and flagging the link" width="1440" height="960" loading="lazy">
+      <figcaption>The QR code decodes to <code>mfa-reset.sharepoint-docs.xyz</code>, a SharePoint look-alike (synthetic sample).</figcaption>
+    </figure>
+
+    <h2>Step 3: is that domain pretending to be someone?</h2>
+    <p>A decoded URL then goes through the same link analysis as every other link. The hardest check is the look-alike domain, because attackers have three tricks:</p>
+    <h3>Combosquatting: <code>sharepoint-docs.xyz</code></h3>
+    <p>A real brand name glued to other words. PhishLens splits the registrable domain into tokens and compares them with a list of the brands phishers impersonate most (Microsoft, PayPal, DHL, banks…, including Moldovan ones like maib and Poșta Moldovei). If the brand appears but the domain isn't one the brand owns, it's flagged.</p>
+    <h3>Character substitution: <code>micros0ft-secure-login.com</code></h3>
+    <p>Both sides are reduced to a <strong>"skeleton"</strong> before comparing: <code>0→o</code>, <code>1/l/i→l</code>, <code>rn→m</code>, <code>vv→w</code>, plus Cyrillic and Greek look-alikes mapped to Latin. <code>micros0ft</code> and <code>microsoft</code> share a skeleton. An edit-distance check then catches typos like <code>paypa1</code>.</p>
+    <h3>Homographs: <code>pаypal.com</code></h3>
+    <p>That "a" is Cyrillic (U+0430). Browsers and URL parsers convert such domains to <strong>punycode</strong>, here <code>xn--pypal-4ve.com</code>. PhishLens decodes punycode itself (RFC 3492), then checks which scripts the name mixes. Latin plus Cyrillic in one label is flagged critical: the domain only <em>looks</em> familiar.</p>
+    <div class="callout"><p>A link whose <em>text</em> shows one domain but whose <em>target</em> is another ("https://www.paypal.com" pointing at bit.ly) is caught separately. It's one of the most reliable phishing signals there is.</p></div>
+
+    <h2>Why everything runs in the browser</h2>
+    <p>Suspicious emails often contain real names, internal addresses and sometimes the victim's own data. Uploading them to an online scanner is a privacy problem in itself. PhishLens is a static page: parsing, QR decoding, scoring and exports all happen in JavaScript on your machine. The preview of the email is rendered in a sandboxed iframe with scripts removed, remote images blocked and links disabled, so opening an evil email in the analyzer can't hurt you either.</p>
+    <p>To make sure it doesn't cry wolf, the sample set includes a genuine, fully authenticated GitHub notification. It scores <strong>0/100</strong>. The CEO-fraud sample, which passes SPF, DKIM and DMARC because it's sent from real Gmail, still scores "likely phishing" from its wording and its Reply-To trick.</p>
+
+    <aside class="art-cta">
+      <h2>Try the QR sample yourself</h2>
+      <p>Open the MFA re-enrollment sample and look at the Attachments tab: the code is decoded and the link flagged in about a second.</p>
+      <div class="row"><a class="btn primary" href="https://vicuvi1.github.io/phishlens/#sample=05&amp;tab=attachments" target="_blank" rel="noopener">Open the QR sample ↗</a><a class="btn" href="https://github.com/vicuvi1/phishlens" target="_blank" rel="noopener">Source on GitHub ↗</a><a class="btn" href="mailto:victor.barbuta@outlook.com">Email me</a></div>
+    </aside>
+
+    <section class="art-more">
+      <h2>More writing</h2>
+      <a href="evtx-parser.html">I wrote a Windows EVTX parser from scratch →</a>
+      <a href="windows-events-attackers.html">Six Windows events that give attackers away →</a>
+    </section>
+  </main>
+  <footer class="art-foot">© Victor Bărbuță · <a href="../">victor-barbuta.vercel.app</a></footer>
+</body>
+</html>

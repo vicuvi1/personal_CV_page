@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self' mailto:; object-src 'none'; upgrade-insecure-requests">
+  <title>Six Windows events that give attackers away | Victor Bărbuță</title>
+  <meta name="description" content="Brute force that succeeds, Kerberoasting, backdoor admins, DCSync, PsExec and cleared logs: the Windows event IDs that reveal them, how to correlate them, and the false positives to watch for.">
+  <meta name="author" content="Victor Bărbuță">
+  <link rel="canonical" href="https://victor-barbuta.vercel.app/articles/windows-events-attackers">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Six Windows events that give attackers away">
+  <meta property="og:description" content="The event IDs a SOC analyst should know by heart, and how to turn single events into a story.">
+  <meta property="og:image" content="https://victor-barbuta.vercel.app/assets/img/sec-wintrace-detections.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/article.css">
+  <script src="../assets/js/theme.js"></script>
+</head>
+<body>
+  <header class="art-nav">
+    <a class="brand" href="../"><span class="brand-mark">VB</span><span>Victor Bărbuță</span></a>
+    <nav><a href="../#writing">All writing</a><a href="../#work" class="hide-sm">Projects</a><a href="https://vicuvi1.github.io/wintrace/" target="_blank" rel="noopener" class="hide-sm">WinTrace demo ↗</a><button class="icon-btn theme-btn" id="theme-toggle" type="button" aria-label="Switch theme"></button></nav>
+  </header>
+
+  <main class="article">
+    <p class="art-kicker">Blue team · 7 min read · November 2026</p>
+    <h1>Six Windows events that give attackers away</h1>
+    <p class="art-lede">Attackers can hide a lot, but on Windows almost every step leaves an event behind. Here are the six patterns I built into <a href="https://vicuvi1.github.io/wintrace/">WinTrace</a> first: what each event means, why one event alone isn't enough, and what usually causes false alarms.</p>
+    <div class="art-meta"><img src="../assets/img/victor.jpg" alt="" width="36" height="36"><span><strong>Victor Bărbuță</strong></span><span>Information Security student, UTM</span></div>
+
+    <div class="callout"><p><strong>The big idea:</strong> single events are noise; <strong>sequences</strong> are attacks. A failed logon happens a thousand times a day. Forty failed logons from one internet address, then a success from that same address, is an incident.</p></div>
+
+    <div class="ev-card">
+      <h3><span class="ev-id">4625 → 4624</span> Brute force that worked</h3>
+      <p><strong>4625</strong> is a failed logon; <strong>4624</strong> a successful one. Logon type <code>10</code> means Remote Desktop, and <code>3</code> means network. The pattern to hunt: many 4625s from one <code>IpAddress</code> in a few minutes (guessing one account, or <em>spraying</em> a couple of passwords across many accounts), <strong>followed by a 4624 from the same address</strong>.</p>
+      <p><strong>False positives:</strong> a service with an expired password retrying forever (many failures, never a success, internal IP), or a user with Caps Lock on (3 failures, then success, internal). The internet source plus the success is what makes it critical.</p>
+    </div>
+
+    <div class="ev-card">
+      <h3><span class="ev-id">4769 · 0x17</span> Kerberoasting</h3>
+      <p>Every Kerberos service ticket request is a <strong>4769</strong> on the domain controller. The field to watch is <code>TicketEncryptionType</code>: modern tickets are AES (<code>0x12</code>), but <code>0x17</code> is <strong>RC4</strong>, which can be cracked offline to recover the service account's password. Tools like Rubeus request RC4 tickets for every account with an SPN in seconds.</p>
+      <p><strong>Pattern:</strong> one user requesting RC4 tickets for 3+ different <em>user</em> service accounts in a short window. Skip machine accounts (names ending in <code>$</code>) and <code>krbtgt</code>: they're normal. A cousin to watch: <strong>4768 with <code>PreAuthType 0</code></strong>, an account without Kerberos pre-authentication (AS-REP roasting).</p>
+    </div>
+
+    <div class="ev-card">
+      <h3><span class="ev-id">4720 → 4732</span> The backdoor admin</h3>
+      <p><strong>4720</strong> is "user account created", <strong>4732</strong> (local) / <strong>4728</strong> (domain) / <strong>4756</strong> (universal) are "member added to a group". Seconds apart, with the group being <em>Administrators</em> or <em>Domain Admins</em>, that's an attacker making sure they can come back.</p>
+      <p><strong>Gotcha I hit:</strong> for local groups, the member is often recorded only as a <strong>SID</strong>, not a name. To link the two events, match the new account's <code>TargetSid</code> from the 4720 to the <code>MemberSid</code> of the 4732. WinTrace learns these SID-to-name mappings from the log itself, so a report says <code>fsir</code> instead of <code>S-1-5-21-…-1000</code>.</p>
+    </div>
+
+    <div class="ev-card">
+      <h3><span class="ev-id">4662 · 1131f6aa…</span> DCSync</h3>
+      <p>Domain controllers replicate password data between each other. With DCSync, an attacker <em>pretends to be a DC</em> and asks for every hash in the domain, krbtgt included. On the DC it shows up as <strong>4662</strong> (an operation on a directory object) with the replication rights GUIDs <code>1131f6aa-…</code> and <code>1131f6ad-…</code> in <code>Properties</code>.</p>
+      <p><strong>Pattern:</strong> those GUIDs requested by an account that is <strong>not a domain controller</strong> (DC computer accounts end in <code>$</code>). This needs "Audit Directory Service Access" enabled, which is a good reminder that detection starts with logging.</p>
+    </div>
+
+    <div class="ev-card">
+      <h3><span class="ev-id">5145 + 7045</span> PsExec lateral movement</h3>
+      <p>PsExec copies <code>PSEXESVC.exe</code> to the target's <code>ADMIN$</code> share (<strong>5145</strong>, share file access) and installs it as a service (<strong>7045</strong> in the System log). The commands then run as children of <code>PSEXESVC.exe</code>. Often just before: a <strong>4624 type 3 over NTLM with <code>KeyLength 0</code></strong>, a classic sign of pass-the-hash.</p>
+      <p><strong>False positives:</strong> admins do use PsExec. Context decides: a workstation reaching a file server's ADMIN$ at 2 a.m., followed by <code>whoami</code> and <code>net group "domain admins"</code>, is not an admin.</p>
+    </div>
+
+    <div class="ev-card">
+      <h3><span class="ev-id">1102 / 104</span> Clearing the logs</h3>
+      <p>The irony of log wiping: clearing the Security log writes a <strong>1102</strong> ("the audit log was cleared") <em>into the freshly cleared log</em>, and clearing System writes a <strong>104</strong>. Attackers do it last, which makes it a strong "something happened before this" marker. Treat it as critical, and pull the missing time window from your SIEM or other machines.</p>
+    </div>
+
+    <figure>
+      <img src="../assets/img/sec-wintrace-detections.jpg" alt="WinTrace detections with decoded PowerShell" width="1440" height="1300" loading="lazy">
+      <figcaption>WinTrace turning events like these into detections, with the hidden PowerShell decoded (synthetic sample).</figcaption>
+    </figure>
+
+    <h2>Bonus: two Sysmon events worth turning on</h2>
+    <p>The Security log doesn't see everything. With Sysmon installed, <strong>Event 10</strong> (process access) shows a tool opening <code>lsass.exe</code> with read rights, which is how credentials get dumped. <strong>Event 1</strong> gives full command lines, where an <code>-EncodedCommand</code> can be base64-decoded and re-checked. In my test sample, the decoded payload is a download cradle, so the alert escalates from high to critical.</p>
+
+    <h2>Logging checklist</h2>
+    <ul>
+      <li>Audit logon events (success and failure) and Kerberos service ticket operations.</li>
+      <li>Audit user account management, security group management and directory service access.</li>
+      <li>Process creation with command lines (4688), or Sysmon.</li>
+      <li>PowerShell script block logging (4104).</li>
+      <li>Forward logs off the machine, because attackers clear the local copy.</li>
+    </ul>
+
+    <aside class="art-cta">
+      <h2>See all six in action</h2>
+      <p>WinTrace ships seven synthetic incidents built on these exact events, plus a normal workday that scores 0/100. Open one and follow the attack story.</p>
+      <div class="row"><a class="btn primary" href="https://vicuvi1.github.io/wintrace/#sample=01" target="_blank" rel="noopener">RDP brute force sample ↗</a><a class="btn" href="https://vicuvi1.github.io/wintrace/#sample=05" target="_blank" rel="noopener">DCSync sample ↗</a><a class="btn" href="mailto:victor.barbuta@outlook.com">Email me</a></div>
+    </aside>
+
+    <section class="art-more">
+      <h2>More writing</h2>
+      <a href="evtx-parser.html">I wrote a Windows EVTX parser from scratch →</a>
+      <a href="quishing-detection.html">Catching QR-code phishing without uploading the email →</a>
+    </section>
+  </main>
+  <footer class="art-foot">© Victor Bărbuță · <a href="../">victor-barbuta.vercel.app</a></footer>
+</body>
+</html>

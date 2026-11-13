@@ -1,0 +1,45 @@
+/* Long-form article pages (/articles/*). Reuses the tokens from style.css. */
+.art-nav { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 16px; padding: 12px var(--gutter); background: color-mix(in srgb, var(--nav-bg) 90%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.art-nav .brand { display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 600; }
+.art-nav .brand:hover { text-decoration: none; }
+.art-nav nav { margin-left: auto; display: flex; align-items: center; gap: 18px; font-size: var(--fs-14); }
+.art-nav nav a { color: var(--muted); }
+.art-nav nav a:hover { color: var(--text); text-decoration: none; }
+
+.article { max-width: 760px; margin: 0 auto; padding: clamp(32px, 6vw, 64px) var(--gutter) 40px; }
+.art-kicker { font: 500 var(--fs-12) var(--mono); color: var(--ok); letter-spacing: .04em; margin: 0 0 14px; text-transform: uppercase; }
+.article h1 { font: 700 clamp(30px, 5vw, 46px)/1.08 var(--display); letter-spacing: -.03em; margin: 0 0 16px; }
+.art-lede { font-size: clamp(18px, 2.2vw, 20px); color: var(--text-2); line-height: 1.55; margin: 0 0 18px; }
+.art-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: var(--fs-14); color: var(--muted); padding-bottom: 22px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.art-meta img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.article h2 { font: 700 clamp(22px, 2.8vw, 27px)/1.2 var(--display); letter-spacing: -.02em; margin: 40px 0 12px; }
+.article h3 { font: 600 var(--fs-18)/1.3 var(--display); margin: 28px 0 8px; }
+.article p, .article li { font-size: 17px; line-height: 1.75; color: var(--text-2); }
+.article p { margin: 0 0 18px; }
+.article ul, .article ol { padding-left: 22px; margin: 0 0 18px; }
+.article li { margin-bottom: 6px; }
+.article strong { color: var(--text); }
+.article code { font-family: var(--mono); font-size: .86em; padding: 1px 6px; border-radius: 4px; background: var(--bg-2); border: 1px solid var(--line); color: var(--text); }
+.article pre { font: 13.5px/1.65 var(--mono); background: var(--bg-2); border: 1px solid var(--line-strong); border-radius: 8px; padding: 14px 16px; overflow-x: auto; margin: 0 0 22px; color: var(--text); }
+.article pre code { padding: 0; border: 0; background: none; font-size: inherit; }
+.article figure { margin: 26px 0; }
+.article figure img { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line-strong); display: block; }
+.article figcaption { font-size: var(--fs-14); color: var(--muted); margin-top: 8px; text-align: center; }
+.callout { border-left: 3px solid var(--accent); background: color-mix(in srgb, var(--accent) 7%, var(--bg-2)); padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 0 0 22px; }
+.callout p { margin: 0; }
+.ev-card { border: 1px solid var(--line-strong); border-radius: 10px; padding: 16px 18px; margin: 0 0 18px; background: var(--bg-2); }
+.ev-card h3 { margin-top: 0; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.ev-id { font: 700 var(--fs-14) var(--mono); color: var(--warn); }
+.ev-card p:last-child { margin-bottom: 0; }
+.art-cta { margin: 44px 0 0; padding: 22px; border-radius: 12px; border: 1px solid var(--line-strong); background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 9%, var(--bg-2)), var(--bg-2)); }
+.art-cta h2 { margin: 0 0 8px; font-size: 22px; }
+.art-cta p { margin: 0 0 14px; }
+.art-cta .row { display: flex; flex-wrap: wrap; gap: 10px; }
+.art-more { margin-top: 36px; }
+.art-more h2 { font-size: 18px; margin: 0 0 10px; }
+.art-more a { display: block; padding: 10px 0; border-top: 1px solid var(--line); }
+.art-foot { text-align: center; color: var(--faint); font-size: var(--fs-14); padding: 30px var(--gutter) 40px; }
+@media (max-width: 560px) { .art-nav nav a.hide-sm { display: none; } }
+.theme-btn { display: grid; place-items: center; padding: 0; width: 34px; }
+.theme-btn svg { width: 17px; height: 17px; }
+.theme-btn:hover { color: var(--accent); }

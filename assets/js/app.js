@@ -51,10 +51,15 @@
     ? `<a class="btn" href="${esc(CV.cvPdf)}" download>${icon("download")}${label}</a>`
     : `<button class="btn" type="button" data-print>${icon("download")}${label}</button>`;
 
+  // muted looping demo video (played only while visible, see setupVideos); the poster is the screenshot
+  const demoVideo = (src, poster, label) =>
+    `<video class="demo-video" src="${esc(src)}" poster="${esc(poster)}" muted loop playsinline preload="none" aria-label="${label}" data-autoplay></video>`;
+
   function projectCard(p) {
+    const alt = p.shotCaption ? T(p.shotCaption) : `${T(p.title)} screenshot`;
     return `
       <article class="row-card project reveal">
-        ${p.shot ? `<div class="proj-shot"><img src="${esc(p.shot)}" alt="${p.shotCaption ? T(p.shotCaption) : `${T(p.title)} screenshot`}" loading="lazy"></div>` : ""}
+        ${p.video ? `<div class="proj-shot proj-video">${demoVideo(p.video, p.shot, `${T(p.title)} demo video`)}</div>` : p.shot ? `<div class="proj-shot"><img src="${esc(p.shot)}" alt="${alt}" loading="lazy"></div>` : ""}
         <div class="project-top">${p.kind ? `<span class="project-kind">${T(p.kind)}</span>` : "<span></span>"}${p.status ? `<span class="pill ${esc(p.status)}">${T(UI.status[p.status] || p.status)}</span>` : ""}</div>
         <h3>${T(p.title)}<span class="yr">${T(p.period)}</span></h3>
         <p>${T(p.summary)}</p>
@@ -76,7 +81,7 @@
     return `
       <article class="flag reveal${i === 0 ? " flag-main" : ""}">
         <a class="flag-shot" href="${esc(shotHref)}"${shotHref.startsWith("#") ? "" : ' target="_blank" rel="noopener"'} aria-label="${T(p.title)}: ${live ? T(UI.cta.flagLive) : T(UI.cta.flagDetails)}">
-          <img src="${esc(p.flagshipShot || p.shot)}" alt="${p.shotCaption ? T(p.shotCaption) : T(p.title)}" loading="${i === 0 ? "eager" : "lazy"}">
+          ${p.video && i === 0 ? demoVideo(p.video, p.flagshipShot || p.shot, `${T(p.title)} demo video`) : `<img src="${esc(p.flagshipShot || p.shot)}" alt="${p.shotCaption ? T(p.shotCaption) : T(p.title)}" loading="${i === 0 ? "eager" : "lazy"}">`}
           ${live ? `<span class="flag-live"><span class="pulse"></span>${T(UI.cta.flagLive)}</span>` : ""}
         </a>
         <div class="flag-body">
@@ -179,6 +184,12 @@
       (demo ? `<a class="btn demo" href="${esc(demo.url)}" target="_blank" rel="noopener">${icon("play")}${T(UI.cta.demo)}</a>` : "") +
       cvButton(T(UI.cta.cv));
     $("#flagships").innerHTML = flags.map(flagshipCard).join("");
+    $("#writing-grid").innerHTML = shown(CV.articles).map((a) => `
+      <a class="article-card reveal" href="${esc(a.url)}">
+        <span class="article-img"><img src="${esc(a.image)}" alt="" loading="lazy"></span>
+        <span class="article-body"><span class="article-kicker">${T(a.kicker)}</span><strong>${T(a.title)}</strong><span class="article-sum">${T(a.summary)}</span><span class="article-read">${T(UI.cta.read)} →</span></span>
+      </a>`).join("");
+    $("#writing").hidden = !shown(CV.articles).length;
     $("#why-grid").innerHTML = shown(CV.whyHire).map((w) => `
       <article class="why reveal"><div class="why-ico">${icon(w.icon)}</div><h3>${T(w.title)}</h3><p>${T(w.text)}</p></article>`).join("");
     $("#status").innerHTML = P.available ? `<span class="pulse"></span>${T(P.availability)}` : "";
@@ -309,6 +320,7 @@
 
     setActiveNav();
     if (window.fxRefresh) window.fxRefresh();
+    setupVideos();
   }
 
   function renderBadge() {
@@ -332,6 +344,25 @@
     for (let i = 0; i < 34; i++) { h = (h * 31 + seed.charCodeAt(i % seed.length) + i) >>> 0; bars.push(1 + (h % 4)); }
     $("#barcode").innerHTML = bars.map(() => "<i></i>").join("");
     $$("#barcode i").forEach((el, i) => { el.style.width = bars[i] + "px"; el.style.opacity = (h >> i) & 1 ? "0.85" : "0.5"; });
+  }
+
+  /* ---------- demo videos: play only while on screen, never for reduced-motion visitors ---------- */
+  let videoIO;
+  function setupVideos() {
+    const vids = $$("video[data-autoplay]");
+    if (reduced || !("IntersectionObserver" in window)) {
+      vids.forEach((v) => { v.controls = true; v.preload = "metadata"; });
+      return;
+    }
+    videoIO?.disconnect();
+    videoIO = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const v = e.target;
+        if (e.isIntersecting) { v.preload = "auto"; v.play().catch(() => { v.controls = true; }); }
+        else v.pause();
+      }
+    }, { threshold: 0.35 });
+    vids.forEach((v) => videoIO.observe(v));
   }
 
   /* ---------- reveal ---------- */
@@ -595,7 +626,8 @@
       const thumb = e.target.closest(".wu-thumb");
       if (thumb) { openLb(thumb.dataset.full, thumb.dataset.cap); return; }
       const cover = e.target.closest(".proj-shot, .case-cover");
-      if (cover) { e.preventDefault(); const im = cover.querySelector("img"); openLb(im.src, im.alt); }
+      const im = cover?.querySelector("img");
+      if (cover && im) { e.preventDefault(); openLb(im.src, im.alt); }
     });
     $("#lb-close").addEventListener("click", closeLb);
     lb.el.addEventListener("click", (e) => { if (e.target === lb.el) closeLb(); });

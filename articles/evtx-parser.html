@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self' mailto:; object-src 'none'; upgrade-insecure-requests">
+  <title>I wrote a Windows EVTX parser from scratch | Victor Bărbuță</title>
+  <meta name="description" content="How Windows stores event logs in binary .evtx files, how I decoded Binary XML templates in plain JavaScript, and the one-byte-order bug a hex dump found for me.">
+  <meta name="author" content="Victor Bărbuță">
+  <link rel="canonical" href="https://victor-barbuta.vercel.app/articles/evtx-parser">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I wrote a Windows EVTX parser from scratch">
+  <meta property="og:description" content="Binary XML, templates, and the bug a hex dump found for me. Behind the scenes of WinTrace.">
+  <meta property="og:image" content="https://victor-barbuta.vercel.app/assets/img/sec-wintrace-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/article.css">
+  <script src="../assets/js/theme.js"></script>
+</head>
+<body>
+  <header class="art-nav">
+    <a class="brand" href="../"><span class="brand-mark">VB</span><span>Victor Bărbuță</span></a>
+    <nav><a href="../#writing">All writing</a><a href="../#work" class="hide-sm">Projects</a><a href="https://vicuvi1.github.io/wintrace/" target="_blank" rel="noopener" class="hide-sm">WinTrace demo ↗</a><button class="icon-btn theme-btn" id="theme-toggle" type="button" aria-label="Switch theme"></button></nav>
+  </header>
+
+  <main class="article">
+    <p class="art-kicker">Windows forensics · 8 min read · November 2026</p>
+    <h1>I wrote a Windows EVTX parser from scratch</h1>
+    <p class="art-lede">Every Windows machine records logons, new services, PowerShell and cleared logs in <code>.evtx</code> files. They look like XML in Event Viewer, but on disk they're a compact binary format. To build <a href="https://vicuvi1.github.io/wintrace/">WinTrace</a> without dependencies, I decoded it myself in plain JavaScript. This is how the format works, and the bug that taught me to trust a hex dump.</p>
+    <div class="art-meta"><img src="../assets/img/victor.jpg" alt="" width="36" height="36"><span><strong>Victor Bărbuță</strong></span><span>Information Security student, UTM</span></div>
+
+    <h2>Why not just use a library?</h2>
+    <p>WinTrace runs entirely in the browser, so the logs never leave the analyst's machine. Good EVTX parsers exist in Python and Rust, but none fit a zero-dependency web page. Writing my own was also the best way to really understand what a SOC analyst is looking at when they open Event Viewer.</p>
+
+    <h2>The layout: header, chunks, records</h2>
+    <p>An <code>.evtx</code> file starts with a 4 KB header (magic <code>ElfFile\0</code>), then a series of fixed 64 KB <strong>chunks</strong> (magic <code>ElfChnk\0</code>). Each chunk is self-contained: it has its own header with a table of element-name strings and a table of templates, and from offset <code>0x200</code> onwards it holds the event <strong>records</strong>.</p>
+    <pre><code>record
+  0x00  u32   magic 0x00002a2a
+  0x04  u32   size
+  0x08  u64   record number
+  0x10  u64   FILETIME (100-ns ticks since 1601)
+  0x18  ...   Binary XML payload
+  end-4 u32   size again</code></pre>
+    <p>The interesting part is that payload. It isn't XML text; it's <strong>Binary XML</strong>, a stream of one-byte tokens.</p>
+
+    <h2>Binary XML: tokens, names and templates</h2>
+    <p>The token stream reads like a tiny bytecode: <code>0x0F</code> fragment header, <code>0x01</code>/<code>0x41</code> open an element (the <code>0x40</code> bit means "has attributes"), <code>0x06</code> an attribute, <code>0x05</code> a literal value, <code>0x02</code>/<code>0x03</code> close the start tag, <code>0x04</code> end the element, <code>0x00</code> end of stream.</p>
+    <p>Two tricks keep the files small:</p>
+    <ul>
+      <li><strong>Names are stored once per chunk.</strong> An element only points at its name (<code>EventData</code>, <code>TargetUserName</code>…). The first time a name appears in a chunk, it's written <em>inline</em>, right inside the token; after that it's just an offset.</li>
+      <li><strong>Templates.</strong> Thousands of 4624 logon events share the same shape. Windows stores that shape once as a <em>template</em> (token <code>0x0C</code>), with <em>substitution</em> slots (<code>0x0D</code>/<code>0x0E</code>) where the values go. Each record then only carries an array of typed values.</li>
+    </ul>
+    <p>Those values are typed: <code>0x01</code> UTF-16 string, <code>0x08</code> uint32, <code>0x11</code> FILETIME, <code>0x13</code> SID, <code>0x0F</code> GUID, <code>0x14</code> hex number, and <code>0x21</code>, which is <em>another Binary XML fragment</em>. That last one is how <code>EventData</code> ends up nested inside the <code>Event</code> template, so the parser has to be recursive.</p>
+    <pre><code>// a record = template + values
+templateInstance(pos) {
+  const defOff = u32(pos + 6);              // where the template lives in the chunk
+  const tpl = this.template(defOff);        // parsed once, then cached per chunk
+  if (defOff === pos + 10 - chunkBase)      // first use: the definition is inline here
+    pos += 24 + tpl.size;
+  const values = readSubstitutionArray(pos);
+  return instantiate(tpl.nodes, values);    // fill the slots
+}</code></pre>
+
+    <h2>The bug: 337 records out of 1,601</h2>
+    <p>My first run on a real <code>System.evtx</code> parsed <strong>337 records and failed on 1,264</strong>, all with the same error: <code>expected CloseStartElement at 0x251</code>. The failures weren't random. Every record whose template was being used <em>for the first time in its chunk</em> broke, and every record re-using an already-seen template worked.</p>
+    <p>The difference between those two cases is exactly the inline names. So I dumped the bytes of the first record:</p>
+    <pre><code>0240  01 00 41 11 00 86 04 00 00 4d 02 00 00 00 00 00
+0250  00 ba 0c 05 00 45 00 76 00 65 00 6e 00 74 00 00
+0260  00 87 00 00 00 06 6a 02 00 00 ...</code></pre>
+    <p>At <code>0x242</code> is <code>0x41</code>, an element with attributes. The name offset says <code>0x24D</code>, which is the very next byte after the fixed fields: an inline name, <code>"Event"</code> (5 UTF-16 characters). And only <em>after</em> the name, at <code>0x261</code>, comes <code>87 00 00 00</code>: the size of the attribute list.</p>
+    <p>I had read the attribute-list size <em>before</em> skipping the inline name, so every first-use template was misaligned by a name's length. Swapping two lines fixed it:</p>
+    <pre><code>p = pos + fixed;
+if (nameOff === p - base) p += nameLength(nameOff); // inline name first…
+if (hasAttrs) p += 4;                               // …then the attribute list size</code></pre>
+    <p>Result: <strong>1,601 of 1,601 records, 0 errors</strong>, and <strong>2,261 of 2,261</strong> on a Security log.</p>
+
+    <h2>Proving it's right</h2>
+    <p>"No errors" doesn't mean "correct". So I tested against the reference files from <a href="https://github.com/williballenthin/python-evtx">python-evtx</a> (Apache-2.0), whose test suite records the expected values: the file header fields, record counts per file, and the full XML of the first record. My test checks the same things, down to the provider GUID, <code>Keywords 0x8000000000000000</code> and the timestamp <code>2012-03-14 04:17:43.354563</code>.</p>
+    <div class="callout"><p>That timestamp caught one last mismatch: I printed <code>.354562</code>. FILETIME counts 100-nanosecond ticks; I was <em>truncating</em> to microseconds while the reference <em>rounds</em>. One <code>+ 5n</code> before dividing by 10 fixed it.</p></div>
+    <p>Real logs are often dirty (the "file is dirty" flag is set on a live log), so the parser never throws on a bad record: it skips it, records the error and keeps going. A deliberately malformed file from python-evtx's bug tracker still yields its 5 records.</p>
+
+    <figure>
+      <img src="../assets/img/sec-wintrace-story.jpg" alt="WinTrace attack story built from parsed events" width="1440" height="1150" loading="lazy">
+      <figcaption>Parsed events feed WinTrace's detections and its plain-English attack story (synthetic sample).</figcaption>
+    </figure>
+
+    <h2>What I took away</h2>
+    <ul>
+      <li><strong>Patterns in failures are clues.</strong> "Only first-use templates fail" pointed straight at inline names.</li>
+      <li><strong>A hex dump beats guessing.</strong> Five minutes of reading bytes saved hours of rewriting.</li>
+      <li><strong>Test against a reference, not against yourself.</strong> Without python-evtx's known values I'd have shipped a parser that was off by one microsecond, and wouldn't have known.</li>
+      <li><strong>As a defender, I now read events differently.</strong> Knowing that a 4624 is a template plus 20 typed values makes it obvious which fields an attacker controls and which ones Windows fills in.</li>
+    </ul>
+
+    <aside class="art-cta">
+      <h2>Try it on your own logs</h2>
+      <p>Drop a Security.evtx into WinTrace: it's parsed in your browser and nothing is uploaded. Or start with one of seven synthetic attack samples.</p>
+      <div class="row"><a class="btn primary" href="https://vicuvi1.github.io/wintrace/" target="_blank" rel="noopener">Open WinTrace ↗</a><a class="btn" href="https://github.com/vicuvi1/wintrace/blob/main/src/evtx.js" target="_blank" rel="noopener">Read evtx.js ↗</a><a class="btn" href="mailto:victor.barbuta@outlook.com">Email me</a></div>
+    </aside>
+
+    <section class="art-more">
+      <h2>More writing</h2>
+      <a href="windows-events-attackers.html">Six Windows events that give attackers away →</a>
+      <a href="quishing-detection.html">Catching QR-code phishing without uploading the email →</a>
+    </section>
+  </main>
+  <footer class="art-foot">© Victor Bărbuță · <a href="../">victor-barbuta.vercel.app</a></footer>
+</body>
+</html>
