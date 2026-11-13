@@ -83,7 +83,7 @@ window.CV = {
     // Numbers bar in the hero: value + what it means. Keep it to 4, all true and checkable.
     stats: [
       { value: "Top 3%", label: { en: "TryHackMe worldwide", ro: "TryHackMe mondial" } },
-      { value: "4", label: { en: "security tools built", ro: "unelte de securitate construite" } },
+      { value: "5", label: { en: "security tools built", ro: "unelte de securitate construite" } },
       { value: "100", label: { en: "websites researched", ro: "site-uri cercetate" } },
       { value: "4th/12", label: { en: "international CTF", ro: "CTF internațional" } },
     ],
@@ -126,7 +126,7 @@ window.CV = {
     {
       icon: "check",
       title: { en: "I finish what I start", ro: "Duc lucrurile la capăt" },
-      text: { en: "Four working security tools, each with tests, documentation and a demo you can open right now.", ro: "Patru unelte de securitate funcționale, fiecare cu teste, documentație și un demo pe care îl poți deschide acum." },
+      text: { en: "Five working security tools, each with tests and documentation, three with a live demo you can open right now.", ro: "Cinci unelte de securitate funcționale, fiecare cu teste și documentație, trei cu un demo live pe care îl poți deschide acum." },
     },
     {
       icon: "shield",
@@ -528,6 +528,9 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "WinTrace",
+      flagship: 3,
+      flagshipLine: { en: "Drop Windows logs and watch it rebuild the attack: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync. My own EVTX parser, live demo with 7 incidents.", ro: "Încarci loguri Windows și reconstruiește atacul: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync. Parser EVTX propriu, demo live cu 7 incidente." },
+      flagshipShot: "assets/img/sec-wintrace-cover.jpg",
       period: "2026",
       status: "live",
       kind: { en: "Blue team · Windows event log attack hunter (JavaScript, web app + CLI)", ro: "Blue team · Analizor de atacuri în logurile Windows (JavaScript, aplicație web + CLI)" },
@@ -564,9 +567,6 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "HiveWatch SOC",
-      flagship: 3,
-      flagshipLine: { en: "Honeypots built to bait attackers, detect them live and map every move to MITRE ATT&CK (screens show demo mode).", ro: "Capcane construite să atragă atacatori, să-i detecteze live și să mapeze fiecare mișcare pe MITRE ATT&CK (capturile arată modul demo)." },
-      flagshipShot: "assets/img/sec-hivewatch-profile.jpg",
       period: "2026",
       status: "building",
       kind: { en: "Blue team · Honeypot-driven mini SOC (Python, FastAPI)", ro: "Blue team · Mini SOC bazat pe honeypot-uri (Python, FastAPI)" },
