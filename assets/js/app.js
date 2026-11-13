@@ -81,7 +81,7 @@
     return `
       <article class="flag reveal${i === 0 ? " flag-main" : ""}">
         <a class="flag-shot" href="${esc(shotHref)}"${shotHref.startsWith("#") ? "" : ' target="_blank" rel="noopener"'} aria-label="${T(p.title)}: ${live ? T(UI.cta.flagLive) : T(UI.cta.flagDetails)}">
-          ${p.video && i === 0 ? demoVideo(p.video, p.flagshipShot || p.shot, `${T(p.title)} demo video`) : `<img src="${esc(p.flagshipShot || p.shot)}" alt="${p.shotCaption ? T(p.shotCaption) : T(p.title)}" loading="${i === 0 ? "eager" : "lazy"}">`}
+          ${p.flagshipVideo ? demoVideo(p.flagshipVideo, p.flagshipShot || p.shot, `${T(p.title)} demo video`) : `<img src="${esc(p.flagshipShot || p.shot)}" alt="${p.shotCaption ? T(p.shotCaption) : T(p.title)}" loading="${i === 0 ? "eager" : "lazy"}">`}
           ${live ? `<span class="flag-live"><span class="pulse"></span>${T(UI.cta.flagLive)}</span>` : ""}
         </a>
         <div class="flag-body">
@@ -184,9 +184,18 @@
       (demo ? `<a class="btn demo" href="${esc(demo.url)}" target="_blank" rel="noopener">${icon("play")}${T(UI.cta.demo)}</a>` : "") +
       cvButton(T(UI.cta.cv));
     $("#flagships").innerHTML = flags.map(flagshipCard).join("");
+    const M = CV.moments;
+    $("#moments").hidden = !M || M.hidden;
+    if (M && !M.hidden) {
+      const ph = (p, cls) => `<button class="wu-thumb moment ${cls}" type="button" data-full="${esc(p.src)}" data-cap="${T(p.caption)}" aria-label="${T(p.caption)}"><img src="${esc(p.src)}" alt="${T(p.caption)}" loading="lazy"></button>`;
+      $("#moments-grid").innerHTML = `
+        ${ph(M.photos[0], "m-main")}
+        <div class="moment-text reveal"><span class="moment-kicker">${T(M.title)}</span><h2 id="moments-title">GigaHack 2026 · HackTrone</h2><p>${T(M.caption)}</p>${M.link ? anchor(M.link.url, `${T(M.link.label)} →`, "moment-link") : ""}</div>
+        ${M.photos.slice(1).map((p, i) => ph(p, `m-side m-side-${i + 1}`)).join("")}`;
+    }
     $("#writing-grid").innerHTML = shown(CV.articles).map((a) => `
       <a class="article-card reveal" href="${esc(a.url)}">
-        <span class="article-img"><img src="${esc(a.image)}" alt="" loading="lazy"></span>
+        ${a.cover ? `<span class="article-cover cover-${esc(a.cover.kind)}" aria-hidden="true"><span class="cover-big">${esc(a.cover.big)}</span><span class="cover-sub">${esc(a.cover.sub)}</span></span>` : `<span class="article-img"><img src="${esc(a.image)}" alt="" loading="lazy"></span>`}
         <span class="article-body"><span class="article-kicker">${T(a.kicker)}</span><strong>${T(a.title)}</strong><span class="article-sum">${T(a.summary)}</span><span class="article-read">${T(UI.cta.read)} →</span></span>
       </a>`).join("");
     $("#writing").hidden = !shown(CV.articles).length;
@@ -597,6 +606,7 @@
   addEventListener("scroll", () => requestAnimationFrame(setActiveNav), { passive: true });
 
   render();
+
   tilt();
   network();
   // the hero typing starts once the intro animation (fx.js) has finished

@@ -116,6 +116,21 @@ window.CV = {
     { label: "X", url: "https://x.com/vicuvi_1", icon: "x" },
   ],
 
+  /* ---------- Photo strip right under the hero: competitions ---------- */
+  moments: {
+    title: { en: "In the arena", ro: "În arenă" },
+    caption: {
+      en: "DeepTech GigaHack 2026, the largest hackathon in Moldova: team NAVI in the red-team CTF, from one web host to five domains. Also in September: 4th of 12 teams at HackTrone.",
+      ro: "DeepTech GigaHack 2026, cel mai mare hackathon din Moldova: echipa NAVI în CTF-ul red team, de la un host web la cinci domenii. Tot în septembrie: locul 4 din 12 echipe la HackTrone.",
+    },
+    link: { label: { en: "Read the incident report", ro: "Citește raportul" }, url: "#incident" },
+    photos: [
+      { src: "assets/img/gigahack-team.jpg", caption: { en: "Team NAVI at DeepTech GigaHack 2026", ro: "Echipa NAVI la DeepTech GigaHack 2026" } },
+      { src: "assets/img/gigahack-arena.jpg", caption: { en: "The main stage, DeepTech GigaHack 2026", ro: "Scena principală, DeepTech GigaHack 2026" } },
+      { src: "assets/img/gigahack-banner.jpg", caption: { en: "“The largest hackathon in Moldova”", ro: "„Cel mai mare hackathon din Moldova”" } },
+    ],
+  },
+
   /* ---------- "Why hire me": 3 plain-language points for HR (no jargon) ---------- */
   whyHire: [
     {
@@ -142,21 +157,21 @@ window.CV = {
       kicker: { en: "Windows forensics · 8 min", ro: "Criminalistică Windows · 8 min" },
       title: "I wrote a Windows EVTX parser from scratch",
       summary: { en: "How Windows stores logs in binary, how Binary XML templates work, and the byte-order bug a hex dump found for me.", ro: "Cum stochează Windows logurile în format binar, cum funcționează șabloanele Binary XML și bug-ul găsit cu un hex dump. (articol în engleză)" },
-      image: "assets/img/sec-wintrace-story.jpg",
+      cover: { kind: "hex", big: "ElfChnk\\0", sub: "45 6C 66 43 68 6E 6B 00 · Binary XML · 1,601 / 1,601 records" },
     },
     {
       url: "articles/windows-events-attackers.html",
       kicker: { en: "Blue team · 7 min", ro: "Blue team · 7 min" },
       title: "Six Windows events that give attackers away",
       summary: { en: "Brute force that works, Kerberoasting, backdoor admins, DCSync, PsExec and cleared logs: the event IDs, the patterns and the false positives.", ro: "Brute force reușit, Kerberoasting, administratori ascunși, DCSync, PsExec și loguri șterse: ID-urile, tiparele și alarmele false. (articol în engleză)" },
-      image: "assets/img/sec-wintrace-detections.jpg",
+      cover: { kind: "ids", big: "4625 → 4624", sub: "4769 · 4720 · 4732 · 4662 · 7045 · 1102" },
     },
     {
       url: "articles/quishing-detection.html",
       kicker: { en: "Email security · 6 min", ro: "Securitate email · 6 min" },
       title: "Catching QR-code phishing without uploading the email",
       summary: { en: "Decoding QR codes in the browser, punycode homographs like pаypal.com, and why privacy shaped PhishLens.", ro: "Decodarea codurilor QR în browser, homografe punycode precum pаypal.com și de ce confidențialitatea a modelat PhishLens. (articol în engleză)" },
-      image: "assets/img/sec-phishlens-quishing.jpg",
+      cover: { kind: "qr", big: "pаypal.com", sub: "→ xn--pypal-4ve.com · Latin + Cyrillic = critical" },
     },
   ],
 
@@ -297,12 +312,7 @@ window.CV = {
         ro: "Operatorul principal a condus partea grea. Am ajutat la recunoașterea inițială, am ținut notițele și cronologia care au devenit raportul echipei și am urmărit fiecare etapă ca să o înțeleg.",
       },
     },
-    cover: "assets/img/gigahack-team.jpg", // big photo at the top of the report (click to enlarge)
-    coverCaption: { en: "Team NAVI at the GigaHack arena", ro: "Echipa NAVI în arena GigaHack" },
-    photos: [
-      { src: "assets/img/gigahack-arena.jpg", caption: { en: "The main stage — DeepTech GigaHack 2026", ro: "Scena principală — DeepTech GigaHack 2026" } },
-      { src: "assets/img/gigahack-banner.jpg", caption: { en: "“The largest hackathon in Moldova”", ro: "„Cel mai mare hackathon din Moldova”" } },
-    ],
+    // The GigaHack photos are shown once, in the "moments" strip under the hero.
     sections: [
       {
         h: { en: "What it was", ro: "Ce a fost" },
@@ -476,7 +486,7 @@ window.CV = {
       title: "SiteSentry",
       flagship: 2,
       flagshipLine: { en: "Scanned 100 popular websites: only 31% earn an A. Grades any site in seconds and writes the fix.", ro: "Am scanat 100 de site-uri populare: doar 31% iau nota A. Notează orice site în câteva secunde și scrie remedierea." },
-      flagshipShot: "assets/img/sec-sitesentry-report.jpg",
+      flagshipShot: "assets/img/sec-sitesentry-focus.jpg",
       period: "2026",
       status: "live",
       kind: { en: "Security tool · Website scanner (Python, web UI + CLI)", ro: "Instrument de securitate · Scanner de site-uri (Python, interfață web + CLI)" },
@@ -491,12 +501,11 @@ window.CV = {
         { en: "Zero dependencies, 103 tests, CI and CodeQL on every push, Docker image.", ro: "Zero dependențe, 103 teste, CI și CodeQL la fiecare push, imagine Docker." },
       ],
       tags: ["Python", "AppSec", "TLS", "OWASP", "DevSecOps"],
-      shot: "assets/img/sec-sitesentry-report.jpg",
-      shotCaption: { en: "SiteSentry: a real report for github.com (A+)", ro: "SiteSentry: un raport real pentru github.com (A+)" },
+      shot: "assets/img/sec-sitesentry-research.jpg",
+      shotCaption: { en: "Research: 100 popular websites scanned with SiteSentry", ro: "Cercetare: 100 de site-uri populare scanate cu SiteSentry" },
       photos: [
         { src: "assets/img/sec-sitesentry-home.jpg", caption: { en: "SiteSentry: the scan screen", ro: "SiteSentry: ecranul de scanare" } },
         { src: "assets/img/sec-sitesentry-compare.jpg", caption: { en: "SiteSentry: comparing two sites check by check", ro: "SiteSentry: compararea a două site-uri, verificare cu verificare" } },
-        { src: "assets/img/sec-sitesentry-research.jpg", caption: { en: "Research: 100 popular websites scanned with SiteSentry", ro: "Cercetare: 100 de site-uri populare scanate cu SiteSentry" } },
         { src: "assets/img/sec-sitesentry-low-grade.jpg", caption: { en: "SiteSentry: google.com scores a D: weak security headers and cookie settings", ro: "SiteSentry: google.com primește nota D: headere de securitate și cookie-uri configurate slab" } },
         { src: "assets/img/sec-sitesentry-fixes.jpg", caption: { en: "SiteSentry: prioritised issues and copy-paste nginx config generated for google.com", ro: "SiteSentry: probleme prioritizate și configurație nginx gata de copiat, generată pentru google.com" } },
         { src: "assets/img/sec-sitesentry-ci-gate.jpg", caption: { en: "SiteSentry: bulk scan as a CI/CD gate: --fail-under B fails the build (exit code 1)", ro: "SiteSentry: scanare în masă ca filtru CI/CD: --fail-under B oprește build-ul (cod de ieșire 1)" } },
@@ -512,10 +521,9 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "PhishLens",
-      video: "assets/video/phishlens-demo.mp4", // 14 s screen recording, plays muted while visible
       flagship: 1,
       flagshipLine: { en: "Drop a suspicious email and see in one second why it is phishing. Try it live with 7 sample attacks.", ro: "Încarci un email suspect și vezi într-o secundă de ce e phishing. Încearcă-l live cu 7 atacuri de test." },
-      flagshipShot: "assets/img/sec-phishlens-cover.jpg",
+      flagshipShot: "assets/img/sec-phishlens-focus.jpg",
       period: "2026",
       status: "live",
       kind: { en: "Blue team · Phishing email analyzer (JavaScript, web app + CLI)", ro: "Blue team · Analizor de emailuri de phishing (JavaScript, aplicație web + CLI)" },
@@ -532,8 +540,8 @@ window.CV = {
         { en: "Zero dependencies: own MIME parser, punycode decoder and PNG decoder. Same engine in a CLI with a CI gate (--fail-above). 24 tests, CI and CodeQL. The screenshots show the 7 bundled synthetic sample emails.", ro: "Zero dependențe: parser MIME, decodor punycode și decodor PNG proprii. Același motor și în CLI, cu barieră pentru CI (--fail-above). 24 de teste, CI și CodeQL. Capturile arată cele 7 emailuri sintetice de test incluse." },
       ],
       tags: ["JavaScript", "Email security", "MITRE ATT&CK", "Threat intel", "STIX 2.1"],
-      shot: "assets/img/sec-phishlens-cover.jpg",
-      shotCaption: { en: "PhishLens: a Microsoft 365 credential-phishing sample scored 97/100 (synthetic sample)", ro: "PhishLens: un email de test care fură date Microsoft 365, scor 97/100 (exemplu sintetic)" },
+      shot: "assets/img/sec-phishlens-batch.jpg",
+      shotCaption: { en: "Batch triage: 7 emails ranked by risk in one go", ro: "Triere în lot: 7 emailuri ordonate după risc dintr-o dată" },
       photos: [
         { src: "assets/img/sec-phishlens-overview.jpg", caption: { en: "Findings with evidence and ATT&CK links, plus what to do next", ro: "Constatările cu dovezi și linkuri ATT&CK, plus pașii următori" } },
         { src: "assets/img/sec-phishlens-quishing.jpg", caption: { en: "QR-code phishing: the QR image is decoded and its link flagged as a SharePoint look-alike", ro: "Phishing prin cod QR: imaginea QR e decodată, iar linkul e marcat ca imitație SharePoint" } },
@@ -541,7 +549,6 @@ window.CV = {
         { src: "assets/img/sec-phishlens-attachments.jpg", caption: { en: "Attachments: a .pdf.js hidden in a ZIP, VBA macros and remote template injection", ro: "Atașamente: un .pdf.js ascuns într-un ZIP, macro-uri VBA și template injection de la distanță" } },
         { src: "assets/img/sec-phishlens-sender.jpg", caption: { en: "Header forensics: Reply-To and Return-Path mismatches, SPF/DKIM/DMARC and the delivery path", ro: "Analiza antetelor: nepotriviri Reply-To și Return-Path, SPF/DKIM/DMARC și traseul de livrare" } },
         { src: "assets/img/sec-phishlens-mitre.jpg", caption: { en: "MITRE ATT&CK coverage for a malware-delivery email", ro: "Acoperirea MITRE ATT&CK pentru un email care livrează malware" } },
-        { src: "assets/img/sec-phishlens-batch.jpg", caption: { en: "Batch triage: 7 emails ranked by risk in one go", ro: "Triere în lot: 7 emailuri ordonate după risc dintr-o dată" } },
         { src: "assets/img/sec-phishlens-preview.jpg", caption: { en: "Safe preview: sandboxed, scripts removed, remote images blocked, links disabled", ro: "Previzualizare sigură: izolată, fără scripturi, imagini externe blocate, linkuri dezactivate" } },
         { src: "assets/img/sec-phishlens-landing.jpg", caption: { en: "Start screen: drop an .eml or try one of the 7 sample attacks", ro: "Ecranul de start: încarci un .eml sau încerci unul dintre cele 7 atacuri de test" } },
       ],
@@ -554,10 +561,9 @@ window.CV = {
       featured: true,
       onCv: true,
       title: "WinTrace",
-      video: "assets/video/wintrace-demo.mp4",
       flagship: 3,
       flagshipLine: { en: "Drop Windows logs and watch it rebuild the attack: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync. My own EVTX parser, live demo with 7 incidents.", ro: "Încarci loguri Windows și reconstruiește atacul: brute force, Kerberoasting, pass-the-hash, Mimikatz, DCSync. Parser EVTX propriu, demo live cu 7 incidente." },
-      flagshipShot: "assets/img/sec-wintrace-cover.jpg",
+      flagshipShot: "assets/img/sec-wintrace-focus.jpg",
       period: "2026",
       status: "live",
       kind: { en: "Blue team · Windows event log attack hunter (JavaScript, web app + CLI)", ro: "Blue team · Analizor de atacuri în logurile Windows (JavaScript, aplicație web + CLI)" },
@@ -573,8 +579,8 @@ window.CV = {
         { en: "A normal workday sample scores 0/100 (no false alarms). Zero dependencies, 17 tests, CI and CodeQL. Screenshots show the 7 bundled synthetic incidents.", ro: "Un eșantion cu o zi normală de lucru primește 0/100 (fără alarme false). Zero dependențe, 17 teste, CI și CodeQL. Capturile arată cele 7 incidente sintetice incluse." },
       ],
       tags: ["Windows", "EVTX", "Active Directory", "MITRE ATT&CK", "Threat hunting"],
-      shot: "assets/img/sec-wintrace-cover.jpg",
-      shotCaption: { en: "WinTrace: an RDP brute force that ends in ransomware preparation, as an attack story (synthetic sample)", ro: "WinTrace: un brute force RDP care se termină cu pregătirea unui ransomware, ca poveste a atacului (exemplu sintetic)" },
+      shot: "assets/img/sec-wintrace-attck.jpg",
+      shotCaption: { en: "MITRE ATT&CK coverage for a phishing → Mimikatz → LSASS dump attack (synthetic sample)", ro: "Acoperirea MITRE ATT&CK pentru un atac phishing → Mimikatz → copie LSASS (exemplu sintetic)" },
       photos: [
         { src: "assets/img/sec-wintrace-story.jpg", caption: { en: "Attack story: what the attacker did, step by step, with what to do now", ro: "Povestea atacului: ce a făcut atacatorul, pas cu pas, și ce trebuie făcut acum" } },
         { src: "assets/img/sec-wintrace-detections.jpg", caption: { en: "Detections: encoded PowerShell decoded automatically, Mimikatz and an LSASS dump", ro: "Detecții: PowerShell codat decodat automat, Mimikatz și o copie a memoriei LSASS" } },
@@ -959,7 +965,7 @@ window.CV = {
 /* ---------- Interface labels (rename sections here) ---------- */
 window.UI = {
   nav: {
-    work: { en: "Work", ro: "Proiecte" },
+    built: { en: "Work", ro: "Proiecte" },
     incident: { en: "Incident report", ro: "Raport" },
     triage: { en: "Triage demo", ro: "Demo triaj" },
     skills: { en: "Skills", ro: "Competențe" },
